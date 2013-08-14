@@ -20,10 +20,10 @@ CREATE  TABLE IF NOT EXISTS `asosUniMap`.`content` (
   `img_med` VARCHAR(200) NULL ,
   `img_large` VARCHAR(200) NULL ,
   `source` VARCHAR(5) NULL ,
+  `hashtag` VARCHAR(150) NOT NULL,
   PRIMARY KEY (`id`) )
 
-ENGINE = InnoDB;
-DEFAULT CHARSET=utf8;
+ENGINE = InnoDB,DEFAULT CHARSET=utf8;
 
 USE `asosUniMap` ;
 

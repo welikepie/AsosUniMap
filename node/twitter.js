@@ -4,15 +4,15 @@ var twitter = require('ntwitter');
 var fs = down.fs;
 var credentials = require('./configurables.js');
 var t = new twitter({
-	consumer_key : credentials.consumer_key,
-	consumer_secret : credentials.consumer_secret,
-	access_token_key : credentials.access_token_key,
-	access_token_secret : credentials.access_token_secret
+	consumer_key : credentials.credentials.consumer_key,
+	consumer_secret : credentials.credentials.consumer_secret,
+	access_token_key : credentials.credentials.access_token_key,
+	access_token_secret : credentials.credentials.access_token_secret
 });
 db.connection.connect();
 //db order //screen_name,id_str,if(.coordinates!=null, .coordinates.coordinates[0] = lon,.coordinates.coordinates[1] = lat  ), TWITTR, text, created_at, .entities.media[0].media_url, 
 t.stream('statuses/filter', 
-{'locations':'-180,-90,180,90'}
+{track:credentials.tags}
 , function(stream) {
 	stream.on('data', function(tweet) {
 	var send = db.sendNew();
@@ -34,6 +34,7 @@ t.stream('statuses/filter',
 		send.time = db.formatDate(new Date(tweet.created_at));
 		send.text = tweet.text;
 		send.source = "TWTTR";
+		send.hashtag = filterForHash(tweet.text);
 		if(tweet.coordinates!=null){
 		send.lat =  tweet.coordinates.coordinates[1];
 		send.lon =  tweet.coordinates.coordinates[0];
@@ -45,9 +46,18 @@ t.stream('statuses/filter',
 				send.img_large = tweet.entities.media[0].display_url;		
 			}
 		}
-		console.log(send);
+		//console.log(send);
 		db.connection.query('INSERT INTO content SET ?', send, function(err, result) {
   console.log(err+","+result);
 });
 	});
 });
+
+function filterForHash(input){
+	var arr = credentials.tags;
+	for(var i in arr){
+		if(input.toLowerCase().indexOf(arr[i].toLowerCase()) > -1){
+			return(arr[i]);
+		}
+	}
+}
