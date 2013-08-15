@@ -1,0 +1,10 @@
+/* CSS crunched with Crunch - http://crunchapp.net/ */
+html{height:100%;}
+body{height:600px;}
+body>div{height:100%;}body>div #render{float:none;margin:0px auto;height:100%;}body>div #render #hashtags{height:80%;overflow-y:scroll;list-style:none;}body>div #render #hashtags .hashtag{float:left;margin:10px;}body>div #render #hashtags .hashtag .hash{float:left;line-height:41px;font-size:30px;}
+body>div #render #hashtags .hashtag .hashlesshash{float:left;font-size:20px;line-height:41px;}
+body>div #render #hashtags .hashtag input[type="button"]{float:left;margin-left:10px;}
+body>div #render #hashtagAdd #hash{float:left;margin-top:15px;font-size:40px;margin-right:10px;}
+body>div #render #hashtagAdd #newHash{margin-top:20px;margin-bottom:0px;}
+body>div #render #hashtagAdd #addStuff{float:right;font-size:20px;width:50px;height:50px;margin-top:15px;}
+body>div #render #hashtagAdd #save{float:right;font-size:20px;margin-top:15px;height:50px;margin-left:10px;display:none;}
