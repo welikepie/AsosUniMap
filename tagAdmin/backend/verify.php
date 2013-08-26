@@ -24,6 +24,7 @@ if (!isset($_REQUEST["command"])) {
 				}
 
 			} else if ($_POST["command"] == $possibleCommands[2]) {//force
+			unlink("check.json");
 				file_put_contents("check.json", "{\"timestamp\":" . date_timestamp_get(date_create()) . "000}");
 				echo("{\"code\":\"[file forced]\",\"response\":\"File has been overwritten. Edit away.\"}");
 			}

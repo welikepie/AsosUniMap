@@ -2,15 +2,66 @@ html{
     height:100%;}
     body{
         height:600px;
+        .left{
+            float:left;
+            }
+        .right{
+            float:right;
+            }
+        .clearBoth{
+            clear:both;
+            }
+        .halfWide{
+            width:50%;
+            margin-right:0px;
+            margin-top:0px;
+            }
         }
-body > div{
+body > #modalDialogue{
+    display:none;
+position:fixed;
+z-index:9000;
+left:0;
+width:100%;
+height:100%;
+background:rgba(125,125,125,0.2);
+    #modalInside{
+        position:relative;
+        width:400px;
+        height:200px;
+        margin:0 auto;
+        margin-top:100px;
+        #modalText{
+            position:absolute;
+            top:20;
+            width:400px;
+            max-height:150px;
+            overflow-y:scroll;
+            }
+        #modalConfirm, #modalDeny{
+            display:block;
+            position:absolute;
+            bottom:0;
+            margin-bottom:20px;
+            }
+        #modalConfirm{
+            right: 20px;
+        }
+        #modalDeny{}
+        }
+}
+body > .well{
     height:100%;
-    #render{
+    #location{
+        display:none;
+        }
+    #render, #location{
         float:none;
         margin:0px auto;
         height:100%;
-        #hashtags{
-            height:80%;
+        
+        #hashtags, #Lhashtags{
+            height:70%;
             overflow-y:scroll;
             list-style:none;
         .hashtag{
@@ -32,25 +83,33 @@ body > div{
                     }
             }
         }
-        #hashtagAdd{
-            #hash{
-                float: left;
-margin-top: 15px;
-font-size: 40px;
-margin-right: 10px;
+        #hashtagAdd, #LhashtagAdd{
+            #JS-AlreadyAdded, #JS-LAlreadyAdded{
+                margin-top:0px;
+                display:none;
                 }
-            #newHash{
+            .alert{
+                margin-bottom:0px;
+                margin-top:20px;
+                }
+            #hash, #Lhash{
+                float: left;
+                margin-top: 15px;
+                font-size: 40px;
+                margin-right: 10px;
+                }
+            #newHash, #LnewHash{
                 margin-top:20px;
                 margin-bottom:0px;
                 }
-            #addStuff{
+            #addStuff, #LaddStuff{
                 float:right;
                 font-size:20px;
                 width:50px;
                 height:50px;
                 margin-top:15px;
                 }
-                #save{
+                #save, #Lsave{
                     float:right;
                     font-size:20px;
                     margin-top:15px;
@@ -60,4 +119,5 @@ margin-right: 10px;
                     }
             }
     }
+    
 }

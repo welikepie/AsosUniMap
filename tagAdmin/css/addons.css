@@ -1,10 +1,19 @@
 /* CSS crunched with Crunch - http://crunchapp.net/ */
 html{height:100%;}
-body{height:600px;}
-body>div{height:100%;}body>div #render{float:none;margin:0px auto;height:100%;}body>div #render #hashtags{height:80%;overflow-y:scroll;list-style:none;}body>div #render #hashtags .hashtag{float:left;margin:10px;}body>div #render #hashtags .hashtag .hash{float:left;line-height:41px;font-size:30px;}
-body>div #render #hashtags .hashtag .hashlesshash{float:left;font-size:20px;line-height:41px;}
-body>div #render #hashtags .hashtag input[type="button"]{float:left;margin-left:10px;}
-body>div #render #hashtagAdd #hash{float:left;margin-top:15px;font-size:40px;margin-right:10px;}
-body>div #render #hashtagAdd #newHash{margin-top:20px;margin-bottom:0px;}
-body>div #render #hashtagAdd #addStuff{float:right;font-size:20px;width:50px;height:50px;margin-top:15px;}
-body>div #render #hashtagAdd #save{float:right;font-size:20px;margin-top:15px;height:50px;margin-left:10px;display:none;}
+body{height:600px;}body .left{float:left;}
+body .right{float:right;}
+body .clearBoth{clear:both;}
+body .halfWide{width:50%;margin-right:0px;margin-top:0px;}
+body>#modalDialogue{display:none;position:fixed;z-index:9000;left:0;width:100%;height:100%;background:rgba(125, 125, 125, 0.2);}body>#modalDialogue #modalInside{position:relative;width:400px;height:200px;margin:0 auto;margin-top:100px;}body>#modalDialogue #modalInside #modalText{position:absolute;top:20;width:400px;max-height:150px;overflow-y:scroll;}
+body>#modalDialogue #modalInside #modalConfirm,body>#modalDialogue #modalInside #modalDeny{display:block;position:absolute;bottom:0;margin-bottom:20px;}
+body>#modalDialogue #modalInside #modalConfirm{right:20px;}
+body>.well{height:100%;}body>.well #location{display:none;}
+body>.well #render,body>.well #location{float:none;margin:0px auto;height:100%;}body>.well #render #hashtags,body>.well #location #hashtags,body>.well #render #Lhashtags,body>.well #location #Lhashtags{height:70%;overflow-y:scroll;list-style:none;}body>.well #render #hashtags .hashtag,body>.well #location #hashtags .hashtag,body>.well #render #Lhashtags .hashtag,body>.well #location #Lhashtags .hashtag{float:left;margin:10px;}body>.well #render #hashtags .hashtag .hash,body>.well #location #hashtags .hashtag .hash,body>.well #render #Lhashtags .hashtag .hash,body>.well #location #Lhashtags .hashtag .hash{float:left;line-height:41px;font-size:30px;}
+body>.well #render #hashtags .hashtag .hashlesshash,body>.well #location #hashtags .hashtag .hashlesshash,body>.well #render #Lhashtags .hashtag .hashlesshash,body>.well #location #Lhashtags .hashtag .hashlesshash{float:left;font-size:20px;line-height:41px;}
+body>.well #render #hashtags .hashtag input[type="button"],body>.well #location #hashtags .hashtag input[type="button"],body>.well #render #Lhashtags .hashtag input[type="button"],body>.well #location #Lhashtags .hashtag input[type="button"]{float:left;margin-left:10px;}
+body>.well #render #hashtagAdd #JS-AlreadyAdded,body>.well #location #hashtagAdd #JS-AlreadyAdded,body>.well #render #LhashtagAdd #JS-AlreadyAdded,body>.well #location #LhashtagAdd #JS-AlreadyAdded,body>.well #render #hashtagAdd #JS-LAlreadyAdded,body>.well #location #hashtagAdd #JS-LAlreadyAdded,body>.well #render #LhashtagAdd #JS-LAlreadyAdded,body>.well #location #LhashtagAdd #JS-LAlreadyAdded{margin-top:0px;display:none;}
+body>.well #render #hashtagAdd .alert,body>.well #location #hashtagAdd .alert,body>.well #render #LhashtagAdd .alert,body>.well #location #LhashtagAdd .alert{margin-bottom:0px;margin-top:20px;}
+body>.well #render #hashtagAdd #hash,body>.well #location #hashtagAdd #hash,body>.well #render #LhashtagAdd #hash,body>.well #location #LhashtagAdd #hash,body>.well #render #hashtagAdd #Lhash,body>.well #location #hashtagAdd #Lhash,body>.well #render #LhashtagAdd #Lhash,body>.well #location #LhashtagAdd #Lhash{float:left;margin-top:15px;font-size:40px;margin-right:10px;}
+body>.well #render #hashtagAdd #newHash,body>.well #location #hashtagAdd #newHash,body>.well #render #LhashtagAdd #newHash,body>.well #location #LhashtagAdd #newHash,body>.well #render #hashtagAdd #LnewHash,body>.well #location #hashtagAdd #LnewHash,body>.well #render #LhashtagAdd #LnewHash,body>.well #location #LhashtagAdd #LnewHash{margin-top:20px;margin-bottom:0px;}
+body>.well #render #hashtagAdd #addStuff,body>.well #location #hashtagAdd #addStuff,body>.well #render #LhashtagAdd #addStuff,body>.well #location #LhashtagAdd #addStuff,body>.well #render #hashtagAdd #LaddStuff,body>.well #location #hashtagAdd #LaddStuff,body>.well #render #LhashtagAdd #LaddStuff,body>.well #location #LhashtagAdd #LaddStuff{float:right;font-size:20px;width:50px;height:50px;margin-top:15px;}
+body>.well #render #hashtagAdd #save,body>.well #location #hashtagAdd #save,body>.well #render #LhashtagAdd #save,body>.well #location #LhashtagAdd #save,body>.well #render #hashtagAdd #Lsave,body>.well #location #hashtagAdd #Lsave,body>.well #render #LhashtagAdd #Lsave,body>.well #location #LhashtagAdd #Lsave{float:right;font-size:20px;margin-top:15px;height:50px;margin-left:10px;display:none;}
