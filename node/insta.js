@@ -9,7 +9,9 @@ db.connection.connect();
 
 var arr = [];
 setInterval(function() {
-	var tagArr = conf.tags;
+	var dataStream = JSON.parse(fs.readFileSync("tags.json")).data;
+	//console.log(dataStream);
+	var tagArr = dataStream.campaign;
 	for (var i in tagArr) {
 		Instagram.tags.recent({
 			name : tagArr[i].substring(1,tagArr[i].length),
@@ -19,7 +21,7 @@ setInterval(function() {
 				// data is a javascript object/array/null matching that shipped Instagram
 				// when available (mostly /recent), pagination is a javascript object with the pagination information
 				//console.log(pagination);
-				for (var i in data) {
+				for (var i in data) {				
 					//console.log(data[i].id);
 					if (arr.indexOf(data[i].id) == -1) {
 						arr.push(data[i].id);
@@ -36,7 +38,7 @@ setInterval(function() {
 								if(imgData.caption!=null){
 								send.text = imgData.caption.text;
 								}
-								send.hashtag = filterForHash(imgData.tags);
+								send.hashtag = filterForHash(imgData.tags, dataStream.location);
 								send.source = "INSTA";
 								if (imgData.location != null) {
 									send.lat = imgData.location.latitude;
@@ -46,9 +48,13 @@ setInterval(function() {
 								send.img_large = imgData.images.standard_resolution.url;
 								send.img_small = imgData.images.thumbnail.url;
 								send.img_med = imgData.images.low_resolution.url;
-								db.connection.query('INSERT INTO content SET ? ', send, function(err, result) {
-									//console.log(err + "," + result);
-								});
+								//console.log(send);
+								if(send.hashtag!=""){
+									console.log(send);
+									db.connection.query('INSERT INTO content SET ? ON DUPLICATE KEY UPDATE hashtag = ?, id = ?, text = ?, user = ?, time = ?, img_large = ?, img_med = ?, img_small = ?, lat = ?, lon = ?', [send, send.hashtag,send.id,send.text,send.user,send.time,send.img_large,send.img_med,send.img_small,send.lat,send.lon], function(err, result) {
+										//console.log(err + "," + result);
+									});
+								}
 								/*
 								`id` VARCHAR(30) NOT NULL ,
 								`user` VARCHAR(45) NULL ,
@@ -79,14 +85,15 @@ setInterval(function() {
 	}
 }, 2000);
 
-function filterForHash(input){
-	var arr = conf.tags;
+function filterForHash(input, arr){
 	for(var i in arr){
 		for(var z in input){
+			console.log(arr[i].substring(1,arr[i].length).toLowerCase()+","+ input[z].toLowerCase());
 			if(arr[i].substring(1,arr[i].length).toLowerCase() == input[z].toLowerCase()){
-				return(arr[i]);
+				return (arr[i].substring(1,arr[i].length));
 			}
 		}
 		
 	}
+	return "";
 }

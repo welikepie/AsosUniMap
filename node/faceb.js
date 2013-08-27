@@ -9,9 +9,9 @@ var express = require("express");
 var creds = "";
 db.connection.connect();
 getAuthed();
-setInterval(function(){getAuthed()}, 30000);
+//setInterval(function(){getAuthed()}, 30000);
 function getBent(){
-	console.log("get bent!");
+	//console.log("get bent!");
 }
 function getAuthed(){
 	var req = https.request({
@@ -22,10 +22,10 @@ function getAuthed(){
 			creds = d.toString().split("=");
 			if (creds[0] == "access_token") {
 				creds = creds[1];
-				console.log(creds);
+				//console.log(creds);
 				getFacebook(creds);
 			} else {
-				console.log("ERROR GETTING TOKEN");
+				//console.log("ERROR GETTING TOKEN");
 			}
 		});
 	});
@@ -37,7 +37,9 @@ function getAuthed(){
 
 }
 function getFacebook(input){
-	console.log(input);
+	var dataStream = JSON.parse(fs.readFileSync("tags.json")).data;
+	credentials.tags = dataStream;
+	//console.log(input);
 	fb.setAccessToken(input);
 	var options = {
 		timeout : 3000,
@@ -48,41 +50,34 @@ function getFacebook(input){
 			connection : "keep-alive"
 		}
 	};
-	for (var i in credentials.tags) {
-
+	//console.log(credentials.tags.campaign);
+	asyncLoop(credentials.tags.campaign.length,function(loop,i){
+		//console.log(i);
+		console.log(credentials.tags.campaign[i]);
 		fb.search({
-			q : credentials.tags[i].substring(1, credentials.tags[i].length),
+			q : credentials.tags.campaign[i].substring(1, credentials.tags.campaign[i].length),
 			type : "post",
 			limit : 500,
 			access_token : creds
 		}, function(err, res) {
-
-			//console.log(res);
-			var resUrl = res.paging.previous.split("?")[1].split("&");
-			var localTag = "";
-			for (var j in resUrl) {
-				if (resUrl[j].indexOf("q=") > -1) {
-					localTag = "#" + resUrl[j].split("=")[1];
-				//	localTag = resUrl[j].split("=")[1];
-					console.log(localTag);
-					break;
-				}
-			}
+			//console.log(err);
+			var localTag = credentials.tags.campaign[i];
+			if(res.data!=null){
 			for (var zed in res.data) {
 				//console.log(res.data[zed]);
 				if (res.data[zed].type == "photo" || res.data[zed].type == "status") {
-					console.log(res.data[zed]);
+					////console.log(res.data[zed]);
 					if (res.data[zed].hasOwnProperty("message")) {
 						if (res.data[zed].message.indexOf(localTag) > -1) {
 							var send = db.sendNew();
-							send.hashtag = localTag;
+							send.hashtag = filterForHash(res.data[zed].message,credentials.tags.location);
 							send.id = res.data[zed].id;
 							send.text = res.data[zed].message;
-							send.id = res.data[zed].id;
-							send.user = res.data[zed].from.id;
+							send.user = res.data[zed].from.name;
+							console.log(res.data[zed].from);
 							send.time = res.data[zed].created_time;
 							if (res.data[zed].type == "photo") {
-								console.log(res.data[zed]);
+								//console.log(res.data[zed]);
 								send.img_large = res.data[zed].picture.substring(0, res.data[zed].picture.length - 5) + "b.jpg";
 								send.img_med = res.data[zed].picture.substring(0, res.data[zed].picture.length - 5) + "a.jpg";
 								send.img_small = res.data[zed].picture.substring(0, res.data[zed].picture.length - 5) + "s.jpg";
@@ -94,13 +89,67 @@ function getFacebook(input){
 								}
 							}
 							send.source = "FACEB";
-							db.connection.query('INSERT INTO content SET ?', send, function(err, result) {
-								console.log(err + "," + result);
-							});
+							//console.log(send.hashtag);
+							if(send.hashtag != ""){
+								//console.log(send);
+								db.connection.query('INSERT INTO content SET ? ON DUPLICATE KEY UPDATE hashtag = ?, id = ?, text = ?, user = ?, time = ?, img_large = ?, img_med = ?, img_small = ?, lat = ?, lon = ?', [send, send.hashtag,send.id,send.text,send.user,send.time,send.img_large,send.img_med,send.img_small,send.lat,send.lon], function(err, result) {
+									//console.log(err + "," + result);
+						//			loop.next();
+								});
+							}
+							
 						}
 					}
 				}
 			}
+			}
+			//console.log("NEXT");
+			loop.next();
 		});
+	},function(){
+		//console.log("done!");
+		getAuthed();
+	})
+}
+
+function filterForHash(input, arr){
+	for(var i in arr){
+		if(input.indexOf(arr[i])>-1){
+			return (arr[i].substring(1,arr[i].length));
+		}
 	}
+	return "";
+}
+
+function asyncLoop(iterations, func, callback) {
+    var index = 0;
+    var done = false;
+    var loop = {
+    	current: index,
+        next: function() {
+            if (done) {
+                return;
+            }
+            if (index < iterations) {
+                index++;
+                //console.log("INDEX"+index);
+                this.current = index-1;
+                //console.log("CURRENT"+this.current);
+                func(loop,this.current);
+            } else {
+                done = true;
+                callback();
+            }
+        },
+        iteration: function() {
+            return index - 1;
+            current = index;
+        },
+        broke: function() {
+            done = true;
+            callback();
+        }
+    };
+    loop.next();
+    return loop;
 }
