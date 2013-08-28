@@ -1,5 +1,15 @@
-var tags = [[],[]];
+var tags = [[], []];
 var newStuff = [[], []];
+var startCoords = [51, 0];
+var newCoordinates = {};
+var oldCoordinates = {};
+Math.toDegrees = function(angle) {
+	return (angle * (180 / Math.PI));
+}
+Math.toRadians = function(angle) {
+	return (angle * (Math.PI / 180));
+}
+//lat,lon
 //0 is campaign name, 1 is location.
 // to add another group, add array to newStuff, take care of extra index throughout code starting from loading. Including saving.
 var divNames = ["render", "location"];
@@ -169,7 +179,7 @@ function checkParity(appendIndex) {
 			document.getElementById("save").style.display = "none";
 			document.getElementById("newHash").value = "";
 		}
-		if(appendIndex == 1){
+		if (appendIndex == 1) {
 			document.getElementById("Lsave").style.display = "none";
 			document.getElementById("LnewHash").value = "";
 		}
@@ -188,50 +198,6 @@ function renderSingle(ins, appendIndex) {
 	extras.className = "hashlesshash";
 	extras.innerText = ins;
 	input.appendChild(extras);
-	if(appendIndex == 1){
-		var lats = document.createElement("label");
-		lats.textContent = "Lat: ";
-		lats.setAttribute("class","hashLabel");
-		lats.setAttribute("for",ins+"lat");
-		input.appendChild(lats);
-		var lats = document.createElement("input");
-		lats.setAttribute("type","number");
-		lats.setAttribute("step","any");
-		lats.setAttribute("min",-90);
-		lats.setAttribute("max",90);
-		lats.setAttribute("class","hashCoord");
-		lats.setAttribute("id",ins+"lat");
-		input.appendChild(lats);
-		var lats = document.createElement("label");
-		lats.textContent = "Lon: ";
-		lats.setAttribute("class","hashLabel");
-		lats.setAttribute("for",ins+"lon");
-		input.appendChild(lats);
-		var lats = document.createElement("input");
-		lats.setAttribute("type","number");
-		lats.setAttribute("step","any");
-		lats.setAttribute("min",-180);
-		lats.setAttribute("max",180);
-		lats.setAttribute("class","hashCoord");
-		lats.setAttribute("id",ins+"lon");
-		input.appendChild(lats);
-		var lats = document.createElement("label");
-		lats.textContent = "Range: ";
-		lats.setAttribute("class","hashRangeLabel");
-		lats.setAttribute("for",ins+"range");
-		input.appendChild(lats);
-		var lats = document.createElement("input")
-		lats.setAttribute("type","number");
-		lats.setAttribute("step","any");
-		lats.setAttribute("min",0);
-		lats.setAttribute("id",ins+"range");
-		lats.setAttribute("class","distRange");
-		input.appendChild(lats);
-		var lats = document.createElement("div");
-		lats.setAttribute("class","coordDisplay");
-		lats.setAttribute("id",ins+"coords");
-		input.appendChild(lats);
-	}
 	var extras = document.createElement("input");
 	extras.setAttribute("type", "button");
 	extras.className = "btn btn-danger";
@@ -244,8 +210,110 @@ function renderSingle(ins, appendIndex) {
 		newStuff[divNames.indexOf(divSelected)].splice(newStuff[divNames.indexOf(divSelected)].indexOf("#" + ins), 1);
 		console.log(newStuff[divNames.indexOf(divSelected)]);
 		checkParity(divNames.indexOf(divSelected));
+		delete newCoordinates[ins];
+		console.log(newCoordinates);
 	}
 	input.appendChild(extras);
+	if (appendIndex == 1) {
+		var lats = document.createElement("input");
+		lats.setAttribute("type", "number");
+		lats.setAttribute("step", "any");
+		lats.setAttribute("min", -90);
+		lats.setAttribute("max", 90);
+		lats.setAttribute("class", "hashCoord");
+		lats.setAttribute("value", startCoords[1]);
+		lats.setAttribute("id", ins + "lat");
+		lats.onchange = function() {
+			var babyDontHurtMe = hadamar(ins,document.getElementById(ins + "lat").value, document.getElementById(ins + "lon").value, document.getElementById(ins + "range").value);
+			document.getElementById(ins + "bbTL").innerHTML = babyDontHurtMe[1] + "," + babyDontHurtMe[0];
+			document.getElementById(ins + "bbBR").innerHTML = babyDontHurtMe[3] + "," + babyDontHurtMe[2];
+		if(document.getElementById("Lsave").style.display !="block"){
+				document.getElementById("Lsave").style.display = "block";
+			}
+		}
+		input.appendChild(lats);
+		var lats = document.createElement("label");
+		lats.textContent = "Lat: ";
+		lats.setAttribute("class", "hashLabel");
+		lats.setAttribute("for", ins + "lat");
+		input.appendChild(lats);
+
+		var lats = document.createElement("input");
+		lats.setAttribute("type", "number");
+		lats.setAttribute("step", "any");
+		lats.setAttribute("min", -180);
+		lats.setAttribute("max", 180);
+		lats.setAttribute("value", startCoords[0]);
+		lats.setAttribute("class", "hashCoord");
+		lats.setAttribute("id", ins + "lon");
+		lats.onchange = function() {
+			var babyDontHurtMe = hadamar(ins,document.getElementById(ins + "lat").value, document.getElementById(ins + "lon").value, document.getElementById(ins + "range").value);
+			document.getElementById(ins + "bbTL").innerHTML = babyDontHurtMe[1] + "," + babyDontHurtMe[0];
+			document.getElementById(ins + "bbBR").innerHTML = babyDontHurtMe[3] + "," + babyDontHurtMe[2];
+		if(document.getElementById("Lsave").style.display !="block"){
+				document.getElementById("Lsave").style.display = "block";
+			}
+		}
+		input.appendChild(lats);
+
+		var lats = document.createElement("label");
+		lats.textContent = "Lon: ";
+		lats.setAttribute("class", "hashLabel");
+		lats.setAttribute("for", ins + "lon");
+		input.appendChild(lats);
+	}
+
+	if (appendIndex == 1) {
+		var lats = document.createElement("label");
+		lats.textContent = "Range (Km): ";
+		lats.setAttribute("class", "hashRangeLabel clearBoth");
+		lats.setAttribute("for", ins + "range");
+		input.appendChild(lats);
+		var lats = document.createElement("input")
+		lats.setAttribute("type", "number");
+		lats.setAttribute("step", "any");
+		lats.setAttribute("value", 0);
+		lats.setAttribute("min", 0);
+		lats.setAttribute("id", ins + "range");
+		lats.setAttribute("class", "distRange");
+		lats.onchange = function() {
+			var babyDontHurtMe = hadamar(ins,document.getElementById(ins + "lat").value, document.getElementById(ins + "lon").value, document.getElementById(ins + "range").value);
+			document.getElementById(ins + "bbTL").innerHTML = babyDontHurtMe[1] + "," + babyDontHurtMe[0];
+			document.getElementById(ins + "bbBR").innerHTML = babyDontHurtMe[3] + "," + babyDontHurtMe[2];
+			if(document.getElementById("Lsave").style.display !="block"){
+				document.getElementById("Lsave").style.display = "block";
+			}
+
+if(document.getElementById("Lsave").style.display !="block"){
+				document.getElementById("Lsave").style.display = "block";
+			}
+		}
+		input.appendChild(lats);
+		var lats = document.createElement("div");
+		lats.setAttribute("class", "coordDisplay");
+		lats.setAttribute("id", ins + "coords");
+
+		var latsKids = document.createElement("label");
+		latsKids.setAttribute("for", ins + "bbTL");
+		latsKids.textContent = "Top Left Corner : ";
+		//console.log(document.getElementById(ins+"range"));
+		lats.appendChild(latsKids);
+		var latsKids = document.createElement("div");
+		latsKids.setAttribute("id", ins + "bbTL");
+		lats.appendChild(latsKids);
+
+		var latsKids = document.createElement("label");
+		latsKids.setAttribute("for", ins + "bbBR");
+		latsKids.setAttribute("class", "clearBoth");
+		latsKids.textContent = "Bottom Right Corner : ";
+		lats.appendChild(latsKids);
+		var latsKids = document.createElement("div");
+		latsKids.setAttribute("id", ins + "bbBR");
+		lats.appendChild(latsKids);
+
+		input.appendChild(lats);
+	}
+
 	if (appendIndex == 0) {
 		document.getElementById("hashtags").appendChild(input);
 		document.getElementById("newHash").value = "";
@@ -253,6 +321,9 @@ function renderSingle(ins, appendIndex) {
 	if (appendIndex == 1) {
 		document.getElementById("Lhashtags").appendChild(input);
 		document.getElementById("LnewHash").value = "";
+		var babyDontHurtMe = hadamar(ins,document.getElementById(ins + "lat").value, document.getElementById(ins + "lon").value, document.getElementById(ins + "range").value);
+		document.getElementById(ins + "bbTL").innerHTML = babyDontHurtMe[1] + "," + babyDontHurtMe[0];
+		document.getElementById(ins + "bbBR").innerHTML = babyDontHurtMe[3] + "," + babyDontHurtMe[2];
 	}
 	console.log("pushing to new");
 	console.log(appendIndex);
@@ -310,8 +381,8 @@ var loadTagJSON = function(type, appendIndex) {
 			xhReq.send("campaign=" + thing);
 		}
 		if (appendIndex == 1) {
-			console.log("location=" + thing);
-			xhReq.send("location=" + thing);
+			console.log("location=" + thing +"&"+"locations="+JSON.stringify(newCoordinates));
+			xhReq.send("location=" + thing+"&"+"locations="+JSON.stringify(newCoordinates));
 		}
 
 	}
@@ -324,4 +395,38 @@ function uniqueArr(arr) {
 		}
 	}
 	return distinctArr;
+}
+
+function hadamar(src,lat, lon, rad) {
+	lat = parseFloat(lat);
+	lon = parseFloat(lon);
+	rad = parseFloat(rad);
+	if(lat == NaN){lat = 0;}
+	if(lon == NaN){lon = 0;}
+	if(rad == NaN){rad = 0;}
+
+	newCoordinates[src] = placeObj(lat,lon,rad);
+	console.log(newCoordinates);
+	if (rad == 0) {
+		console.log([lat, lon, lat, lon]);
+		return [lat.toFixed(6), lon.toFixed(6), lat.toFixed(6), lon.toFixed(6)];
+	} else {
+
+		var R = 6371;
+		// earth radius in km
+		var radius = rad;
+		//km
+		console.log(lat + "," + lon);
+		console.log(Math.toDegrees(radius / R / Math.cos(Math.toRadians(lat))));
+		var x1 = lon - Math.toDegrees(radius / R / Math.cos(Math.toRadians(lat)));
+		var x2 = lon + Math.toDegrees(radius / R / Math.cos(Math.toRadians(lat)));
+		var y1 = lat + Math.toDegrees(radius / R);
+		var y2 = lat - Math.toDegrees(radius / R);
+		console.log([x2.toFixed(6), y2.toFixed(6), x1.toFixed(6), y1.toFixed(6)]);
+		return [y2.toFixed(6), x2.toFixed(6), y1.toFixed(6), x1.toFixed(6)];
+	}
+}
+
+function placeObj(lat,lon,radius){
+	return {"latitude":lat,"longitude":lon,"radius":radius};
 }

@@ -1,8 +1,13 @@
 <?php
-if(isset($_POST["location"])||isset($_POST["campaign"])){
+
+if((isset($_POST["location"])&&isset($_POST["locations"]))||isset($_POST["campaign"])){
 $json = json_decode(file_get_contents("../../node/tags.json"),true);
 	//echo($json);
 
+	if(isset($_POST["locations"])){
+		$json["data"]["locations"] = json_decode($_POST["locations"],true);
+	}
+	
 	if(isset($_POST["location"])){
 	$arr = explode(",",$_POST["location"]);
 		foreach($arr as $index=>$val){

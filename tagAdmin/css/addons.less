@@ -59,12 +59,56 @@ body > .well{
         float:none;
         margin:0px auto;
         height:100%;
-        #Lhashtags > li{
+
+#Lhashtags > li{
+    border-bottom:1px solid #34495e;
+            width:640px;
             clear:both;
+            .coordDisplay{
+                float:left;
+                margin-left:75px;
+                label{
+                    margin-top:0px;
+                    float:left;
+                    }
+                div{
+                    float:left;
+                    }
+            }
+            .hashlesshash{
+                margin-bottom:5px;
+                }
+            label{
+                margin-top:10px;
+                margin-right:5px;
+                margin-left:5px;
+                }
+            .hashLabel{
+                float:right;
+                }
+            .hashRangeLabel{
+                float:left;
+                }
+            .hashCoord{
+                float:right;
+                width:120px;
+                margin-right:10px;
+                
+                }
+            .distRange{
+                float:left;
+                width:60px;
+                }
+                input[type="button"]{
+                    float:right !important;
+                    margin-right:2
+                    0px;
+                }
             }
         #hashtags, #Lhashtags{
             height:70%;
             overflow-y:scroll;
+            overflow-x:hidden;
             list-style:none;
         .hashtag{
             float:left;
