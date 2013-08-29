@@ -1,13 +1,41 @@
 <?php
+if(isset($_GET["locations"])){
+		$tested = json_decode($_GET["locations"],true);	
+		$newThings = array();
+		foreach($tested as $ind=>$value){
+			if(isset($value["grouptag"])){
+				if(!isset($newThings[$value["grouptag"]])){
+					$newThings[$value["grouptag"]] = array();
+				}	
+				if(!in_array($ind, $newThings[$value["grouptag"]])){
+					array_push($newThings[$value["grouptag"]],$ind);
+				}
+			}
+		}
+		var_dump($newThings);
+	}
 
 if((isset($_POST["location"])&&isset($_POST["locations"]))||isset($_POST["campaign"])){
 $json = json_decode(file_get_contents("../../node/tags.json"),true);
 	//echo($json);
 
 	if(isset($_POST["locations"])){
-		$json["data"]["locations"] = json_decode($_POST["locations"],true);
-	}
+		$json["data"]["locations"] = json_decode($_POST["locations"],true);	
 	
+		$tested = $json["data"]["locations"];
+		$newThings = array();
+		foreach($tested as $ind=>$value){
+			if(isset($value["grouptag"])){
+				if(!isset($newThings[$value["grouptag"]])){
+					$newThings[$value["grouptag"]] = array();
+				}	
+				if(!in_array($ind, $newThings[$value["grouptag"]])){
+					array_push($newThings[$value["grouptag"]],$ind);
+				}
+			}
+		}
+		$json["data"]["optionaltags"] = $newThings;
+	}
 	if(isset($_POST["location"])){
 	$arr = explode(",",$_POST["location"]);
 		foreach($arr as $index=>$val){

@@ -1,8 +1,9 @@
 var tags = [[], []];
 var newStuff = [[], []];
 var startCoords = [51, 0];
-var newCoordinates = {};
-var oldCoordinates = {};
+var newCoordinates;
+//for retrieving, drop what exists in to newCoordinates from tags. if exists, swap in during creation, else leave blank.
+//change hadamar to not compute if blank.
 Math.toDegrees = function(angle) {
 	return (angle * (180 / Math.PI));
 }
@@ -211,7 +212,6 @@ function renderSingle(ins, appendIndex) {
 		console.log(newStuff[divNames.indexOf(divSelected)]);
 		checkParity(divNames.indexOf(divSelected));
 		delete newCoordinates[ins];
-		console.log(newCoordinates);
 	}
 	input.appendChild(extras);
 	if (appendIndex == 1) {
@@ -222,6 +222,13 @@ function renderSingle(ins, appendIndex) {
 		lats.setAttribute("max", 90);
 		lats.setAttribute("class", "hashCoord");
 		lats.setAttribute("value", startCoords[1]);
+		if(newCoordinates.hasOwnProperty(ins)){
+			lats.setAttribute("value",newCoordinates[ins]["longitude"]);
+		}
+		else{
+			lats.setAttribute("value", "");
+		}
+
 		lats.setAttribute("id", ins + "lat");
 		lats.onchange = function() {
 			var babyDontHurtMe = hadamar(ins,document.getElementById(ins + "lat").value, document.getElementById(ins + "lon").value, document.getElementById(ins + "range").value);
@@ -243,7 +250,12 @@ function renderSingle(ins, appendIndex) {
 		lats.setAttribute("step", "any");
 		lats.setAttribute("min", -180);
 		lats.setAttribute("max", 180);
-		lats.setAttribute("value", startCoords[0]);
+		if(newCoordinates.hasOwnProperty(ins)){
+			lats.setAttribute("value",newCoordinates[ins]["latitude"]);
+		}
+		else{
+		lats.setAttribute("value", "");
+		}
 		lats.setAttribute("class", "hashCoord");
 		lats.setAttribute("id", ins + "lon");
 		lats.onchange = function() {
@@ -265,6 +277,26 @@ function renderSingle(ins, appendIndex) {
 
 	if (appendIndex == 1) {
 		var lats = document.createElement("label");
+		lats.textContent = "Grouping Label: ";
+		lats.setAttribute("for",ins+"AltTag");
+		lats.setAttribute("class","hashRangeLabel clearBoth");
+		input.appendChild(lats);
+		var lats = document.createElement("input");
+		lats.setAttribute("type", "text");
+		lats.setAttribute("id",ins+"AltTag");
+		lats.setAttribute("class","altTagDelete");
+		if(newCoordinates[ins].hasOwnProperty("grouptag")){
+			lats.setAttribute("value",newCoordinates[ins]["grouptag"]);
+		}
+		lats.onchange = function(){
+			newCoordinates[ins]["grouptag"] = document.getElementById(ins+"AltTag").value;
+			console.log(newCoordinates);
+			if(document.getElementById("Lsave").style.display !="block"){
+				document.getElementById("Lsave").style.display = "block";
+			}
+		}
+		input.appendChild(lats);
+		var lats = document.createElement("label");
 		lats.textContent = "Range (Km): ";
 		lats.setAttribute("class", "hashRangeLabel clearBoth");
 		lats.setAttribute("for", ins + "range");
@@ -272,7 +304,12 @@ function renderSingle(ins, appendIndex) {
 		var lats = document.createElement("input")
 		lats.setAttribute("type", "number");
 		lats.setAttribute("step", "any");
+		if(newCoordinates.hasOwnProperty(ins)){
+			lats.setAttribute("value",newCoordinates[ins]["radius"]);
+		}
+		else{
 		lats.setAttribute("value", 0);
+		}
 		lats.setAttribute("min", 0);
 		lats.setAttribute("id", ins + "range");
 		lats.setAttribute("class", "distRange");
@@ -344,7 +381,14 @@ var loadTagJSON = function(type, appendIndex) {
 			var serverResponse = xhReq.responseText;
 			tags[0] = (JSON.parse(serverResponse)).data.campaign;
 			tags[1] = (JSON.parse(serverResponse)).data.location;
-			console.log(tags);
+			newCoordinates = {};
+			for(var i in JSON.parse(serverResponse).data.locations){
+				newCoordinates[i] = (JSON.parse(serverResponse).data.locations[i]);
+				console.log(i);
+				console.log(newCoordinates[i]);
+			} 
+			console.log(newCoordinates);
+			
 			for (var i in tags[0]) {
 				renderSingle(tags[0][i].substring(1, tags[0][i].length), 0);
 			}
@@ -398,6 +442,7 @@ function uniqueArr(arr) {
 }
 
 function hadamar(src,lat, lon, rad) {
+	console.log(lat+","+lon+","+rad);
 	lat = parseFloat(lat);
 	lon = parseFloat(lon);
 	rad = parseFloat(rad);
@@ -405,8 +450,10 @@ function hadamar(src,lat, lon, rad) {
 	if(lon == NaN){lon = 0;}
 	if(rad == NaN){rad = 0;}
 
-	newCoordinates[src] = placeObj(lat,lon,rad);
-	console.log(newCoordinates);
+	newCoordinates[src]["latitude"] = placeObj(lat,lon,rad).latitude;
+	newCoordinates[src]["longitude"] = placeObj(lat,lon,rad).longitude;
+	newCoordinates[src]["radius"] = placeObj(lat,lon,rad).radius;
+
 	if (rad == 0) {
 		console.log([lat, lon, lat, lon]);
 		return [lat.toFixed(6), lon.toFixed(6), lat.toFixed(6), lon.toFixed(6)];

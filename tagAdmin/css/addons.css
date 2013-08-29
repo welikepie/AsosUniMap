@@ -10,6 +10,7 @@ body>#modalDialogue #modalInside #modalConfirm{right:20px;}
 body>.well{height:100%;}body>.well #location{display:none;}
 body>.well #render,body>.well #location{float:none;margin:0px auto;height:100%;}body>.well #render #Lhashtags>li,body>.well #location #Lhashtags>li{border-bottom:1px solid #34495e;width:640px;clear:both;}body>.well #render #Lhashtags>li .coordDisplay,body>.well #location #Lhashtags>li .coordDisplay{float:left;margin-left:75px;}body>.well #render #Lhashtags>li .coordDisplay label,body>.well #location #Lhashtags>li .coordDisplay label{margin-top:0px;float:left;}
 body>.well #render #Lhashtags>li .coordDisplay div,body>.well #location #Lhashtags>li .coordDisplay div{float:left;}
+body>.well #render #Lhashtags>li .altTagDelete,body>.well #location #Lhashtags>li .altTagDelete{width:460px;}
 body>.well #render #Lhashtags>li .hashlesshash,body>.well #location #Lhashtags>li .hashlesshash{margin-bottom:5px;}
 body>.well #render #Lhashtags>li label,body>.well #location #Lhashtags>li label{margin-top:10px;margin-right:5px;margin-left:5px;}
 body>.well #render #Lhashtags>li .hashLabel,body>.well #location #Lhashtags>li .hashLabel{float:right;}
