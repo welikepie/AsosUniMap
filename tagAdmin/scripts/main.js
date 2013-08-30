@@ -285,8 +285,13 @@ function renderSingle(ins, appendIndex) {
 		lats.setAttribute("type", "text");
 		lats.setAttribute("id",ins+"AltTag");
 		lats.setAttribute("class","altTagDelete");
-		if(newCoordinates[ins].hasOwnProperty("grouptag")){
-			lats.setAttribute("value",newCoordinates[ins]["grouptag"]);
+		if(newCoordinates.hasOwnProperty(ins)){
+			if(newCoordinates[ins].hasOwnProperty("grouptag")){
+				lats.setAttribute("value",newCoordinates[ins]["grouptag"]);
+			}
+		}
+		else{
+			newCoordinates[ins]={};
 		}
 		lats.onchange = function(){
 			newCoordinates[ins]["grouptag"] = document.getElementById(ins+"AltTag").value;

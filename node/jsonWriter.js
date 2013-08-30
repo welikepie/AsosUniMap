@@ -13,8 +13,8 @@ function writEm() {
 			var results = [];
 			for (var i in result) {
 				if (result[i].hashtag.length > 0) {
-					results.push(result[i].hashtag)
-				};
+					results.push(result[i].hashtag);
+				}
 			}
 			asyncLoop(results.length, function(loop, i) {
 				console.log(i);
@@ -24,11 +24,21 @@ function writEm() {
 						console.log("Error occurred pulling " + results[i] + " at " + new Date().getTime());
 					} else {
 						var writeArr = {};
+						if(results[i].indexOf("#">-1)){
+							results[i] = results[i].replace(/#/g,"");
+						}
+						writeArr.tag = results[i];
 						writeArr.timestamp = new Date().getTime();
 						writeArr.answers = result;
-						var thing = JSON.stringify(JSON.parse(fs.readFileSync("jsons/"+results[i]+".json",'utf-8')).answers);
+						var thing; 
+						try{
+							thing = JSON.stringify(JSON.parse(fs.readFileSync("jsons/"+results[i]+".json",'utf-8')).answers);
+						}catch(e){
+							thing = "";
+						}
 						//console.log(thing);
 						if(JSON.stringify(writeArr.answers)!=thing){
+							console.log(writeArr);
 							fs.writeFile("jsons/pre-" + results[i] + ".json", JSON.stringify(writeArr), function(err) {
 								if (err) {
 									console.log("Error occurred writing " + results[i] + " at " + new Date().getTime());
