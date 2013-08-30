@@ -1,4 +1,24 @@
-html { height: 100%;
+html { 
+    .infoBox{
+            float:left;
+            width:300px;
+            list-style:none;
+                        margin-bottom:5px;
+                        .text{
+                            max-height: 200px;
+                            overflow-y: scroll;
+                            word-wrap: break-word;
+                            word-wrap: break-word;
+                            }
+                        .image{
+                            float:right;
+                            
+                            width:150px;
+                            height:150px;
+                            }
+
+        }
+    height: 100%;
       body { 
           height: 100%; 
           margin: 0; 
@@ -6,11 +26,38 @@ html { height: 100%;
               #map-canvas { height: 100% }
               #map-overlay{                  
                 position: absolute;
-                width: 25%;
+                width: 350px;
                 height:90%;
                 right: 5%;
                 top: 5%;
-                background-color: lime;
+                background-color:rgba(255,255,255,0.8);
+                border-radius:20px;
+                border: 10px solid rgb(135, 206, 235);
+                #content{
+                    width:inherit;
+                    padding-left:0px;
+                    height:90%;
+                    overflow-y:scroll;
+                    li{
+                        float:left;
+                        width:100%;
+                        list-style:none;
+                        margin-bottom:5px;
+                        border-bottom:1px solid rgb(125,125,125);
+                        .text{
+                            max-height: 200px;
+                            overflow-y: scroll;
+                            word-wrap: break-word;
+                            word-wrap: break-word;
+                            }
+                        .image{
+                            float:right;
+                            
+                            width:150px;
+                            height:150px;
+                            }
+                        }
+                    }
             }
       }
 }
