@@ -2,7 +2,8 @@ var config = {
 	"minTime" : 0, //usually looks like 1376501470
 	"minZoom" : 6, //minimum zoom to have.
 	"startZoom" : 6, //starting zoom to have.
-	"markerMinZoom" : 5
+	"markerMinZoom" : 5,
+	"lastUpdated" : 0
 }
 var maps = {
 	oldInfoBox : null,
@@ -123,13 +124,12 @@ var mmanager = {
 		google.maps.event.addListener(obj, 'click', function() {
 			maps.map.panTo(obj.getPosition());
 			maps.map.setZoom(9);
-					
-			
+
 			var bounds = maps.map.getBounds();
 			maps.boundingBox = [bounds.ma.b, bounds.ga.d, bounds.ma.d, bounds.ga.b]
 			tags.filterBasedOnBound("doNothing");
-		
-		//	console.log("calling");
+
+			//	console.log("calling");
 		});
 	},
 	"addClickToHashes" : function(obj) {
@@ -150,7 +150,7 @@ var mmanager = {
 		hashContentManager = new MarkerManager(maps.map);
 		for (var zed in tags.locations) {
 			if (tags.locations[zed].latitude != null && tags.locations[zed].longitude != null) {
-				console.log(new google.maps.LatLng(tags.locations[zed].latitude, tags.locations[zed].longitude));
+				//console.log(new google.maps.LatLng(tags.locations[zed].latitude, tags.locations[zed].longitude));
 				//thisMarker = new google.maps.Marker({
 				thisMarker = new MarkerWithLabel({
 					position : new google.maps.LatLng(tags.locations[zed].latitude, tags.locations[zed].longitude),
@@ -223,7 +223,7 @@ var tags = {
 		});
 	},
 	"filterBasedOnBound" : function(carryOn) {
-		
+
 		tags.inBound = [];
 		for (var i in tags.locations) {
 			if (tags.locations[i].latitude != null && tags.locations[i].longitude != null) {
@@ -239,12 +239,11 @@ var tags = {
 		console.log(tags.inBound);
 		console.log(maps.map.getBounds());
 		var toCheck = tpht.getByClass("sideBar");
-		for(var i = 0; i < toCheck.length; i++){
-			if(tags.inBound.indexOf(toCheck[i].getAttribute("data-rel-hashtag"))==-1){
-				toCheck[i].style.display="none";
-			}
-			else{
-				toCheck[i].style.display="block";
+		for (var i = 0; i < toCheck.length; i++) {
+			if (tags.inBound.indexOf(toCheck[i].getAttribute("data-rel-hashtag")) == -1) {
+				toCheck[i].style.display = "none";
+			} else {
+				toCheck[i].style.display = "block";
 			}
 		}
 		if (carryOn == true || carryOn == "update") {
@@ -263,6 +262,7 @@ var tags = {
 			});
 		}, function() {
 			//console.log(tags.tagData);
+			config.lastUpdated = new Date().getTime();
 			tags.gather();
 		});
 	},
@@ -343,6 +343,86 @@ var tags = {
 		}
 		//console.log(tags.DOMrender.length);
 	},
+	"renew" : function(arr) {
+		for (var i in arr) {
+			//console.log(tags.tagData[i]);
+			var arrMake = arr[i];
+			var arrTags = arrMake.tag;
+			var arrAns = arrMake.answers;
+			var arrTime = arrMake.time;
+			for (var t in arrAns) {
+				//		console.log(new Date(arrAns[t].time).getTime()/1000);
+				if (new Date(arrAns[t].time).getTime() / 1000 > config.minTime) {
+					if (arrAns[t].lat != null) {
+						//console.log(arrAns[t]);
+						//arrAns[t].position = new google.maps.LatLng(arrAns[t].lat, arrAns[t].lon);
+						//arrAns[t].map = maps.map;
+						//tags.MAPrender.push(arrAns[t]);
+						//shove in to thing here.
+
+					} else {//DOMrender, //MAPrender
+						tags.DOMrender.push(arrAns[t]);
+						tags.renderToList(arrAns[t], true);
+					}
+				}
+			}
+		}
+		tags.MAPrender.sort(function(a, b) {
+			var aTime = new Date(a.time).getTime() / 1000;
+			var bTime = new Date(b.time).getTime() / 1000;
+			if (aTime > bTime) {
+				return -1;
+			}
+			if (aTime < bTime) {
+				return 1;
+			}
+
+			return 0;
+
+		});
+		tags.DOMrender.sort(function(a, b) {
+			var aTime = new Date(a.time).getTime() / 1000;
+			var bTime = new Date(b.time).getTime() / 1000;
+			if (aTime > bTime) {
+				return -1;
+			}
+			if (aTime < bTime) {
+				return 1;
+			}
+
+			return 0;
+
+		});
+
+		for (var zed in tags.MAPrender) {
+			var obj = tags.MAPrender[zed];
+			var marker = new google.maps.Marker({
+				position : obj.position,
+				map : obj.map,
+				zIndex : 9000,
+				addedInfo : obj,
+				disableAutoPan : true
+			});
+			marker.info = new google.maps.InfoWindow({
+				content : elements.info(obj),
+				zIndex : 9001
+			});
+			mmanager.addClickToHashes(marker);
+
+			mmanager.hashContentArr.push(marker);
+		}
+		tags.renderToMap(mmanager.hashContentArr);
+
+		for (var zed in tags.DOMrender) {
+			if (zed < 100) {
+				tags.renderToList(tags.DOMrender[zed], false);
+				//	console.log(t);
+				//	tpht.ping();
+			}
+		}
+		//console.log(tags.DOMrender.length);
+	},
+
 	"renderToMap" : function(obj) {
 		mcOptions = {};
 		//var mcOptions = {gridSize: 50, maxZoom: 15};
@@ -379,7 +459,11 @@ var elements = {
 		if (obj.img_small != undefined) {
 			var div = tpht.createElement("img");
 			tpht.setClass(div, "image");
-			tpht.setAttr(div, "src", obj.img_small);
+			if (obj.src == "TWTTR") {
+				tpht.setAttr(div, "src", "http://" + obj.img_small);
+			} else {
+				tpht.setAttr(div, "src", obj.img_small);
+			}
 			li.appendChild(div);
 		}
 		var div = tpht.createElement("div");
@@ -410,8 +494,11 @@ var elements = {
 		if (obj.img_small != undefined) {
 			var div = tpht.createElement("img");
 			tpht.setClass(div, "image");
-			tpht.setAttr(div, "src", obj.img_small);
-			//tpht.setAttr(div,"src","images/marker.png");
+			if (obj.src == "TWTTR") {
+				tpht.setAttr(div, "src", "http://" + obj.img_small);
+			} else {
+				tpht.setAttr(div, "src", obj.img_small);
+			}//tpht.setAttr(div,"src","images/marker.png");
 			li.appendChild(div);
 		}
 		var div = tpht.createElement("div");
@@ -434,5 +521,36 @@ var elements = {
 		li.appendChild(div);
 		//console.log(li);
 		return li;
+	}
+}
+var sse = {
+	"longtroll" : function(input) {
+		console.log(input);
+		var ins = JSON.parse(input.data);
+
+		if (ins.hasOwnProperty("tag")) {
+			//	tag.loadTagFiles([input]);
+			//fill 'er up.
+			tags.tagData
+			var timeToBeat = 0;
+			for (var i in tags.tagData) {
+				var newTime = new Date(tags.tagData[i].time).getTime();
+				if (newTime > timeToBeat) {
+					timeToBeat = newTime;
+				}
+			}
+			var newPushArr = [];
+			for (var inputs in ins.data) {
+				//check time against last updated
+				if (new Date(ins.data[inputs][time]).getTime() >= timeToBeat) {
+					tags.tagData.push(ins.data[inputs]);
+					newPushArr.push(ins.data[inputs]);
+				}
+			}
+			tags.renew(newPushArr);
+		} else {
+			console.log(input.data);
+		}
+
 	}
 }

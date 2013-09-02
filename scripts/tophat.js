@@ -22,7 +22,7 @@ var tpht = {
 	"getById" : function(id) {
 		return document.getElementById(id);
 	},
-
+	
 	"easyXML" : function(type, url, args, callback) {
 		if (type.toLowerCase() == "get") {
 			var xhReq = new XMLHttpRequest();
@@ -161,7 +161,6 @@ var tpht = {
 		var r1y = tpht.distance1(r1[1], r1[3]) / 2;
 		var r2x = tpht.distance1(r2[0], r2[2]) / 2;
 		var r2y = tpht.distance1(r2[1], r2[3]) / 2;
-		console.log("MinsX"+r1x+r2x+",totalDist:"+totalDistX);
 		if((r1x+r2x) >= totalDistX && r1y+r2y >= totalDistY){return true;}
 		else{return false;}
 	},
