@@ -95,6 +95,18 @@ var tpht = {
 		}
 		return "";
 	},
+	"lazyLoader" : function(tagLazyIsOn){
+		var img = document.getElementsByTagName("img");
+		for(var zed in img){
+			console.log(typeof(img[zed])=="object");
+			if(typeof(img[zed])=="object"){
+				console.log(img[zed]);
+				if(img[zed].hasAttribute(tagLazyIsOn)){
+					console.log("in the air like you don't care");
+				}
+			}
+		}
+	},
 	"asyncLoop" : function(iterations, func, callback) {
 		var index = 0;
 		var done = false;
@@ -140,7 +152,21 @@ var tpht = {
 		}
 		return result;
 	},
+	"compareBoxesRect" : function(r1,r2){
+		var r1Cent = tpht.centerBox(r1[0], r1[1], r1[2], r1[3]);
+		var r2Cent = tpht.centerBox(r2[0], r2[1], r2[2], r2[3]);
+		var totalDistX = tpht.distance1(r1Cent[0],r2Cent[0]);
+		var totalDistY = tpht.distance1(r1Cent[1],r2Cent[1]);
+		var r1x = tpht.distance1(r1[0], r1[2]) / 2;
+		var r1y = tpht.distance1(r1[1], r1[3]) / 2;
+		var r2x = tpht.distance1(r2[0], r2[2]) / 2;
+		var r2y = tpht.distance1(r2[1], r2[3]) / 2;
+		console.log("MinsX"+r1x+r2x+",totalDist:"+totalDistX);
+		if((r1x+r2x) >= totalDistX && r1y+r2y >= totalDistY){return true;}
+		else{return false;}
+	},
 	"compareBoxesCircular" : function(r1, r2) {
+//		console.log(tpht.distance1(r1[0], r1[2]) / 2+","+tpht.distance1(r2[0], r2[2]));
 		var r1Range = tpht.pythagoras(tpht.distance1(r1[0], r1[2]) / 2, tpht.distance1(r1[1], r1[3]) / 2);
 		var r2Range = tpht.pythagoras(tpht.distance1(r2[0], r2[2]) / 2, tpht.distance1(r2[1], r2[3]) / 2);
 		var touse;
@@ -151,6 +177,21 @@ var tpht = {
 		}
 		var r1Pyth = tpht.centerBox(r1[0], r1[1], r1[2], r1[3]);
 		var r2Pyth = tpht.centerBox(r2[0], r2[1], r2[2], r2[3]);
+		console.log("box:");
+		console.log(r1);
+		console.log(r1Range);
+		console.log(r1Pyth);
+		
+		console.log("area:");
+		console.log(r2);
+		console.log(r2Range);
+		console.log(r2Pyth);
+		console.log("---------------------");
+		console.log(tpht.distance1(r1Pyth[0], r2Pyth[0]));
+		console.log(tpht.distance1(r1Pyth[1], r2Pyth[1]));
+		console.log("=========");
+		console.log(tpht.pythagoras(tpht.distance1(r1Pyth[0], r2Pyth[0]), tpht.distance1(r1Pyth[1], r2Pyth[1])));
+		console.log(touse);
 		return tpht.pythagoras(tpht.distance1(r1Pyth[0], r2Pyth[0]), tpht.distance1(r1Pyth[1], r2Pyth[1])) < touse;
 
 	},

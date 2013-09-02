@@ -69,27 +69,37 @@ var maps = {
 			icon : image,
 			pane : "mapPane",
 			enableEventPropagation : true,
-			zIndex : 0,
+			zIndex : 8999,
 			map : maps.map
 		});
 		google.maps.event.addListener(beachMarker, 'dblclick', function(event) {
 			maps.map.setZoom(maps.map.getZoom() + 1);
+			tags.filterBasedOnBound("doNothing");
 		});
 		google.maps.event.addListener(maps.map, 'zoom_changed', function() {
 			var bounds = maps.map.getBounds();
 			maps.boundingBox = [bounds.ma.b, bounds.ga.d, bounds.ma.d, bounds.ga.b];
 			if (maps.map.getZoom() > config.minZoom) {
-				beachMarker.setMap(null);
+				if (maps.map.getZoom() > config.minZoom + 1) {
+					mmanager.tagManager.hide();
+				} else {
+					mmanager.tagManager.show();
+				}
+				beachMarker.setVisible(false);
 			} else {
-				beachMarker.setMap(maps.map);
+
+				beachMarker.setVisible(true);
 			}
+			mmanager.tagManager.refresh();
+			console.log("calling doNothing");
+			tags.filterBasedOnBound("doNothing");
 		});
-		google.maps.event.addListener(maps.map, 'center_changed', function() {
+		google.maps.event.addListener(maps.map, 'dragend', function() {
 			//tpht.getById("map-canvas").onclick = function() {
 
 			var bounds = maps.map.getBounds();
 			maps.boundingBox = [bounds.ma.b, bounds.ga.d, bounds.ma.d, bounds.ga.b];
-			//tags.filterBasedOnBound(true);
+			tags.filterBasedOnBound("doNothing");
 			//tags.update();
 			//}
 		});
@@ -97,11 +107,6 @@ var maps = {
 			// do something only the first time the map is loaded
 			var bounds = maps.map.getBounds();
 			oldBounds = bounds;
-			window.setInterval(function() {
-				if (JSON.stringify(maps.map.getBounds()) != JSON.stringify(oldBounds)) {
-					//tags.filterBasedOnBound(true);
-				}
-			}, 500);
 			maps.boundingBox = [bounds.ma.b, bounds.ga.d, bounds.ma.d, bounds.ga.b];
 			console.log(maps.boundingBox);
 		});
@@ -111,27 +116,65 @@ var maps = {
 var mmanager = {
 	"tagManager" : null,
 	"markerArr" : null,
+	"hashContentManager" : null,
+	"hashContentArr" : [],
 	"overMark" : [],
+	"addClickToOverHashes" : function(obj) {
+		google.maps.event.addListener(obj, 'click', function() {
+			maps.map.panTo(obj.getPosition());
+			maps.map.setZoom(9);
+					
+			
+			var bounds = maps.map.getBounds();
+			maps.boundingBox = [bounds.ma.b, bounds.ga.d, bounds.ma.d, bounds.ga.b]
+			tags.filterBasedOnBound("doNothing");
+		
+		//	console.log("calling");
+		});
+	},
+	"addClickToHashes" : function(obj) {
+		console.log("added");
+		google.maps.event.addListener(obj, 'click', function() {
+			console.log("click");
+			maps.map.panTo(obj.getPosition());
+			if (maps.oldInfoBox != null) {
+				maps.oldInfoBox.close();
+			}
+			obj.info.open(maps.map, obj);
+			maps.oldInfoBox = obj.info;
+			//mmanager.tagManager.refresh();
+		});
+	},
 	"initialise" : function() {
-		console.log("log");
-		mmanager.tagManager = new MarkerManager(maps.map);
+		var thisMarker;
+		hashContentManager = new MarkerManager(maps.map);
 		for (var zed in tags.locations) {
 			if (tags.locations[zed].latitude != null && tags.locations[zed].longitude != null) {
 				console.log(new google.maps.LatLng(tags.locations[zed].latitude, tags.locations[zed].longitude));
-				mmanager.overMark.push(
-				new google.maps.Marker({
+				//thisMarker = new google.maps.Marker({
+				thisMarker = new MarkerWithLabel({
 					position : new google.maps.LatLng(tags.locations[zed].latitude, tags.locations[zed].longitude),
-					title : zed
-				}));
+					title : "#" + zed,
+					zIndex : 9010,
+					labelContent : "<h2>#" + zed + "</h2>",
+					labelAnchor : new google.maps.Point(22, 25),
+					labelClass : "labels", // the CSS class for the label
+					icon : "images/marker.png"
+				});
+				//thisMarker.setVisible(false);
+				mmanager.addClickToOverHashes(thisMarker);
+				mmanager.overMark.push(thisMarker);
 			}
-//			console.log(mmanager.overMark[mmanager.overMark.length-1]);
+			//			console.log(mmanager.overMark[mmanager.overMark.length-1]);
 		}
-		//http://google-maps-utility-library-v3.googlecode.com/svn/tags/markermanager/1.0/docs/examples.html
-		//http://stackoverflow.com/questions/1538681/how-to-call-fromlatlngtodivpixel-in-google-maps-api-v3
-		//http://stackoverflow.com/questions/7819209/google-map-marker-manager-v3
-		this.tagManager.addMarkers(mmanager.overMark,6);
-		this.tagManager.addMarkers([],5);
-		mmanager.tagManager.refresh();
+		mmanager.tagManager = new MarkerManager(maps.map);
+		google.maps.event.addListener(mmanager.tagManager, 'loaded', function() {
+			mmanager.tagManager.addMarkers(mmanager.overMark, config.minZoom);
+			mmanager.tagManager.refresh();
+			google.maps.event.addListener(maps.map, 'zoom_changed', function() {
+				mmanager.tagManager.refresh();
+			});
+		});
 		console.log("refreshed");
 	}
 }
@@ -152,8 +195,8 @@ var tags = {
 		//
 		//	}
 		//}
-		console.log(tags.locations);
-		console.log(tags.markerTags);
+		//console.log(tags.locations);
+		//console.log(tags.markerTags);
 	},
 	"retrieve" : function() {
 		var waiting;
@@ -164,16 +207,14 @@ var tags = {
 			}
 			if (ans.hasOwnProperty("optionaltags")) {
 				tags.optionaltags = ans.optionaltags;
-				tpht.ping();				
+				//tpht.ping();
 			}
 			if (maps.boundingBox.length != 4) {
 				waiting = window.setInterval(function() {
 					if (maps.boundingBox.length == 4) {
-						
+						mmanager.initialise();
 						tags.filterBasedOnBound(true);
 						clearInterval(waiting);
-						mmanager.initialise();
-						
 					}
 				}, 500);
 			}
@@ -182,20 +223,30 @@ var tags = {
 		});
 	},
 	"filterBasedOnBound" : function(carryOn) {
+		
 		tags.inBound = [];
 		for (var i in tags.locations) {
-			//console.log(tags.locations[i]);
 			if (tags.locations[i].latitude != null && tags.locations[i].longitude != null) {
 				if (tags.locations[i].radius == null) {
 					tags.locations[i].radius = 0;
 				}
-				var near = tpht.compareBoxesCircular(maps.boundingBox, tpht.haversine(tags.locations[i].latitude, tags.locations[i].longitude, tags.locations[i].radius));
+				var near = tpht.compareBoxesRect(maps.boundingBox, tpht.haversine(tags.locations[i].latitude, tags.locations[i].longitude, tags.locations[i].radius));
 				if (near == true) {
 					tags.inBound.push(i);
 				}
 			}
 		}
 		console.log(tags.inBound);
+		console.log(maps.map.getBounds());
+		var toCheck = tpht.getByClass("sideBar");
+		for(var i = 0; i < toCheck.length; i++){
+			if(tags.inBound.indexOf(toCheck[i].getAttribute("data-rel-hashtag"))==-1){
+				toCheck[i].style.display="none";
+			}
+			else{
+				toCheck[i].style.display="block";
+			}
+		}
 		if (carryOn == true || carryOn == "update") {
 			tags.loadTagFiles(tags.inBound, "");
 		}
@@ -207,7 +258,7 @@ var tags = {
 				if (!JSON.parse(response).hasOwnProperty("error")) {
 					tags.tagData[JSON.parse(response).tag] = JSON.parse(response);
 				}
-				console.log(tags.tagData[JSON.parse(response).tag]);
+				//console.log(tags.tagData[JSON.parse(response).tag]);
 				loop.next();
 			});
 		}, function() {
@@ -217,7 +268,7 @@ var tags = {
 	},
 	"gather" : function() {
 		for (var i in tags.tagData) {
-			console.log(tags.tagData[i]);
+			//console.log(tags.tagData[i]);
 			var arrMake = tags.tagData[i];
 			var arrTags = arrMake.tag;
 			var arrAns = arrMake.answers;
@@ -265,39 +316,48 @@ var tags = {
 		});
 
 		for (var zed in tags.MAPrender) {
-			tags.renderToMap(tags.MAPrender[zed]);
+			var obj = tags.MAPrender[zed];
+			var marker = new google.maps.Marker({
+				position : obj.position,
+				map : obj.map,
+				zIndex : 9000,
+				addedInfo : obj,
+				disableAutoPan : true
+			});
+			marker.info = new google.maps.InfoWindow({
+				content : elements.info(obj),
+				zIndex : 9001
+			});
+			mmanager.addClickToHashes(marker);
+
+			mmanager.hashContentArr.push(marker);
 		}
+		tags.renderToMap(mmanager.hashContentArr);
+
 		for (var zed in tags.DOMrender) {
 			if (zed < 100) {
 				tags.renderToList(tags.DOMrender[zed], false);
 				//	console.log(t);
-				tpht.ping();
+				//	tpht.ping();
 			}
 		}
-		console.log(tags.DOMrender.length);
+		//console.log(tags.DOMrender.length);
 	},
 	"renderToMap" : function(obj) {
-		tags.MAPrenderOnPage.push(obj.id)
-		var marker = new google.maps.Marker({
-			position : obj.position,
-			//map : obj.map,
-			zIndex : 9000,
-			addedInfo : obj,
-			disableAutoPan : true
-		});
-		marker.info = new google.maps.InfoWindow({
-			content : elements.info(obj),
-			zIndex : 9001
-		});
-
-		google.maps.event.addListener(marker, 'click', function() {
-			maps.map.panTo(marker.getPosition());
-			if (maps.oldInfoBox != null) {
-				maps.oldInfoBox.close();
-			}
-			marker.info.open(maps.map, marker);
-			maps.oldInfoBox = marker.info;
-		});
+		mcOptions = {};
+		//var mcOptions = {gridSize: 50, maxZoom: 15};
+		mmanager.hashContentManager = new MarkerClusterer(maps.map, obj, mcOptions);
+		google.maps.event.addListener(mmanager.hashContentManager, 'loaded', function() {
+			mmanager.tagManager.refresh();
+		})
+		//tpht.lazyLoader("data-image-src");
+		//	mmanager.hashContentManager = new MarkerManager(maps.map);
+		//	google.maps.event.addListener(mmanager.hashContentManager, 'loaded', function() {
+		//console.log("==============================");
+		//			mmanager.tagManager.addMarkers(obj, config.minZoom);
+		//		mmanager.tagManager.refresh();
+		//	});
+		//tags.MAPrenderOnPage.push(obj.id);
 	},
 	"renderToList" : function(obj, inb4) {
 		tags.DOMrenderOnPage.push(obj.id);
@@ -315,6 +375,7 @@ var elements = {
 		var li = tpht.createElement("li");
 		tpht.setId(li, "sideBar" + obj.id);
 		tpht.setClass(li, "sideBar");
+		tpht.setAttr(li, "data-rel-hashtag", obj.hashtag.replace(/#/g, ""));
 		if (obj.img_small != undefined) {
 			var div = tpht.createElement("img");
 			tpht.setClass(div, "image");
@@ -350,6 +411,7 @@ var elements = {
 			var div = tpht.createElement("img");
 			tpht.setClass(div, "image");
 			tpht.setAttr(div, "src", obj.img_small);
+			//tpht.setAttr(div,"src","images/marker.png");
 			li.appendChild(div);
 		}
 		var div = tpht.createElement("div");
