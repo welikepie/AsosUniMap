@@ -22,28 +22,97 @@ var tpht = {
 	"getById" : function(id) {
 		return document.getElementById(id);
 	},
-	
+	"partInViewport" : function(el){
+		  var top = el.offsetTop;
+		  var left = el.offsetLeft;
+		  var width = el.offsetWidth;
+		  var height = el.offsetHeight;
+		
+		  while(el.offsetParent) {
+		    el = el.offsetParent;
+		    top += el.offsetTop;
+		    left += el.offsetLeft;
+		  }
+		
+		  return (
+		    top < (window.pageYOffset + window.innerHeight) &&
+		    left < (window.pageXOffset + window.innerWidth) &&
+		    (top + height) > window.pageYOffset &&
+		    (left + width) > window.pageXOffset
+		  );
+		
+	},
+	"debounce" : function(func, wait, immediate) {
+	var timeout;
+	return function() {
+		var context = this, args = arguments;
+		var later = function() {
+			timeout = null;
+			if (!immediate) func.apply(context, args);
+		};
+		var callNow = immediate && !timeout;
+		clearTimeout(timeout);
+		timeout = setTimeout(later, wait);
+		if (callNow) func.apply(context, args);
+	};
+},
+	"allInViewport" : function(el){
+		  var top = el.offsetTop;
+		  var left = el.offsetLeft;
+		  var width = el.offsetWidth;
+		  var height = el.offsetHeight;
+		
+		  while(el.offsetParent) {
+		    el = el.offsetParent;
+		    top += el.offsetTop;
+		    left += el.offsetLeft;
+		  }
+		
+		  return (
+		    top >= window.pageYOffset &&
+		    left >= window.pageXOffset &&
+		    (top + height) <= (window.pageYOffset + window.innerHeight) &&
+		    (left + width) <= (window.pageXOffset + window.innerWidth)
+		  );
+		
+	},
+
 	"easyXML" : function(type, url, args, callback) {
 		if (type.toLowerCase() == "get") {
 			var xhReq = new XMLHttpRequest();
-			xhReq.open("GET", url, true);
-			xhReq.onreadystatechange = function() {
-				//console.log(xhReq.status);
-				if (xhReq.status != 200 && (xhReq.status <= 300 && xhReq.status >= 400)) {
-					callback(JSON.stringify({
-						"error" : {
-							"statusCode" : xhReq.status
-						},
-						"responseText" : xhReq.responseText
-					}));
-				}
-				if (xhReq.readyState == 4) {
-					var serverResponse = xhReq.responseText;
-					callback(serverResponse);
-				}
+			try {
+				var err = false;
+				xhReq.open("GET", url, true);
+				xhReq.onreadystatechange = function() {
+					console.log(xhReq.status);
+					if (xhReq.readyState == 4) {
+						if (xhReq.status != 200) {
+							err = true;
+							callback(JSON.stringify({
+								"error" : {
+									"statusCode" : xhReq.status
+								},
+								"responseText" : xhReq.responseText
+							}));
+							return false;
+						} else {
+							console.log("DONE");
+							console.log(err);
+							var serverResponse = xhReq.responseText;
+							callback(serverResponse);
+						}
+					}
 
-			};
-			xhReq.send();
+				};
+				xhReq.send();
+			} catch(e) {
+				callback(JSON.stringify({
+					"error" : {
+						"statusCode" : 9001
+					},
+					"responseText" : e
+				}));
+			}
 		}
 		if (type.toLowerCase() == "post") {
 			console.log("post");
@@ -95,13 +164,13 @@ var tpht = {
 		}
 		return "";
 	},
-	"lazyLoader" : function(tagLazyIsOn){
+	"lazyLoader" : function(tagLazyIsOn) {
 		var img = document.getElementsByTagName("img");
-		for(var zed in img){
-			console.log(typeof(img[zed])=="object");
-			if(typeof(img[zed])=="object"){
+		for (var zed in img) {
+			console.log( typeof (img[zed]) == "object");
+			if ( typeof (img[zed]) == "object") {
 				console.log(img[zed]);
-				if(img[zed].hasAttribute(tagLazyIsOn)){
+				if (img[zed].hasAttribute(tagLazyIsOn)) {
 					console.log("in the air like you don't care");
 				}
 			}
@@ -152,20 +221,23 @@ var tpht = {
 		}
 		return result;
 	},
-	"compareBoxesRect" : function(r1,r2){
+	"compareBoxesRect" : function(r1, r2) {
 		var r1Cent = tpht.centerBox(r1[0], r1[1], r1[2], r1[3]);
 		var r2Cent = tpht.centerBox(r2[0], r2[1], r2[2], r2[3]);
-		var totalDistX = tpht.distance1(r1Cent[0],r2Cent[0]);
-		var totalDistY = tpht.distance1(r1Cent[1],r2Cent[1]);
+		var totalDistX = tpht.distance1(r1Cent[0], r2Cent[0]);
+		var totalDistY = tpht.distance1(r1Cent[1], r2Cent[1]);
 		var r1x = tpht.distance1(r1[0], r1[2]) / 2;
 		var r1y = tpht.distance1(r1[1], r1[3]) / 2;
 		var r2x = tpht.distance1(r2[0], r2[2]) / 2;
 		var r2y = tpht.distance1(r2[1], r2[3]) / 2;
-		if((r1x+r2x) >= totalDistX && r1y+r2y >= totalDistY){return true;}
-		else{return false;}
+		if ((r1x + r2x) >= totalDistX && r1y + r2y >= totalDistY) {
+			return true;
+		} else {
+			return false;
+		}
 	},
 	"compareBoxesCircular" : function(r1, r2) {
-//		console.log(tpht.distance1(r1[0], r1[2]) / 2+","+tpht.distance1(r2[0], r2[2]));
+		//		console.log(tpht.distance1(r1[0], r1[2]) / 2+","+tpht.distance1(r2[0], r2[2]));
 		var r1Range = tpht.pythagoras(tpht.distance1(r1[0], r1[2]) / 2, tpht.distance1(r1[1], r1[3]) / 2);
 		var r2Range = tpht.pythagoras(tpht.distance1(r2[0], r2[2]) / 2, tpht.distance1(r2[1], r2[3]) / 2);
 		var touse;
@@ -180,7 +252,7 @@ var tpht = {
 		console.log(r1);
 		console.log(r1Range);
 		console.log(r1Pyth);
-		
+
 		console.log("area:");
 		console.log(r2);
 		console.log(r2Range);
@@ -214,7 +286,7 @@ var tpht = {
 	},
 	"appendFirst" : function(element, parent) {
 
-		if (parent.firstChild!=undefined || parent.firstChild!=null) {
+		if (parent.firstChild != undefined || parent.firstChild != null) {
 			parent.insertBefore(element, parent.firstChild);
 		} else {
 			parent.appendChild(element);

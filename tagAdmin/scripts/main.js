@@ -135,7 +135,7 @@ var renderModal = function(opts) {
 }
 var commandSend = function(input, type, callback) {
 	var xhReq = new XMLHttpRequest();
-	xhReq.open("POST", "http://localhost:65/asosUniMap/tagAdmin/backend/verify.php", true);
+	xhReq.open("POST", "backend/verify.php", true);
 	xhReq.onreadystatechange = function() {
 		console.log(xhReq.status);
 		if (xhReq.readyState != 4) {
@@ -143,6 +143,7 @@ var commandSend = function(input, type, callback) {
 			console.log("An error dispatching command " + input + " occurred");
 		}
 		var serverResponse = xhReq.responseText;
+		console.log(serverResponse);
 		callback(JSON.parse(serverResponse));
 	};
 	if (type == "post") {
@@ -376,7 +377,7 @@ if(document.getElementById("Lsave").style.display !="block"){
 var loadTagJSON = function(type, appendIndex) {
 	if (type == "get") {
 		var xhReq = new XMLHttpRequest();
-		xhReq.open("POST", "http://localhost:65/asosUniMap/node/tags.json", true);
+		xhReq.open("POST", "../node/tags.json", true);
 		xhReq.onreadystatechange = function() {
 			console.log(xhReq.status);
 			if (xhReq.readyState != 4) {
@@ -405,7 +406,7 @@ var loadTagJSON = function(type, appendIndex) {
 	}
 	if (type == "post") {
 		var xhReq = new XMLHttpRequest();
-		xhReq.open("POST", "http://localhost:65/asosUniMap/tagAdmin/backend/writer.php", true);
+		xhReq.open("POST", "backend/writer.php", true);
 		xhReq.onreadystatechange = function() {
 			console.log(xhReq.status);
 			if (xhReq.readyState != 4) {

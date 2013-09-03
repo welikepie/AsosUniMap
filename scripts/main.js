@@ -3,7 +3,10 @@ var config = {
 	"minZoom" : 6, //minimum zoom to have.
 	"startZoom" : 6, //starting zoom to have.
 	"markerMinZoom" : 5,
-	"lastUpdated" : 0
+	"lastUpdated" : 0,
+	"baseURL" : "",
+	"ulLimit" : 50,
+	"LIBOTTOMMARGIN" : 6
 }
 var maps = {
 	oldInfoBox : null,
@@ -79,7 +82,7 @@ var maps = {
 		});
 		google.maps.event.addListener(maps.map, 'zoom_changed', function() {
 			var bounds = maps.map.getBounds();
-			maps.boundingBox = [bounds.ma.b, bounds.ga.d, bounds.ma.d, bounds.ga.b];
+			maps.boundingBox = [bounds.ma.b, bounds.ga.d, bounds.ma.d, bounds.ga.b]
 			if (maps.map.getZoom() > config.minZoom) {
 				if (maps.map.getZoom() > config.minZoom + 1) {
 					mmanager.tagManager.hide();
@@ -99,7 +102,7 @@ var maps = {
 			//tpht.getById("map-canvas").onclick = function() {
 
 			var bounds = maps.map.getBounds();
-			maps.boundingBox = [bounds.ma.b, bounds.ga.d, bounds.ma.d, bounds.ga.b];
+			maps.boundingBox = [bounds.ma.b, bounds.ga.d, bounds.ma.d, bounds.ga.b]
 			tags.filterBasedOnBound("doNothing");
 			//tags.update();
 			//}
@@ -108,7 +111,8 @@ var maps = {
 			// do something only the first time the map is loaded
 			var bounds = maps.map.getBounds();
 			oldBounds = bounds;
-			maps.boundingBox = [bounds.ma.b, bounds.ga.d, bounds.ma.d, bounds.ga.b];
+			maps.boundingBox = [bounds.ma.b, bounds.ga.d, bounds.ma.d, bounds.ga.b]
+
 			console.log(maps.boundingBox);
 		});
 	}
@@ -142,6 +146,13 @@ var mmanager = {
 			}
 			obj.info.open(maps.map, obj);
 			maps.oldInfoBox = obj.info;
+			//			document.getElementById("infoBox"+obj.id).getElementsByTagName("img")[0].setAttribute("src",document.getElementById(obj.id).getElementsByTagName(0).getAttribute("img-data-src"));
+			if (document.getElementsByClassName("infoBox")[0].getElementsByTagName("img").length > 0) {
+				document.getElementsByClassName("infoBox")[0].getElementsByTagName("img")[0].addEventListener("error", function() {
+					document.getElementsByClassName("infoBox")[0].getElementsByTagName("img")[0].style.display = "none";
+				});
+				document.getElementsByClassName("infoBox")[0].getElementsByTagName("img")[0].setAttribute("src", document.getElementsByClassName("infoBox")[0].getElementsByTagName("img")[0].getAttribute("img-data-src"));
+			}
 			//mmanager.tagManager.refresh();
 		});
 	},
@@ -169,16 +180,19 @@ var mmanager = {
 		}
 		mmanager.tagManager = new MarkerManager(maps.map);
 		google.maps.event.addListener(mmanager.tagManager, 'loaded', function() {
+			//console.log(mmanager.overMark);
 			mmanager.tagManager.addMarkers(mmanager.overMark, config.minZoom);
+			//console.log(mmanager.tagManager);
 			mmanager.tagManager.refresh();
 			google.maps.event.addListener(maps.map, 'zoom_changed', function() {
 				mmanager.tagManager.refresh();
 			});
 		});
-		console.log("refreshed");
+		//console.log("refreshed");
 	}
 }
 var tags = {
+	"contentInnerHeight" : 0,
 	"locations" : {},
 	"optionaltags" : {}, //use optionaltags to traverse locations and get data.
 	"inBound" : [],
@@ -200,7 +214,7 @@ var tags = {
 	},
 	"retrieve" : function() {
 		var waiting;
-		tpht.easyXML("get", "node/tags.json", "", function(response) {
+		tpht.easyXML("get", config.baseURL + "node/tags.json", "", function(response) {
 			var ans = JSON.parse(response).data;
 			if (ans.hasOwnProperty("locations")) {
 				tags.locations = ans.locations;
@@ -236,8 +250,7 @@ var tags = {
 				}
 			}
 		}
-		console.log(tags.inBound);
-		console.log(maps.map.getBounds());
+		//console.log(tags.inBound);
 		var toCheck = tpht.getByClass("sideBar");
 		for (var i = 0; i < toCheck.length; i++) {
 			if (tags.inBound.indexOf(toCheck[i].getAttribute("data-rel-hashtag")) == -1) {
@@ -253,7 +266,8 @@ var tags = {
 	"loadTagFiles" : function(arr, updater) {
 		tpht.asyncLoop(arr.length, function(loop, i) {
 			//		console.log("node/jsons/"+tags.inBound[t]+".json");
-			tpht.easyXML("get", "node/jsons/" + tags.inBound[i] + ".json", "", function(response) {
+			tpht.easyXML("get", config.baseURL + "node/jsons/" + tags.inBound[i] + ".json", "", function(response) {
+				//console.log(response);
 				if (!JSON.parse(response).hasOwnProperty("error")) {
 					tags.tagData[JSON.parse(response).tag] = JSON.parse(response);
 				}
@@ -281,7 +295,7 @@ var tags = {
 						arrAns[t].position = new google.maps.LatLng(arrAns[t].lat, arrAns[t].lon);
 						arrAns[t].map = maps.map;
 						tags.MAPrender.push(arrAns[t]);
-
+						tags.DOMrender.push(arrAns[t]);
 					} else {//DOMrender, //MAPrender
 						tags.DOMrender.push(arrAns[t]);
 					}
@@ -329,43 +343,101 @@ var tags = {
 				zIndex : 9001
 			});
 			mmanager.addClickToHashes(marker);
-
 			mmanager.hashContentArr.push(marker);
 		}
 		tags.renderToMap(mmanager.hashContentArr);
 
 		for (var zed in tags.DOMrender) {
-			if (zed < 100) {
+			if (zed < config.ulLimit) {
 				tags.renderToList(tags.DOMrender[zed], false);
+				tags.DOMrenderOnPage.push(obj.id);
+
+				//console.log(document.getElementById("sideBar"+obj.id));
 				//	console.log(t);
 				//	tpht.ping();
 			}
 		}
+		var iterate = document.getElementsByTagName("li");
+		var carried = false;
+		document.getElementById("surrounder").onscroll = function() {
+//console.log((document.getElementById("content").offsetHeight-document.getElementById("surrounder").offsetHeight) - 100);
+			console.log(document.getElementById("surrounder").scrollTop);
+			if (document.getElementById("surrounder").scrollTop >= (document.getElementById("content").offsetHeight-document.getElementById("surrounder").offsetHeight) - 100) {
+				console.log("trigger");
+				if(carried == false){
+					console.log("doing");
+					carried = true;
+					var longest = tags.DOMrenderOnPage.length;
+					for (var zed = longest; zed < longest+(config.ulLimit); zed++) {
+						if (zed < tags.DOMrender.length) {
+							tags.renderToList(tags.DOMrender[zed], false);
+							tags.DOMrenderOnPage.push(obj.id);
+							//console.log(document.getElementById("sideBar"+obj.id));
+							//	console.log(t);
+							//	tpht.ping();
+						}
+					}
+console.log(iterate.length);
+					console.log("ITERATIVE PROGRESS");
+									carried = false;
+
+				}
+			}
+		}
 		//console.log(tags.DOMrender.length);
+	},
+	"listImageLoad" : function() {
+
+		var unloaded = document.getElementsByClassName("image");
+		for (var i in unloaded) {
+			//console.log( typeof (unloaded[i]));
+			if ( typeof (unloaded[i]) == "object") {
+				//console.log(unloaded[i]);
+				unloaded[i].addEventListener("error", function() {
+					unloaded[i].style.display = 'none';
+				});
+				unloaded[i].setAttribute("src", unloaded[i].getAttribute("data-img-src"));
+			}
+		}
+
 	},
 	"renew" : function(arr) {
 		for (var i in arr) {
 			//console.log(tags.tagData[i]);
-			var arrMake = arr[i];
-			var arrTags = arrMake.tag;
-			var arrAns = arrMake.answers;
-			var arrTime = arrMake.time;
-			for (var t in arrAns) {
-				//		console.log(new Date(arrAns[t].time).getTime()/1000);
-				if (new Date(arrAns[t].time).getTime() / 1000 > config.minTime) {
-					if (arrAns[t].lat != null) {
-						//console.log(arrAns[t]);
-						//arrAns[t].position = new google.maps.LatLng(arrAns[t].lat, arrAns[t].lon);
-						//arrAns[t].map = maps.map;
-						//tags.MAPrender.push(arrAns[t]);
-						//shove in to thing here.
+			console.log(arr[i]);
+			//		console.log(new Date(arrAns[t].time).getTime()/1000);
+			console.log(new Date(arr[i].time).getTime() + "," + config.minTime);
+			if (new Date(arr[i].time).getTime() > config.minTime) {
+				if (arr[i].lat != null) {
+					//console.log(arrAns[t]);
+					arr[i].position = new google.maps.LatLng(arr[i].lat, arr[i].lon);
+					arr[i].map = maps.map;
+					tags.MAPrender.push(arr[i]);
+					//shove in to thing here.
 
-					} else {//DOMrender, //MAPrender
-						tags.DOMrender.push(arrAns[t]);
-						tags.renderToList(arrAns[t], true);
-					}
+					var obj = arr[i];
+					var marker = new google.maps.Marker({
+						position : obj.position,
+						map : obj.map,
+						zIndex : 9000,
+						addedInfo : obj,
+						disableAutoPan : true
+					});
+					marker.info = new google.maps.InfoWindow({
+						content : elements.info(obj),
+						zIndex : 9001
+					});
+					mmanager.addClickToHashes(marker);
+
+					//	console.log(obj.position);
+					tags.renderToList(arr[i], true);
+					marker.setVisible(true);
+					//mmanager.hashContentManager.refresh();
+				} else {//DOMrender, //MAPrender
+					tags.renderToList(arr[i], true);
 				}
 			}
+
 		}
 		tags.MAPrender.sort(function(a, b) {
 			var aTime = new Date(a.time).getTime() / 1000;
@@ -393,43 +465,18 @@ var tags = {
 			return 0;
 
 		});
-
-		for (var zed in tags.MAPrender) {
-			var obj = tags.MAPrender[zed];
-			var marker = new google.maps.Marker({
-				position : obj.position,
-				map : obj.map,
-				zIndex : 9000,
-				addedInfo : obj,
-				disableAutoPan : true
-			});
-			marker.info = new google.maps.InfoWindow({
-				content : elements.info(obj),
-				zIndex : 9001
-			});
-			mmanager.addClickToHashes(marker);
-
-			mmanager.hashContentArr.push(marker);
-		}
-		tags.renderToMap(mmanager.hashContentArr);
-
-		for (var zed in tags.DOMrender) {
-			if (zed < 100) {
-				tags.renderToList(tags.DOMrender[zed], false);
-				//	console.log(t);
-				//	tpht.ping();
-			}
-		}
 		//console.log(tags.DOMrender.length);
 	},
 
-	"renderToMap" : function(obj) {
+	"renderToMap" : function(obj, callback) {
 		mcOptions = {};
 		//var mcOptions = {gridSize: 50, maxZoom: 15};
 		mmanager.hashContentManager = new MarkerClusterer(maps.map, obj, mcOptions);
 		google.maps.event.addListener(mmanager.hashContentManager, 'loaded', function() {
-			mmanager.tagManager.refresh();
-		})
+			console.log("+++++++++++++++++++++++++++++++++");
+			mmanager.hashContentManager.refresh();
+		});
+
 		//tpht.lazyLoader("data-image-src");
 		//	mmanager.hashContentManager = new MarkerManager(maps.map);
 		//	google.maps.event.addListener(mmanager.hashContentManager, 'loaded', function() {
@@ -440,64 +487,89 @@ var tags = {
 		//tags.MAPrenderOnPage.push(obj.id);
 	},
 	"renderToList" : function(obj, inb4) {
-		tags.DOMrenderOnPage.push(obj.id);
-		var append = tpht.getById("content");
-		if (inb4 == true) {
-			tpht.appendFirst(elements.list(obj), append);
+		var append = document.getElementById("content");
+		var toAdd;
+		if (tags.inBound.indexOf(obj.hashtag) == -1) {
+			toAdd = elements.list(obj, true, inb4);
 		} else {
-			append.appendChild(elements.list(obj));
+			toAdd = elements.list(obj, false, inb4);
+		}
+		if (inb4 == true) {
+			tpht.appendFirst(toAdd, append);
+		} else {
+			append.appendChild(toAdd);
 		}
 	}
 }
 
 var elements = {
-	"list" : function(obj) {
-		var li = tpht.createElement("li");
-		tpht.setId(li, "sideBar" + obj.id);
-		tpht.setClass(li, "sideBar");
-		tpht.setAttr(li, "data-rel-hashtag", obj.hashtag.replace(/#/g, ""));
+	"list" : function(obj, hidden, notLazyLoad) {
+		notLazyLoad = true;
+		var li = document.createElement("li");
+		li.setAttribute("id", "sideBar" + obj.id);
+		if (hidden == true) {
+			li.style.display = "none";
+		}
+		li.setAttribute("class", "sideBar");
+		li.setAttribute("data-rel-hashtag", obj.hashtag.replace(/#/g, ""));
 		if (obj.img_small != undefined) {
-			var div = tpht.createElement("img");
-			tpht.setClass(div, "image");
+			var div = document.createElement("img");
+			div.setAttribute("class", "image");
 			if (obj.src == "TWTTR") {
-				tpht.setAttr(div, "src", "http://" + obj.img_small);
+				if (notLazyLoad == false) {
+					div.setAttribute("data-img-src", "http://" + obj.img_small);
+				} else {
+					div.setAttribute("src", "http://" + obj.img_small);
+				}
 			} else {
-				tpht.setAttr(div, "src", obj.img_small);
-			}
+				if (notLazyLoad == false) {
+					div.setAttribute("data-img-src", obj.img_small);
+				} else {
+					div.setAttribute("src", obj.img_small);
+				}
+
+			}//"sideBar" + obj.id
+			//div.setAttribute("onerror",)
+			//			tpht.setAttr(div, "onError", tpht.setAttr(div,"style","display:none;"));
+
+			div.addEventListener("error", function() {
+				//console.log("sideBar" + obj.id);
+				document.getElementById("sideBar" + obj.id).getElementsByTagName("img")[0].style.display = "none";
+			})
 			li.appendChild(div);
 		}
-		var div = tpht.createElement("div");
-		tpht.setText(div, "source: " + obj.source);
+		var div = document.createElement("div");
+		div.textContent = "source: " + obj.source;
 		li.appendChild(div);
-		var div = tpht.createElement("div");
-		tpht.setClass(div, "user");
-		tpht.setText(div, "user: " + obj.user);
+		var div = document.createElement("div");
+		div.setAttribute("class", "user");
+		div.textContent = "user: " + obj.user;
 		li.appendChild(div);
 
 		if (obj.text != undefined) {
-			var div = tpht.createElement("div");
-			tpht.setClass(div, "text");
-			tpht.setText(div, "text: " + obj.text);
+			var div = document.createElement("div");
+			div.setAttribute("class", "text");
+			div.textContent = "text: " + obj.text;
 			li.appendChild(div);
 		}
-		var div = tpht.createElement("div");
-		tpht.setClass(div, "date");
-		tpht.setText(div, "date added: " + obj.time);
+		var div = document.createElement("div");
+		div.setAttribute("class", "date");
+		div.textContent = "date added: " + obj.time;
 		li.appendChild(div);
 		//console.log(li);
 		return li;
 	},
 	"info" : function(obj) {
-		var li = tpht.createElement("div");
-		tpht.setId(li, "infoBox" + obj.id);
-		tpht.setClass(li, "infoBox");
+		var li = document.createElement("div");
+		li.setAttribute("id", "infoBox" + obj.id);
+		li.setAttribute("class", "infoBox");
 		if (obj.img_small != undefined) {
 			var div = tpht.createElement("img");
 			tpht.setClass(div, "image");
 			if (obj.src == "TWTTR") {
-				tpht.setAttr(div, "src", "http://" + obj.img_small);
+				tpht.setAttr(div, "img-data-src", "http://" + obj.img_small);
 			} else {
-				tpht.setAttr(div, "src", obj.img_small);
+				tpht.setAttr(div, "img-data-src", obj.img_small);
 			}//tpht.setAttr(div,"src","images/marker.png");
 			li.appendChild(div);
 		}
@@ -527,29 +599,30 @@ var sse = {
 	"longtroll" : function(input) {
 		console.log(input);
 		var ins = JSON.parse(input.data);
-
+		//console.log(ins);
 		if (ins.hasOwnProperty("tag")) {
 			//	tag.loadTagFiles([input]);
 			//fill 'er up.
 			tags.tagData
 			var timeToBeat = 0;
 			for (var i in tags.tagData) {
-				var newTime = new Date(tags.tagData[i].time).getTime();
+				var newTime = new Date(tags.tagData[i].timestamp).getTime();
 				if (newTime > timeToBeat) {
 					timeToBeat = newTime;
 				}
 			}
 			var newPushArr = [];
-			for (var inputs in ins.data) {
+			for (var inputs in ins.answers) {
+				//console.log(ins.answers[inputs]);
 				//check time against last updated
-				if (new Date(ins.data[inputs][time]).getTime() >= timeToBeat) {
-					tags.tagData.push(ins.data[inputs]);
-					newPushArr.push(ins.data[inputs]);
+				if (new Date(ins.answers[inputs].time).getTime() > timeToBeat) {
+					newPushArr.push(ins.answers[inputs]);
 				}
 			}
+			console.log(newPushArr);
 			tags.renew(newPushArr);
 		} else {
-			console.log(input.data);
+			//console.log(input.data);
 		}
 
 	}

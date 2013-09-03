@@ -49,9 +49,9 @@ t.stream('statuses/filter', {
 			}
 			if (tweet.entities.hasOwnProperty("media")) {
 				if (tweet.entities.media.length > 0) {
-					send.img_small = tweet.entities.media[0].display_url;
-					send.img_med = tweet.entities.media[0].display_url;
-					send.img_large = tweet.entities.media[0].display_url;
+					send.img_small = tweet.entities.media[0].media_url;
+					send.img_med = tweet.entities.media[0].media_url;
+					send.img_large = tweet.entities.media[0].media_url;
 				}
 			}
 			//console.log(send);

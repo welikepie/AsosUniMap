@@ -38,19 +38,26 @@ html {
               #map-overlay{                  
                 position: absolute;
                 width: 350px;
-                height:90%;
+                height:500px;
                 right: 5%;
                 top: 5%;
                 background-color:rgba(255,255,255,0.8);
                 border-radius:20px;
                 border: 10px solid rgb(135, 206, 235);
-                #content{
+                #surrounder{
+                    float:left;
                     width:inherit;
                     padding-left:0px;
-                    height:90%;
+                    height:450px;
                     overflow-y:scroll;
+            #content{
+                width:330px;
+                margin:0px;
+                padding-left:0px;
+                float:left;
                     li{
                         float:left;
+                        clear:left;
                         width:100%;
                         list-style:none;
                         margin-bottom:5px;
@@ -69,6 +76,7 @@ html {
                             }
                         }
                     }
+                }
             }
       }
 }

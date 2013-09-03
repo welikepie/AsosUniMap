@@ -1,0 +1,6 @@
+AuthUserFile C:\xampp\htdocs\aptana\AsosUniMap\tagAdmin\.htpasswd
+#AuthUserFile /srv/Websites/Development/asosUniMap/tagAdmin/.htpasswd
+#AuthGroupFile /dev/null
+AuthName "Admin Area"
+AuthType Basic
+require valid-user
