@@ -59,7 +59,7 @@ var maps = {
 			center : new google.maps.LatLng(54.53389810146441, 1.95556640625),
 			zoom : config.startZoom,
 			styles : styles,
-			mapTypeId : google.maps.MapTypeId.ROADMAP,
+			mapTypeId : google.maps.MapTypeId.SATELITE,
 			minZoom : config.minZoom
 		};
 
@@ -81,8 +81,12 @@ var maps = {
 			tags.filterBasedOnBound("doNothing");
 		});
 		google.maps.event.addListener(maps.map, 'zoom_changed', function() {
+			console.log(maps.map.getZoom());
 			var bounds = maps.map.getBounds();
-			maps.boundingBox = [bounds.ma.b, bounds.ga.d, bounds.ma.d, bounds.ga.b]
+			oldBounds = bounds;
+			var bArr = bounds.toString().replace(/[()]/g, "").split(",");
+			maps.boundingBox = [parseFloat(bArr[1]), parseFloat(bArr[0]), parseFloat(bArr[3]), parseFloat(bArr[2])];
+
 			if (maps.map.getZoom() > config.minZoom) {
 				if (maps.map.getZoom() > config.minZoom + 1) {
 					mmanager.tagManager.hide();
@@ -102,7 +106,9 @@ var maps = {
 			//tpht.getById("map-canvas").onclick = function() {
 
 			var bounds = maps.map.getBounds();
-			maps.boundingBox = [bounds.ma.b, bounds.ga.d, bounds.ma.d, bounds.ga.b]
+			var bArr = bounds.toString().replace(/[()]/g, "").split(",");
+			maps.boundingBox = [parseFloat(bArr[1]), parseFloat(bArr[0]), parseFloat(bArr[3]), parseFloat(bArr[2])];
+
 			tags.filterBasedOnBound("doNothing");
 			//tags.update();
 			//}
@@ -111,7 +117,8 @@ var maps = {
 			// do something only the first time the map is loaded
 			var bounds = maps.map.getBounds();
 			oldBounds = bounds;
-			maps.boundingBox = [bounds.ma.b, bounds.ga.d, bounds.ma.d, bounds.ga.b]
+			var bArr = bounds.toString().replace(/[()]/g, "").split(",");
+			maps.boundingBox = [parseFloat(bArr[1]), parseFloat(bArr[0]), parseFloat(bArr[3]), parseFloat(bArr[2])];
 
 			console.log(maps.boundingBox);
 		});
@@ -128,9 +135,10 @@ var mmanager = {
 		google.maps.event.addListener(obj, 'click', function() {
 			maps.map.panTo(obj.getPosition());
 			maps.map.setZoom(9);
-
 			var bounds = maps.map.getBounds();
-			maps.boundingBox = [bounds.ma.b, bounds.ga.d, bounds.ma.d, bounds.ga.b]
+			oldBounds = bounds;
+			var bArr = bounds.toString().replace(/[()]/g, "").split(",");
+			maps.boundingBox = [parseFloat(bArr[1]), parseFloat(bArr[0]), parseFloat(bArr[3]), parseFloat(bArr[2])];
 			tags.filterBasedOnBound("doNothing");
 
 			//	console.log("calling");
@@ -192,6 +200,7 @@ var mmanager = {
 	}
 }
 var tags = {
+	"singleTag" : "",
 	"contentInnerHeight" : 0,
 	"locations" : {},
 	"optionaltags" : {}, //use optionaltags to traverse locations and get data.
@@ -199,6 +208,7 @@ var tags = {
 	"tagData" : {},
 	"MAPrender" : [],
 	"DOMrender" : [],
+	"campaign" : [],
 	"MAPrenderOnPage" : [],
 	"DOMrenderOnPage" : [],
 	"markerTags" : {},
@@ -223,6 +233,9 @@ var tags = {
 				tags.optionaltags = ans.optionaltags;
 				//tpht.ping();
 			}
+			if (ans.hasOwnProperty("campaign")) {
+				tags.campaign = ans.campaign;
+			}
 			if (maps.boundingBox.length != 4) {
 				waiting = window.setInterval(function() {
 					if (maps.boundingBox.length == 4) {
@@ -232,6 +245,7 @@ var tags = {
 					}
 				}, 500);
 			}
+			general.updateSinglePoint();
 			//tags.markerPos();
 
 		});
@@ -262,6 +276,7 @@ var tags = {
 		if (carryOn == true || carryOn == "update") {
 			tags.loadTagFiles(tags.inBound, "");
 		}
+		general.updateSinglePoint();
 	},
 	"loadTagFiles" : function(arr, updater) {
 		tpht.asyncLoop(arr.length, function(loop, i) {
@@ -360,15 +375,15 @@ var tags = {
 		var iterate = document.getElementsByTagName("li");
 		var carried = false;
 		document.getElementById("surrounder").onscroll = function() {
-//console.log((document.getElementById("content").offsetHeight-document.getElementById("surrounder").offsetHeight) - 100);
+			//console.log((document.getElementById("content").offsetHeight-document.getElementById("surrounder").offsetHeight) - 100);
 			console.log(document.getElementById("surrounder").scrollTop);
-			if (document.getElementById("surrounder").scrollTop >= (document.getElementById("content").offsetHeight-document.getElementById("surrounder").offsetHeight) - 100) {
+			if (document.getElementById("surrounder").scrollTop >= (document.getElementById("content").offsetHeight - document.getElementById("surrounder").offsetHeight) - 100) {
 				console.log("trigger");
-				if(carried == false){
+				if (carried == false) {
 					console.log("doing");
 					carried = true;
 					var longest = tags.DOMrenderOnPage.length;
-					for (var zed = longest; zed < longest+(config.ulLimit); zed++) {
+					for (var zed = longest; zed < longest + (config.ulLimit); zed++) {
 						if (zed < tags.DOMrender.length) {
 							tags.renderToList(tags.DOMrender[zed], false);
 							tags.DOMrenderOnPage.push(obj.id);
@@ -377,9 +392,9 @@ var tags = {
 							//	tpht.ping();
 						}
 					}
-console.log(iterate.length);
+					console.log(iterate.length);
 					console.log("ITERATIVE PROGRESS");
-									carried = false;
+					carried = false;
 
 				}
 			}
@@ -402,11 +417,13 @@ console.log(iterate.length);
 
 	},
 	"renew" : function(arr) {
-		for (var i in arr) {
-			//console.log(tags.tagData[i]);
-			console.log(arr[i]);
+		console.log(arr.length);
+		var longWay = 500;
+		//		console.log(longWay);
+		tpht.asyncLoop(arr.length, function(loop, i) {
+			//	console.log(arr[i]);
 			//		console.log(new Date(arrAns[t].time).getTime()/1000);
-			console.log(new Date(arr[i].time).getTime() + "," + config.minTime);
+			//	console.log(new Date(arr[i].time).getTime() + "," + config.minTime);
 			if (new Date(arr[i].time).getTime() > config.minTime) {
 				if (arr[i].lat != null) {
 					//console.log(arrAns[t]);
@@ -432,13 +449,17 @@ console.log(iterate.length);
 					//	console.log(obj.position);
 					tags.renderToList(arr[i], true);
 					marker.setVisible(true);
+					setTimeout(loop.next, Math.floor(longWay));
 					//mmanager.hashContentManager.refresh();
 				} else {//DOMrender, //MAPrender
 					tags.renderToList(arr[i], true);
+					setTimeout(loop.next, Math.floor(longWay));
 				}
 			}
 
-		}
+		}, function() {
+			console.log("added all!")
+		});
 		tags.MAPrender.sort(function(a, b) {
 			var aTime = new Date(a.time).getTime() / 1000;
 			var bTime = new Date(b.time).getTime() / 1000;
@@ -469,7 +490,9 @@ console.log(iterate.length);
 	},
 
 	"renderToMap" : function(obj, callback) {
-		mcOptions = {};
+		mcOptions = {
+			maxZoom : 18
+		};
 		//var mcOptions = {gridSize: 50, maxZoom: 15};
 		mmanager.hashContentManager = new MarkerClusterer(maps.map, obj, mcOptions);
 		google.maps.event.addListener(mmanager.hashContentManager, 'loaded', function() {
@@ -603,27 +626,119 @@ var sse = {
 		if (ins.hasOwnProperty("tag")) {
 			//	tag.loadTagFiles([input]);
 			//fill 'er up.
-			tags.tagData
+			//			tags.tagData
+
 			var timeToBeat = 0;
-			for (var i in tags.tagData) {
-				var newTime = new Date(tags.tagData[i].timestamp).getTime();
-				if (newTime > timeToBeat) {
-					timeToBeat = newTime;
-				}
-			}
+			console.log(tags.tagData);
+
 			var newPushArr = [];
 			for (var inputs in ins.answers) {
-				//console.log(ins.answers[inputs]);
-				//check time against last updated
-				if (new Date(ins.answers[inputs].time).getTime() > timeToBeat) {
+				if (tags.tagData.hasOwnProperty(ins.answers[inputs].hashtag)) {
+					if (new Date(ins.answers[inputs].time).getTime() > tags.tagData[ins.answers[inputs].hashtag].timestamp) {
+						tags.tagData[ins.answers[inputs].hashtag].timestamp = new Date(ins.answers[inputs].time).getTime();
+						newPushArr.push(ins.answers[inputs]);
+					}
+				} else {
+					tags.tagData[ins.answers[inputs].hashtag] = {
+						"answers" : [],
+						"tag" : ins.answers[inputs].hashtag,
+						"timestamp" : 0
+					}
 					newPushArr.push(ins.answers[inputs]);
 				}
+				//console.log(ins.answers[inputs]);
+				//check time against last updated
 			}
-			console.log(newPushArr);
-			tags.renew(newPushArr);
+			//			console.log(newPushArr);
+			if (newPushArr.length > 0) {
+				tags.renew(newPushArr);
+			}
 		} else {
 			//console.log(input.data);
 		}
 
+	}
+}
+
+var general = {
+	"customModal" : function(opts){
+/*	{
+				"type" : "dialog",
+				"message" : "<strong>Warning!</strong><p>The file is already being edited and has been since " + new Date(parseInt(response.data.timestamp, 10)) + "</p>" + "<p>If you are sure you want to edit anyways, click \"Confirm\".</p>",
+				"confirm" : function() {
+					commandSend("force", "post", function() {
+						loadTagJSON("get", -1);
+					});
+				}
+			});*/
+	console.log(opts);
+	var content = document.getElementById("modalInside");
+	var textIn = document.createElement("div");
+	textIn.setAttribute("id", "modalText");
+	var decline = document.createElement("input");
+	decline.setAttribute("type", "button");
+	decline.setAttribute("class", "btn btn-large btn-danger");
+	decline.setAttribute("id", "modalDeny");
+	decline.setAttribute("value", "Dismiss");
+	decline.onclick = function() {
+		document.getElementById("modalDialogue").style.display = "none";
+		document.getElementById("modalInside").innerHTML = "";
+	}
+	content.appendChild(decline);
+	if (opts.type == "dialog") {
+		console.log(opts.message);
+		textIn.innerHTML = opts.message;
+		var confirm = document.createElement("input");
+		confirm.setAttribute("type", "button");
+		confirm.setAttribute("class", "btn btn-large btn-success");
+		confirm.setAttribute("id", "modalConfirm");
+		confirm.setAttribute("value", "Confirm");
+		confirm.onclick = function() {
+			opts.confirm();
+		}
+		content.appendChild(confirm);
+	}
+	content.appendChild(textIn);
+	document.getElementById("modalDialogue").style.display = "block";
+
+},
+	"updateSinglePoint" : function() {
+		var extraString = "twitButton.html#type=hashtag&count=none";
+		if (tags.inBound.length > 0) {
+			var center = maps.map.getCenter().toString().replace(/[()]/g, "").split(",");
+			var dist = [999, ""];
+			for (var i in tags.inBound) {
+				if (tpht.distanceBetweenPoints([parseFloat(center[0]), parseFloat(center[1])], [tags.locations[tags.inBound[i]].latitude, tags.locations[tags.inBound[i]].longitude]) < dist[0]) {
+					dist[1] = "#" + tags.inBound[i];
+					dist[0] = tpht.distanceBetweenPoints([parseFloat(center[0]), parseFloat(center[1])], [tags.locations[tags.inBound[i]].latitude, tags.locations[tags.inBound[i]].longitude]);
+				}//latitude, longitude
+			}
+			tags.singleTag = dist[1];
+		} else {
+			tags.singleTag = "";
+		}
+		//		tags.locations
+
+		/*var toAdd = tags.campaign;
+		 if(tags.campaign.length>0){
+		 extraString+="&hashtags=";
+		 }
+		 for(var i in tags.campaign){
+		 if(i > 0){
+		 extraString += "%2C";
+		 }
+		 console.log(tags.campaign[i]);
+		 extraString+=tags.campaign[i].replace(/#/g,"");
+		 }
+		 if(tags.inBound.length == 1){
+		 if(tags.campaign.length>0){
+		 extraString+="%2C";
+		 }
+		 extraString+=tags.inBound[0];
+		 }*/
+		var tweet = document.getElementById("twitterButton");
+		extraString = extraString+"&hashtags="+tags.singleTag.replace(/#/g,"");
+		tweet.setAttribute("src", extraString);
+		tweet.contentWindow.location.reload();
 	}
 }

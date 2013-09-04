@@ -13,6 +13,9 @@ var tpht = {
 
 		return [x1, y1, x2, y2];
 	},
+	"distanceBetweenPoints" : function(obj1,obj2){
+		return tpht.pythagoras((obj1[0]-obj2[0]),(obj1[1]-obj2[1]));
+	},
 	"pythagoras" : function(num, num1) {
 		return Math.sqrt(Math.pow(num, 2) + Math.pow(num1, 2));
 	},
@@ -76,7 +79,49 @@ var tpht = {
 		  );
 		
 	},
+	"renderModal" : function(opts) {
+/*	{
+				"type" : "dialog",
+				"message" : "<strong>Warning!</strong><p>The file is already being edited and has been since " + new Date(parseInt(response.data.timestamp, 10)) + "</p>" + "<p>If you are sure you want to edit anyways, click \"Confirm\".</p>",
+				"confirm" : function() {
+					commandSend("force", "post", function() {
+						loadTagJSON("get", -1);
+					});
+				}
+			});*/
+	console.log(opts);
+	var content = document.getElementById("modalInside");
+	var textIn = document.createElement("div");
+	textIn.setAttribute("id", "modalText");
+	var decline = document.createElement("input");
+	decline.setAttribute("type", "button");
+	decline.setAttribute("class", "btn btn-large btn-danger");
+	decline.setAttribute("id", "modalDeny");
+	decline.setAttribute("value", "Dismiss");
+	decline.onclick = function() {
+		document.getElementById("modalDialogue").style.display = "none";
+		document.getElementById("modalInside").innerHTML = "";
+	}
+	content.appendChild(decline);
+	if (opts.type == "dialog") {
+		console.log(opts.message);
+		textIn.innerHTML = opts.message;
+		var confirm = document.createElement("input");
+		confirm.setAttribute("type", "button");
+		confirm.setAttribute("class", "btn btn-large btn-success");
+		confirm.setAttribute("id", "modalConfirm");
+		confirm.setAttribute("value", "Confirm");
+		confirm.onclick = function() {
+			opts.confirm();
+			document.getElementById("modalDialogue").style.display = "none";
+			document.getElementById("modalInside").innerHTML = "";
+		}
+		content.appendChild(confirm);
+	}
+	content.appendChild(textIn);
+	document.getElementById("modalDialogue").style.display = "block";
 
+},
 	"easyXML" : function(type, url, args, callback) {
 		if (type.toLowerCase() == "get") {
 			var xhReq = new XMLHttpRequest();
@@ -84,7 +129,6 @@ var tpht = {
 				var err = false;
 				xhReq.open("GET", url, true);
 				xhReq.onreadystatechange = function() {
-					console.log(xhReq.status);
 					if (xhReq.readyState == 4) {
 						if (xhReq.status != 200) {
 							err = true;

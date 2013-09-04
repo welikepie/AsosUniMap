@@ -9,7 +9,7 @@ var port = 1337;
 var express = require("express");
 var app = express();
 var idents = [];
-var setTimeoutVar = 20000;
+var setTimeoutVar = 10000;
 db.connection.connect();
 
 app.use(app.router);
@@ -27,7 +27,8 @@ function sendSSE(req, res) {
 	res.writeHead(200, {
 		'Content-Type' : 'text/event-stream',
 		'Cache-Control' : 'no-cache',
-		'Connection' : 'keep-alive'
+		'Connection' : 'keep-alive',
+	      "Access-Control-Allow-Origin": "*"
 	});
 	constructSSE(res, new Date().getTime(), "{\"status\":\"Connected!\"}");
 }
@@ -51,7 +52,7 @@ function writEm(listOfListeners) {
 			console.log(err);
 			writEm(listOfListeners);
 		} else {
-			//console.log(result);
+			console.log(result);
 			var results = [];
 			for (var zedsdead in result) {
 				if (result[zedsdead].hashtag.length > 0) {
