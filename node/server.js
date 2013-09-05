@@ -47,22 +47,25 @@ writEm(idents);
 
 function writEm(listOfListeners) {
 	console.log("start");
-	db.connection.query('SELECT DISTINCT hashtag FROM asosUniMap.content', function(err, result) {
+	fs.readFile('tags.json','utf-8', function(err, result) {
 		if (err) {
 			console.log(err);
 			writEm(listOfListeners);
 		} else {
 			console.log(result);
 			var results = [];
-			for (var zedsdead in result) {
-				if (result[zedsdead].hashtag.length > 0) {
-					results.push(result[zedsdead].hashtag);
+			var res = JSON.parse(result).data.location;
+			for (var zedsdead in res) {
+				if (res[zedsdead].length > 0) {
+					results.push(res[zedsdead].replace(/#/g,""));
 				}
 			}
+			console.log(results);
 			asyncLoop(results.length, function(loop, i) {
 				console.log(results[i]);
 				var prepare = "SELECT * FROM asosUniMap.content WHERE hashtag = '" + results[i] + "'";
 				db.connection.query(prepare, function(err, result) {
+					//console.log(result);
 					if (err) {
 						console.log("Error occurred pulling " + results[i] + " at " + new Date().getTime());
 						loop.next();
@@ -73,6 +76,7 @@ function writEm(listOfListeners) {
 						}
 						writeArr.tag = results[i];
 						writeArr.timestamp = new Date().getTime();
+						writeArr.length = result.length;
 						writeArr.answers = result;
 						var thing;
 						try {
@@ -80,8 +84,7 @@ function writEm(listOfListeners) {
 						} catch(e) {
 							thing = "";
 						}
-						//console.log(thing);
-						if (testForEquality(thing, JSON.parse(JSON.stringify(writeArr.answers),'utf-8')) == false) {
+						if (JSON.parse(JSON.stringify(writeArr.answers)).length == 0 && thing.length == 0||testForEquality(thing, JSON.parse(JSON.stringify(writeArr.answers),'utf-8')) == false) {
 							//console.log(writeArr);
 							fs.writeFile("jsons/pre-" + results[i] + ".json", JSON.stringify(writeArr), function(err) {
 								if (err) {

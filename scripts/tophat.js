@@ -89,7 +89,7 @@ var tpht = {
 					});
 				}
 			});*/
-	console.log(opts);
+	//console.log(opts);
 	var content = document.getElementById("modalInside");
 	var textIn = document.createElement("div");
 	textIn.setAttribute("id", "modalText");

@@ -37,7 +37,7 @@ function getAuthed(){
 
 }
 function getFacebook(input){
-	var dataStream = JSON.parse(fs.readFileSync("tags.json")).data;
+	var dataStream = JSON.parse(fs.readFileSync("tags.json")).data; //commented out is for multiple tags
 	credentials.tags = dataStream;
 	//console.log(input);
 	fb.setAccessToken(input);
@@ -51,17 +51,21 @@ function getFacebook(input){
 		}
 	};
 	//console.log(credentials.tags.campaign);
-	asyncLoop(credentials.tags.campaign.length,function(loop,i){
+//--	asyncLoop(credentials.tags.campaign.length,function(loop,i){
+asyncLoop(credentials.tags.location.length,function(loop,i){
 		//console.log(i);
-		console.log(credentials.tags.campaign[i]);
+//--		console.log(credentials.tags.campaign[i]);
+		console.log(credentials.tags.location[i])
 		fb.search({
-			q : credentials.tags.campaign[i].substring(1, credentials.tags.campaign[i].length),
+			//--q : credentials.tags.campaign[i].substring(1, credentials.tags.campaign[i].length),
+			q : credentials.tags.location[i].substring(1, credentials.tags.location[i].length),
 			type : "post",
 			limit : 500,
 			access_token : creds
 		}, function(err, res) {
 			//console.log(err);
-			var localTag = credentials.tags.campaign[i];
+//--			var localTag = credentials.tags.campaign[i];
+			var localTag = credentials.tags.location[i];
 			if(res.data!=null){
 			for (var zed in res.data) {
 				//console.log(res.data[zed]);

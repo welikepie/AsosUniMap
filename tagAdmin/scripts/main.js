@@ -15,7 +15,14 @@ Math.toRadians = function(angle) {
 // to add another group, add array to newStuff, take care of extra index throughout code starting from loading. Including saving.
 var divNames = ["render", "location"];
 var divSelected = "location";
+
 window.onload = function() {
+	//these things are all here to drop in to the location window by using already present code and hiding selections.
+	document.getElementById("JS-loc").style.display="none";
+	document.getElementById("JS-camp").style.display="none";
+	document.getElementById("JS-loc").click();
+
+
 	commandSend("start", "post", function(response) {
 		console.log(response);
 		//loadTagJSON();
@@ -326,8 +333,7 @@ function renderSingle(ins, appendIndex) {
 			if(document.getElementById("Lsave").style.display !="block"){
 				document.getElementById("Lsave").style.display = "block";
 			}
-
-if(document.getElementById("Lsave").style.display !="block"){
+			if(document.getElementById("Lsave").style.display !="block"){
 				document.getElementById("Lsave").style.display = "block";
 			}
 		}

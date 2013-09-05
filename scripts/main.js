@@ -3,10 +3,8 @@ var config = {
 	"minZoom" : 6, //minimum zoom to have.
 	"startZoom" : 6, //starting zoom to have.
 	"markerMinZoom" : 5,
-	"lastUpdated" : 0,
 	"baseURL" : "",
 	"ulLimit" : 50,
-	"LIBOTTOMMARGIN" : 6
 }
 var maps = {
 	oldInfoBox : null,
@@ -101,6 +99,8 @@ var maps = {
 			mmanager.tagManager.refresh();
 			console.log("calling doNothing");
 			tags.filterBasedOnBound("doNothing");
+			//elements.fullUpdate();
+
 		});
 		google.maps.event.addListener(maps.map, 'dragend', function() {
 			//tpht.getById("map-canvas").onclick = function() {
@@ -167,19 +167,29 @@ var mmanager = {
 	"initialise" : function() {
 		var thisMarker;
 		hashContentManager = new MarkerManager(maps.map);
+		var element = 3;
 		for (var zed in tags.locations) {
 			if (tags.locations[zed].latitude != null && tags.locations[zed].longitude != null) {
 				//console.log(new google.maps.LatLng(tags.locations[zed].latitude, tags.locations[zed].longitude));
 				//thisMarker = new google.maps.Marker({
+					var toInsert = "";
+					if(tags.optionaltags[zed]!=""){
+						toInsert = tags.optionaltags[zed];
+					}
+					else{
+						toInsert = "#"+zed;
+					}
+					
 				thisMarker = new MarkerWithLabel({
 					position : new google.maps.LatLng(tags.locations[zed].latitude, tags.locations[zed].longitude),
 					title : "#" + zed,
 					zIndex : 9010,
-					labelContent : "<h2>#" + zed + "</h2>",
-					labelAnchor : new google.maps.Point(22, 25),
+					labelContent : "<h2 style='font-size:"+(element*6)+"px'class='domHash' data-rel-hash='"+zed+"'>" + toInsert + "</h2>",
+					labelAnchor : new google.maps.Point(0, 0),
 					labelClass : "labels", // the CSS class for the label
 					icon : "images/marker.png"
 				});
+				element++;
 				//thisMarker.setVisible(false);
 				mmanager.addClickToOverHashes(thisMarker);
 				mmanager.overMark.push(thisMarker);
@@ -192,15 +202,18 @@ var mmanager = {
 			mmanager.tagManager.addMarkers(mmanager.overMark, config.minZoom);
 			//console.log(mmanager.tagManager);
 			mmanager.tagManager.refresh();
+			tags.labelRefresh();
 			google.maps.event.addListener(maps.map, 'zoom_changed', function() {
 				mmanager.tagManager.refresh();
+				tags.labelRefresh();
 			});
 		});
 		//console.log("refreshed");
 	}
 }
 var tags = {
-	"singleTag" : "",
+	"filtration" : "",
+	"singleTag" : "",//this is the tag closest to the center which is pulled and used for FB and tweets.
 	"contentInnerHeight" : 0,
 	"locations" : {},
 	"optionaltags" : {}, //use optionaltags to traverse locations and get data.
@@ -212,6 +225,14 @@ var tags = {
 	"MAPrenderOnPage" : [],
 	"DOMrenderOnPage" : [],
 	"markerTags" : {},
+	"labelRefresh" : function(){
+		console.log(document.getElementsByClassName("labels"));
+		var elements = document.getElementsByClassName("labels");
+		 
+		 for(var i = 0, length = elements.length; i < length; i++) {
+		 	console.log(elements.item(i));
+		 }
+	},
 	"markerPos" : function() {
 		//for(var i in tags.optionaltags){
 		//	tags.markerTags[i] = {};
@@ -265,14 +286,8 @@ var tags = {
 			}
 		}
 		//console.log(tags.inBound);
-		var toCheck = tpht.getByClass("sideBar");
-		for (var i = 0; i < toCheck.length; i++) {
-			if (tags.inBound.indexOf(toCheck[i].getAttribute("data-rel-hashtag")) == -1) {
-				toCheck[i].style.display = "none";
-			} else {
-				toCheck[i].style.display = "block";
-			}
-		}
+					elements.fullUpdate();
+
 		if (carryOn == true || carryOn == "update") {
 			tags.loadTagFiles(tags.inBound, "");
 		}
@@ -291,7 +306,6 @@ var tags = {
 			});
 		}, function() {
 			//console.log(tags.tagData);
-			config.lastUpdated = new Date().getTime();
 			tags.gather();
 		});
 	},
@@ -517,6 +531,14 @@ var tags = {
 		} else {
 			toAdd = elements.list(obj, false, inb4);
 		}
+		
+		if(tags.inBound.indexOf(toAdd.getAttribute("data-rel-hashtag"))==-1 || elements.filter(toAdd.getElementsByClassName("text")[0].innerText,tags.filtration)==false){
+					toAdd.style.display="none";
+				}
+				else{
+					toAdd.style.display="block";
+				}
+		
 		if (inb4 == true) {
 			tpht.appendFirst(toAdd, append);
 		} else {
@@ -524,8 +546,27 @@ var tags = {
 		}
 	}
 }
-
 var elements = {
+	"fullUpdate" : function(){
+		var ins = document.getElementsByClassName("sideBar");
+		for(var i in ins){
+			if(ins.hasOwnProperty(i)&&ins[i]!=ins.length){
+				if(tags.inBound.indexOf(ins[i].getAttribute("data-rel-hashtag"))==-1 || elements.filter(ins[i].getElementsByClassName("text")[0].innerText,tags.filtration)==false){
+					ins[i].style.display="none";
+				}
+				else{
+					ins[i].style.display="block";
+				}
+			}
+		}
+	},
+	"filter" : function(input,string){
+		if(input.substring(0,5)=="text:"){
+			input = input.substring(6,input.length);
+		}
+		if(input.toLowerCase().indexOf(string.toLowerCase()) > -1){return true;}
+		return false;
+	},
 	"list" : function(obj, hidden, notLazyLoad) {
 		notLazyLoad = true;
 		var li = document.createElement("li");

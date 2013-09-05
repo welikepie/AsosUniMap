@@ -21,12 +21,20 @@
 		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 	</head>
 	<body>
+		<div id="modalDialogue">
+			<div id="modalInside" class="well">
+			</div>
+		</div>
 		<div id="map-canvas"></div>
 		<div id="map-overlay">
+			<input type="text" id="searchField"/><input type="button" id="searchMe" value="search"/><input type="button" id="searchClear" value="clear"/>
 			<div id="surrounder">
-			<ol id="content">
-			</ol>
+				<ol id="content"></ol>
 			</div>
+			<iframe id="twitterButton" src="twitButton.html#type=hashtag&count=none" style="border-style:none;"></iframe>
+			<!-- This be an iFrame. The actual content is in twitButton.html, but the styling is in the same file as for this document. Aww yeah. -->
+			<input type="button" id="facebookShare" value="Share on Facebook"/>
+
 		</div>
 	</body>
 	<footer>
@@ -37,6 +45,7 @@
 		<script type="text/javascript" src="scripts/markerclusterer.js"></script>
 		<script type="text/javascript" src="scripts/tophat.js"></script>
 		<script type="text/javascript" src="scripts/main.js"></script>
+		<script type="text/javascript" src="scripts/facebook.js"></script>
 		<script type="text/javascript" src="scripts/events.js"></script>
 	</footer>
 </html>

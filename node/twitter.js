@@ -17,11 +17,12 @@ t = new twitter({
 	access_token_secret : credentials.credentials.access_token_secret
 });
 //db order //screen_name,id_str,if(.coordinates!=null, .coordinates.coordinates[0] = lon,.coordinates.coordinates[1] = lat  ), TWITTR, text, created_at, .entities.media[0].media_url,
-//startStream();
-//function startStream() {
+startStream();
+function startStream() {
 	console.log("streaming");
 	t.stream('statuses/filter', {
-		track : credentials.tags.campaign
+		//track : credentials.tags.campaign
+		track : credentials.tags.location
 	}, function(stream) {
 		
 		stream.on('data', function(tweet) {
@@ -75,7 +76,7 @@ t = new twitter({
 		});
 	});
 
-//}
+}
 
 function filterForHash(input) {
 	//console.log(input);

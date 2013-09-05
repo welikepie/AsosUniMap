@@ -16,13 +16,30 @@ window.onload = function() {
 	source.addEventListener('open', function(e) {
 		console.log("Yay!");
 	}, false);
-
+//scroll handler for scroll box is in main.js. Aww yis.
 	source.addEventListener('error', function(e) {
 		if (e.readyState == EventSource.CLOSED) {
 			console.log("A dragon appeared!");
 		}
 	}, false);
-
+	document.getElementById("searchClear").addEventListener('click', function(){
+		document.getElementById("searchField").value = "";
+		document.getElementById("searchClear").style.display="none";
+		tags.filtration = "";
+		elements.fullUpdate();
+	});
+	document.getElementById("searchMe").addEventListener('click', function(){
+		var stuff = document.getElementById("searchField").value;
+		if(tags.filtration != stuff){
+			if(stuff == ""){
+				document.getElementById("searchClear").style.display="none";
+			}else{
+				document.getElementById("searchClear").style.display="block";
+			}
+			tags.filtration = stuff;
+		}
+		elements.fullUpdate();		
+	});
 	document.getElementById("facebookShare").addEventListener('click', function() {
 		/*document.getElementById("facebookShare").preventDefault();
 		 FB.ui(
@@ -53,13 +70,12 @@ window.onload = function() {
 								"oauth" : auth,
 								"message" : tags.singleTag + " " + inputToSend,
 								privacy : {
-									'value' : 'EVERYONE'
+									'value' : "EVERYONE"
 								}
 							}, function(response) {
 								console.log(response);
 								if (!response || response.error) {
 									//alert('Error occured');
-									console.log("MOTHERFUCKING ERROR.")
 									document.getElementById("facebookInput").value = "There was an error: "+response.error;
 								} else {
 									document.getElementById("modalDialogue").style.display = "none";

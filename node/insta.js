@@ -11,7 +11,8 @@ var arr = [];
 setInterval(function() {
 	var dataStream = JSON.parse(fs.readFileSync("tags.json")).data;
 	//console.log(dataStream);
-	var tagArr = dataStream.campaign;
+	//-- var tagArr = dataStream.campaign;
+	var tagArr = dataStream.location;
 	for (var i in tagArr) {
 		Instagram.tags.recent({
 			name : tagArr[i].substring(1,tagArr[i].length),
@@ -88,7 +89,7 @@ setInterval(function() {
 function filterForHash(input, arr){
 	for(var i in arr){
 		for(var z in input){
-			console.log(arr[i].substring(1,arr[i].length).toLowerCase()+","+ input[z].toLowerCase());
+			//console.log(arr[i].substring(1,arr[i].length).toLowerCase()+","+ input[z].toLowerCase());
 			if(arr[i].substring(1,arr[i].length).toLowerCase() == input[z].toLowerCase()){
 				return (arr[i].substring(1,arr[i].length));
 			}
