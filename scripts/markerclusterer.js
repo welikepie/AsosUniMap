@@ -1073,6 +1073,7 @@ ClusterIcon.prototype.onAdd = function() {
 
   var panes = this.getPanes();
   panes.overlayMouseTarget.appendChild(this.div_);
+ // tpht.appendFirst(this.div_,panes.overlayMouseTarget);
 
   var that = this;
   google.maps.event.addDomListener(this.div_, 'click', function() {
@@ -1238,7 +1239,7 @@ ClusterIcon.prototype.createCss = function(pos) {
 
   style.push('cursor:pointer; top:' + pos.y + 'px; left:' +
       pos.x + 'px; color:' + txtColor + '; position:absolute; font-size:' +
-      txtSize + 'px; font-family:Arial,sans-serif; font-weight:bold');
+      txtSize + 'px; font-family:Arial,sans-serif; font-weight:bold;');
   return style.join('');
 };
 

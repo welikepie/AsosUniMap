@@ -1,34 +1,61 @@
 google.maps.event.addDomListener(window, 'load', maps.initialize);
+var heartInterval = 30;
+var heartBeat = 0;
 
-window.onload = function() {
-	tags.retrieve();
+function setSSE(){
 	if (!!window.EventSource) {
 		var source = new EventSource('http://localhost:1337/events');
+		source.addEventListener('message', function(e) {
+			  var interval = window.setInterval(function(){
+			  	if(heartBeat+ (heartInterval*1000) < new Date().getTime()){
+			  		console.log("SHUTTING UP SHOP");
+			  		window.clearInterval(interval);
+			  		interval = null;
+			  		source.close();
+			  		//setSSE();
+			  	}
+			  },30000)
+			if(JSON.parse(e.data).hasOwnProperty("type")){
+				if(JSON.parse(e.data).type == "heartbeat"){
+					console.log("HEARTBEAT");
+				}
+			}
+			heartBeat = JSON.parse(e.data).timestamp;
+			sse.longtroll(e);
+		}, false);
+	
+		source.addEventListener('open', function(e) {
+			console.log("Yay!");
+		}, false);
+	//scroll handler for scroll box is in main.js. Aww yis.
+		source.addEventListener('error', function(e) {
+			console.log("erroring");
+			if (e.readyState == EventSource.CLOSED) {
+				console.log("A dragon appeared!");
+				setSSE();
+			}
+			else{
+				source.close();
+//				window.setTimeout(setSSE(),5000);
+			}
+		}, false);
+	
 	} else {
 		// Result to xhr polling :(
-		//	tpht.easyXML("get","/events","",sse.longtroll(response));
+		console.log("no SSE support here; xhr only.");
+		//tpht.easyXML("get","http://localhost:1337/events","",sse.longtroll(response));
 	}
-	source.addEventListener('message', function(e) {
-		//  console.log(e);
-		sse.longtroll(e);
-	}, false);
-
-	source.addEventListener('open', function(e) {
-		console.log("Yay!");
-	}, false);
-//scroll handler for scroll box is in main.js. Aww yis.
-	source.addEventListener('error', function(e) {
-		if (e.readyState == EventSource.CLOSED) {
-			console.log("A dragon appeared!");
-		}
-	}, false);
-	document.getElementById("searchClear").addEventListener('click', function(){
+}
+window.onload = function() {
+	setSSE();
+	tags.retrieve();
+	tpht.bindEvent(document.getElementById("searchClear"),'click', function(){
 		document.getElementById("searchField").value = "";
 		document.getElementById("searchClear").style.display="none";
 		tags.filtration = "";
 		elements.fullUpdate();
 	});
-	document.getElementById("searchMe").addEventListener('click', function(){
+	tpht.bindEvent(document.getElementById("searchMe"),'click', function(){
 		var stuff = document.getElementById("searchField").value;
 		if(tags.filtration != stuff){
 			if(stuff == ""){
@@ -40,7 +67,7 @@ window.onload = function() {
 		}
 		elements.fullUpdate();		
 	});
-	document.getElementById("facebookShare").addEventListener('click', function() {
+	tpht.bindEvent(document.getElementById("facebookShare"),'click', function() {
 		/*document.getElementById("facebookShare").preventDefault();
 		 FB.ui(
 		 {

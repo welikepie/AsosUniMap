@@ -80,8 +80,11 @@ MarkerLabel_.prototype.onAdd = function () {
     }
   };
 
-  this.getPanes().overlayImage.appendChild(this.labelDiv_);
-  this.getPanes().overlayMouseTarget.appendChild(this.eventDiv_);
+//  this.getPanes().overlayImage.appendChild(this.labelDiv_);
+// this.getPanes().overlayMouseTarget.appendChild(this.eventDiv_);
+  tpht.appendFirst(this.labelDiv_,this.getPanes().overlayImage);
+      tpht.appendFirst(this.eventDiv_,this.getPanes().overlayMouseTarget);
+
 
   this.listeners_ = [
     google.maps.event.addDomListener(document, "mouseup", function (mEvent) {
@@ -217,8 +220,11 @@ MarkerLabel_.prototype.setContent = function () {
     this.eventDiv_.innerHTML = this.labelDiv_.innerHTML;
   } else {
     this.labelDiv_.appendChild(content);
+   //tpht.appendFirst(content,this.labelDiv_);
     content = content.cloneNode(true);
     this.eventDiv_.appendChild(content);
+   //tpht.appendFirst(content,this.labelDiv_);
+
   }
 };
 
@@ -272,7 +278,7 @@ MarkerLabel_.prototype.setMandatoryStyles = function () {
 
   this.eventDiv_.style.position = this.labelDiv_.style.position;
   this.eventDiv_.style.overflow = this.labelDiv_.style.overflow;
-  this.eventDiv_.style.opacity = 0.01; // Don't use 0; DIV won't be clickable on MSIE
+  //this.eventDiv_.style.opacity = 0.01; // Don't use 0; DIV won't be clickable on MSIE
   this.eventDiv_.style.filter = "alpha(opacity=1)"; // For MSIE
   
   this.setAnchor();

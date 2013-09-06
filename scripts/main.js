@@ -4,13 +4,13 @@ var config = {
 	"startZoom" : 6, //starting zoom to have.
 	"markerMinZoom" : 5,
 	"baseURL" : "",
-	"ulLimit" : 50,
-}
+	"ulLimit" : 50
+};
 var maps = {
 	oldInfoBox : null,
 	oldBounds : null,
 	map : "",
-	boundingBox : [],
+	boundingBox : new Array(),
 	"initialize" : function() {
 		var styles = [{
 			featureType : "landscape",
@@ -68,12 +68,11 @@ var maps = {
 
 		var beachMarker = new google.maps.Marker({
 			position : myLatLng,
-			icon : image,
+			icon : 'images/looksbetter.png',
 			pane : "mapPane",
-			enableEventPropagation : true,
-			zIndex : 8999,
-			map : maps.map
+			zIndex : 500
 		});
+		beachMarker.setMap(maps.map);
 		google.maps.event.addListener(beachMarker, 'dblclick', function(event) {
 			maps.map.setZoom(maps.map.getZoom() + 1);
 			tags.filterBasedOnBound("doNothing");
@@ -102,6 +101,13 @@ var maps = {
 			//elements.fullUpdate();
 
 		});
+			google.maps.event.addListener(maps.map, "rightclick", function(event) {
+				    var lat = event.latLng.lat();
+				    var lng = event.latLng.lng();
+				    // populate yor box/field with lat, lng
+				    alert("Lat=" + lat + "; Lng=" + lng);
+				});
+
 		google.maps.event.addListener(maps.map, 'dragend', function() {
 			//tpht.getById("map-canvas").onclick = function() {
 
@@ -119,7 +125,7 @@ var maps = {
 			oldBounds = bounds;
 			var bArr = bounds.toString().replace(/[()]/g, "").split(",");
 			maps.boundingBox = [parseFloat(bArr[1]), parseFloat(bArr[0]), parseFloat(bArr[3]), parseFloat(bArr[2])];
-
+			console.log(maps.map.getCenter());
 			console.log(maps.boundingBox);
 		});
 	}
@@ -129,8 +135,8 @@ var mmanager = {
 	"tagManager" : null,
 	"markerArr" : null,
 	"hashContentManager" : null,
-	"hashContentArr" : [],
-	"overMark" : [],
+	"hashContentArr" : new Array(),
+	"overMark" : new Array(),
 	"addClickToOverHashes" : function(obj) {
 		google.maps.event.addListener(obj, 'click', function() {
 			maps.map.panTo(obj.getPosition());
@@ -145,7 +151,7 @@ var mmanager = {
 		});
 	},
 	"addClickToHashes" : function(obj) {
-		console.log("added");
+		//console.log("added");
 		google.maps.event.addListener(obj, 'click', function() {
 			console.log("click");
 			maps.map.panTo(obj.getPosition());
@@ -194,6 +200,7 @@ var mmanager = {
 				mmanager.addClickToOverHashes(thisMarker);
 				mmanager.overMark.push(thisMarker);
 			}
+			
 			//			console.log(mmanager.overMark[mmanager.overMark.length-1]);
 		}
 		mmanager.tagManager = new MarkerManager(maps.map);
@@ -203,12 +210,13 @@ var mmanager = {
 			//console.log(mmanager.tagManager);
 			mmanager.tagManager.refresh();
 			tags.labelRefresh();
+			
 			google.maps.event.addListener(maps.map, 'zoom_changed', function() {
 				mmanager.tagManager.refresh();
-				tags.labelRefresh();
 			});
 		});
-		//console.log("refreshed");
+		tags.labelRefresh();
+		console.log("refreshed");
 	}
 }
 var tags = {
@@ -217,21 +225,29 @@ var tags = {
 	"contentInnerHeight" : 0,
 	"locations" : {},
 	"optionaltags" : {}, //use optionaltags to traverse locations and get data.
-	"inBound" : [],
+	"inBound" : new Array(),
 	"tagData" : {},
-	"MAPrender" : [],
-	"DOMrender" : [],
-	"campaign" : [],
-	"MAPrenderOnPage" : [],
-	"DOMrenderOnPage" : [],
+	"MAPrender" : new Array(),
+	"DOMrender" : new Array(),
+	"campaign" : new Array(),
+	"MAPrenderOnPage" : new Array(),
+	"DOMrenderOnPage" : new Array(),
 	"markerTags" : {},
+	"setOrdering" : function(){
+		//document.getElementsByClassName("domHash")[0].parentNode.parentNode.parentNode.style.zIndex = 650;
+	},
 	"labelRefresh" : function(){
-		console.log(document.getElementsByClassName("labels"));
+		var thing = window.setInterval(function(){
+		//console.log(document.getElementsByClassName("labels"));
 		var elements = document.getElementsByClassName("labels");
-		 
-		 for(var i = 0, length = elements.length; i < length; i++) {
-		 	console.log(elements.item(i));
+		 if(elements.length>0){
+		 	window.clearInterval(thing);		 
 		 }
+		},100);
+
+//		 for(var i = 0, length = elements.length; i < length; i++) {
+//		 	console.log(elements.item(i));
+//		 }
 	},
 	"markerPos" : function() {
 		//for(var i in tags.optionaltags){
@@ -245,7 +261,7 @@ var tags = {
 	},
 	"retrieve" : function() {
 		var waiting;
-		tpht.easyXML("get", config.baseURL + "node/tags.json", "", function(response) {
+		tpht.easyXHR("get", config.baseURL + "node/tags.json", "", function(response) {
 			var ans = JSON.parse(response).data;
 			if (ans.hasOwnProperty("locations")) {
 				tags.locations = ans.locations;
@@ -260,7 +276,6 @@ var tags = {
 			if (maps.boundingBox.length != 4) {
 				waiting = window.setInterval(function() {
 					if (maps.boundingBox.length == 4) {
-						mmanager.initialise();
 						tags.filterBasedOnBound(true);
 						clearInterval(waiting);
 					}
@@ -273,7 +288,7 @@ var tags = {
 	},
 	"filterBasedOnBound" : function(carryOn) {
 
-		tags.inBound = [];
+		tags.inBound = new Array();
 		for (var i in tags.locations) {
 			if (tags.locations[i].latitude != null && tags.locations[i].longitude != null) {
 				if (tags.locations[i].radius == null) {
@@ -296,9 +311,10 @@ var tags = {
 	"loadTagFiles" : function(arr, updater) {
 		tpht.asyncLoop(arr.length, function(loop, i) {
 			//		console.log("node/jsons/"+tags.inBound[t]+".json");
-			tpht.easyXML("get", config.baseURL + "node/jsons/" + tags.inBound[i] + ".json", "", function(response) {
+			tpht.easyXHR("get", config.baseURL + "node/jsons/" + tags.inBound[i] + ".json", "", function(response) {
 				//console.log(response);
 				if (!JSON.parse(response).hasOwnProperty("error")) {
+					console.log("GETTING");
 					tags.tagData[JSON.parse(response).tag] = JSON.parse(response);
 				}
 				//console.log(tags.tagData[JSON.parse(response).tag]);
@@ -306,19 +322,29 @@ var tags = {
 			});
 		}, function() {
 			//console.log(tags.tagData);
+			console.log("STUFFANDTHINGS");
 			tags.gather();
 		});
 	},
 	"gather" : function() {
+		console.log(tags.tagData);
 		for (var i in tags.tagData) {
+			console.log(i);
+			
 			//console.log(tags.tagData[i]);
 			var arrMake = tags.tagData[i];
 			var arrTags = arrMake.tag;
 			var arrAns = arrMake.answers;
 			var arrTime = arrMake.time;
+			
 			for (var t in arrAns) {
+				//console.log(JSON.stringify(arrAns[t]));
 				//		console.log(new Date(arrAns[t].time).getTime()/1000);
-				if (new Date(arrAns[t].time).getTime() / 1000 > config.minTime) {
+				//console.log(new Date());
+				//console.log((new Date(arrAns[t].time).getTime() / 1000));
+//				console.log(arrAns[t].time);
+//				console.log(new Date(arrAns[t].time).getTime());
+				if (new Date(arrAns[t].time).getTime() / 1000 >= config.minTime) {
 					if (arrAns[t].lat != null) {
 						//console.log(arrAns[t]);
 						arrAns[t].position = new google.maps.LatLng(arrAns[t].lat, arrAns[t].lon);
@@ -357,7 +383,7 @@ var tags = {
 			return 0;
 
 		});
-
+		console.log("starting");
 		for (var zed in tags.MAPrender) {
 			var obj = tags.MAPrender[zed];
 			var marker = new google.maps.Marker({
@@ -369,13 +395,16 @@ var tags = {
 			});
 			marker.info = new google.maps.InfoWindow({
 				content : elements.info(obj),
-				zIndex : 9001
+				zIndex : 9005
 			});
 			mmanager.addClickToHashes(marker);
 			mmanager.hashContentArr.push(marker);
 		}
 		tags.renderToMap(mmanager.hashContentArr);
-
+		tags.setOrdering();
+		console.log("finishing");
+		console.log(tags.DOMrender.length);
+		console.log(tags.MAPrender.length);
 		for (var zed in tags.DOMrender) {
 			if (zed < config.ulLimit) {
 				tags.renderToList(tags.DOMrender[zed], false);
@@ -437,8 +466,9 @@ var tags = {
 		tpht.asyncLoop(arr.length, function(loop, i) {
 			//	console.log(arr[i]);
 			//		console.log(new Date(arrAns[t].time).getTime()/1000);
+			
 			//	console.log(new Date(arr[i].time).getTime() + "," + config.minTime);
-			if (new Date(arr[i].time).getTime() > config.minTime) {
+			if (new Date(arr[i].time).getTime() >= config.minTime) {
 				if (arr[i].lat != null) {
 					//console.log(arrAns[t]);
 					arr[i].position = new google.maps.LatLng(arr[i].lat, arr[i].lon);
@@ -512,7 +542,9 @@ var tags = {
 		google.maps.event.addListener(mmanager.hashContentManager, 'loaded', function() {
 			console.log("+++++++++++++++++++++++++++++++++");
 			mmanager.hashContentManager.refresh();
+			
 		});
+		mmanager.initialise();
 
 		//tpht.lazyLoader("data-image-src");
 		//	mmanager.hashContentManager = new MarkerManager(maps.map);
@@ -526,13 +558,13 @@ var tags = {
 	"renderToList" : function(obj, inb4) {
 		var append = document.getElementById("content");
 		var toAdd;
+		
 		if (tags.inBound.indexOf(obj.hashtag) == -1) {
 			toAdd = elements.list(obj, true, inb4);
 		} else {
 			toAdd = elements.list(obj, false, inb4);
 		}
-		
-		if(tags.inBound.indexOf(toAdd.getAttribute("data-rel-hashtag"))==-1 || elements.filter(toAdd.getElementsByClassName("text")[0].innerText,tags.filtration)==false){
+		if(tags.inBound.indexOf(toAdd.getAttribute("data-rel-hashtag"))==-1 || elements.filter(toAdd.getElementsByClassName("text")[0].textContent,tags.filtration)==false){
 					toAdd.style.display="none";
 				}
 				else{
@@ -551,7 +583,7 @@ var elements = {
 		var ins = document.getElementsByClassName("sideBar");
 		for(var i in ins){
 			if(ins.hasOwnProperty(i)&&ins[i]!=ins.length){
-				if(tags.inBound.indexOf(ins[i].getAttribute("data-rel-hashtag"))==-1 || elements.filter(ins[i].getElementsByClassName("text")[0].innerText,tags.filtration)==false){
+				if(tags.inBound.indexOf(ins[i].getAttribute("data-rel-hashtag"))==-1 || elements.filter(ins[i].getElementsByClassName("text")[0].textContent,tags.filtration)==false){
 					ins[i].style.display="none";
 				}
 				else{
@@ -618,7 +650,7 @@ var elements = {
 		}
 		var div = document.createElement("div");
 		div.setAttribute("class", "date");
-		div.textContent = "date added: " + obj.time;
+		div.textContent = "date added: " + new Date(obj.time);
 		li.appendChild(div);
 		//console.log(li);
 		return li;
@@ -653,7 +685,7 @@ var elements = {
 		}
 		var div = tpht.createElement("div");
 		tpht.setClass(div, "date");
-		tpht.setText(div, "date added: " + obj.time);
+		tpht.setText(div, "date added: " + new Date(obj.time));
 		li.appendChild(div);
 		//console.log(li);
 		return li;
@@ -672,7 +704,7 @@ var sse = {
 			var timeToBeat = 0;
 			console.log(tags.tagData);
 
-			var newPushArr = [];
+			var newPushArr = new Array();
 			for (var inputs in ins.answers) {
 				if (tags.tagData.hasOwnProperty(ins.answers[inputs].hashtag)) {
 					if (new Date(ins.answers[inputs].time).getTime() > tags.tagData[ins.answers[inputs].hashtag].timestamp) {
@@ -681,7 +713,7 @@ var sse = {
 					}
 				} else {
 					tags.tagData[ins.answers[inputs].hashtag] = {
-						"answers" : [],
+						"answers" : new Array(),
 						"tag" : ins.answers[inputs].hashtag,
 						"timestamp" : 0
 					}
@@ -747,6 +779,7 @@ var general = {
 		var extraString = "twitButton.html#type=hashtag&count=none";
 		if (tags.inBound.length > 0) {
 			var center = maps.map.getCenter().toString().replace(/[()]/g, "").split(",");
+			console.log(center);
 			var dist = [999, ""];
 			for (var i in tags.inBound) {
 				if (tpht.distanceBetweenPoints([parseFloat(center[0]), parseFloat(center[1])], [tags.locations[tags.inBound[i]].latitude, tags.locations[tags.inBound[i]].longitude]) < dist[0]) {

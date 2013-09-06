@@ -13,8 +13,8 @@ var tpht = {
 
 		return [x1, y1, x2, y2];
 	},
-	"distanceBetweenPoints" : function(obj1,obj2){
-		return tpht.pythagoras((obj1[0]-obj2[0]),(obj1[1]-obj2[1]));
+	"distanceBetweenPoints" : function(obj1, obj2) {
+		return tpht.pythagoras((obj1[0] - obj2[0]), (obj1[1] - obj2[1]));
 	},
 	"pythagoras" : function(num, num1) {
 		return Math.sqrt(Math.pow(num, 2) + Math.pow(num1, 2));
@@ -25,104 +25,98 @@ var tpht = {
 	"getById" : function(id) {
 		return document.getElementById(id);
 	},
-	"partInViewport" : function(el){
-		  var top = el.offsetTop;
-		  var left = el.offsetLeft;
-		  var width = el.offsetWidth;
-		  var height = el.offsetHeight;
-		
-		  while(el.offsetParent) {
-		    el = el.offsetParent;
-		    top += el.offsetTop;
-		    left += el.offsetLeft;
-		  }
-		
-		  return (
-		    top < (window.pageYOffset + window.innerHeight) &&
-		    left < (window.pageXOffset + window.innerWidth) &&
-		    (top + height) > window.pageYOffset &&
-		    (left + width) > window.pageXOffset
-		  );
-		
+	"partInViewport" : function(el) {
+		var top = el.offsetTop;
+		var left = el.offsetLeft;
+		var width = el.offsetWidth;
+		var height = el.offsetHeight;
+
+		while (el.offsetParent) {
+			el = el.offsetParent;
+			top += el.offsetTop;
+			left += el.offsetLeft;
+		}
+
+		return (top < (window.pageYOffset + window.innerHeight) && left < (window.pageXOffset + window.innerWidth) && (top + height) > window.pageYOffset && (left + width) > window.pageXOffset
+		);
+
 	},
 	"debounce" : function(func, wait, immediate) {
-	var timeout;
-	return function() {
-		var context = this, args = arguments;
-		var later = function() {
-			timeout = null;
-			if (!immediate) func.apply(context, args);
+		var timeout;
+		return function() {
+			var context = this, args = arguments;
+			var later = function() {
+				timeout = null;
+				if (!immediate)
+					func.apply(context, args);
+			};
+			var callNow = immediate && !timeout;
+			clearTimeout(timeout);
+			timeout = setTimeout(later, wait);
+			if (callNow)
+				func.apply(context, args);
 		};
-		var callNow = immediate && !timeout;
-		clearTimeout(timeout);
-		timeout = setTimeout(later, wait);
-		if (callNow) func.apply(context, args);
-	};
-},
-	"allInViewport" : function(el){
-		  var top = el.offsetTop;
-		  var left = el.offsetLeft;
-		  var width = el.offsetWidth;
-		  var height = el.offsetHeight;
-		
-		  while(el.offsetParent) {
-		    el = el.offsetParent;
-		    top += el.offsetTop;
-		    left += el.offsetLeft;
-		  }
-		
-		  return (
-		    top >= window.pageYOffset &&
-		    left >= window.pageXOffset &&
-		    (top + height) <= (window.pageYOffset + window.innerHeight) &&
-		    (left + width) <= (window.pageXOffset + window.innerWidth)
-		  );
-		
+	},
+	"allInViewport" : function(el) {
+		var top = el.offsetTop;
+		var left = el.offsetLeft;
+		var width = el.offsetWidth;
+		var height = el.offsetHeight;
+
+		while (el.offsetParent) {
+			el = el.offsetParent;
+			top += el.offsetTop;
+			left += el.offsetLeft;
+		}
+
+		return (top >= window.pageYOffset && left >= window.pageXOffset && (top + height) <= (window.pageYOffset + window.innerHeight) && (left + width) <= (window.pageXOffset + window.innerWidth)
+		);
+
 	},
 	"renderModal" : function(opts) {
-/*	{
-				"type" : "dialog",
-				"message" : "<strong>Warning!</strong><p>The file is already being edited and has been since " + new Date(parseInt(response.data.timestamp, 10)) + "</p>" + "<p>If you are sure you want to edit anyways, click \"Confirm\".</p>",
-				"confirm" : function() {
-					commandSend("force", "post", function() {
-						loadTagJSON("get", -1);
-					});
-				}
-			});*/
-	//console.log(opts);
-	var content = document.getElementById("modalInside");
-	var textIn = document.createElement("div");
-	textIn.setAttribute("id", "modalText");
-	var decline = document.createElement("input");
-	decline.setAttribute("type", "button");
-	decline.setAttribute("class", "btn btn-large btn-danger");
-	decline.setAttribute("id", "modalDeny");
-	decline.setAttribute("value", "Dismiss");
-	decline.onclick = function() {
-		document.getElementById("modalDialogue").style.display = "none";
-		document.getElementById("modalInside").innerHTML = "";
-	}
-	content.appendChild(decline);
-	if (opts.type == "dialog") {
-		console.log(opts.message);
-		textIn.innerHTML = opts.message;
-		var confirm = document.createElement("input");
-		confirm.setAttribute("type", "button");
-		confirm.setAttribute("class", "btn btn-large btn-success");
-		confirm.setAttribute("id", "modalConfirm");
-		confirm.setAttribute("value", "Confirm");
-		confirm.onclick = function() {
-			opts.confirm();
+		/*	{
+		"type" : "dialog",
+		"message" : "<strong>Warning!</strong><p>The file is already being edited and has been since " + new Date(parseInt(response.data.timestamp, 10)) + "</p>" + "<p>If you are sure you want to edit anyways, click \"Confirm\".</p>",
+		"confirm" : function() {
+		commandSend("force", "post", function() {
+		loadTagJSON("get", -1);
+		});
+		}
+		});*/
+		//console.log(opts);
+		var content = document.getElementById("modalInside");
+		var textIn = document.createElement("div");
+		textIn.setAttribute("id", "modalText");
+		var decline = document.createElement("input");
+		decline.setAttribute("type", "button");
+		decline.setAttribute("class", "btn btn-large btn-danger");
+		decline.setAttribute("id", "modalDeny");
+		decline.setAttribute("value", "Dismiss");
+		decline.onclick = function() {
 			document.getElementById("modalDialogue").style.display = "none";
 			document.getElementById("modalInside").innerHTML = "";
 		}
-		content.appendChild(confirm);
-	}
-	content.appendChild(textIn);
-	document.getElementById("modalDialogue").style.display = "block";
+		content.appendChild(decline);
+		if (opts.type == "dialog") {
+			console.log(opts.message);
+			textIn.innerHTML = opts.message;
+			var confirm = document.createElement("input");
+			confirm.setAttribute("type", "button");
+			confirm.setAttribute("class", "btn btn-large btn-success");
+			confirm.setAttribute("id", "modalConfirm");
+			confirm.setAttribute("value", "Confirm");
+			confirm.onclick = function() {
+				opts.confirm();
+				document.getElementById("modalDialogue").style.display = "none";
+				document.getElementById("modalInside").innerHTML = "";
+			}
+			content.appendChild(confirm);
+		}
+		content.appendChild(textIn);
+		document.getElementById("modalDialogue").style.display = "block";
 
-},
-	"easyXML" : function(type, url, args, callback) {
+	},
+	"easyXHR" : function(type, url, args, callback) {
 		if (type.toLowerCase() == "get") {
 			var xhReq = new XMLHttpRequest();
 			try {
@@ -182,43 +176,27 @@ var tpht = {
 		}
 
 	},
-	"getByClass" : function(input) {
-		return document.getElementsByClassName(input);
-	},
-	"getByTag" : function(select) {
-		return document.getElementsByTagName(select);
-	},
-	"singleCompareStringArr" : function(input, arr) {
-		for (var i in arr) {
-			for (var z in input) {
-				console.log(arr[i].substring(1, arr[i].length).toLowerCase() + "," + input[z].toLowerCase());
-				if (arr[i].substring(1, arr[i].length).toLowerCase() == input[z].toLowerCase()) {
-					return (arr[i]);
-				}
-			}
+	"convertDate" : function(datestamp) {
+		var pattern = /^([d]{4})-([d]{2})-([d]{2})T([d]{2}):([d]{2}):([d]{2})(Z|(?:[+-][d]{2}[:]?[d]{2}))$/;
+		if (!pattern.test(datestamp)) {
+			return null;
+		}
 
-		}
-		return "";
-	},
-	"singleCompareArrToString" : function(input, arr) {
-		for (var i in arr) {
-			if (input.indexOf(arr[i]) > -1) {
-				return (arr[i]);
+		var components = [], zoneoffset = 0;
+		datestamp.replace(pattern, function(a, y, m, d, h, i, s, z) {
+			for (var bits = [y, m, d, h, i, s], i = 0; i < 6; i++) {
+				components[i] = parseInt(bits[i], 10);
 			}
-		}
-		return "";
-	},
-	"lazyLoader" : function(tagLazyIsOn) {
-		var img = document.getElementsByTagName("img");
-		for (var zed in img) {
-			console.log( typeof (img[zed]) == "object");
-			if ( typeof (img[zed]) == "object") {
-				console.log(img[zed]);
-				if (img[zed].hasAttribute(tagLazyIsOn)) {
-					console.log("in the air like you don't care");
-				}
+			components[1]--;
+
+			if (z !== 'Z') {
+				zoneoffset = (((parseInt(( z = z.replace(':', '')).substr(1, 2), 10) * 3600) + (parseInt(z.substr(3, 4), 10) * 60)
+				) * (z.charAt(0) == '-' ? 1000 : -1000)
+				);
 			}
-		}
+		});
+
+		return Date.UTC.apply(Date, components) + zoneoffset;
 	},
 	"asyncLoop" : function(iterations, func, callback) {
 		var index = 0;
@@ -335,6 +313,22 @@ var tpht = {
 		} else {
 			parent.appendChild(element);
 		}
+	},
+	"bindEvent" : function(el, eventName, eventHandler) {
+		if (el.addEventListener) {
+			el.addEventListener(eventName, eventHandler, false);
+		} else if (el.attachEvent) {
+			el.attachEvent('on' + eventName, eventHandler);
+		}
+	},
+	"getElementsFromDomNode" : function(node, classname) {
+		var a = [];
+		var re = new RegExp('(^| )' + classname + '( |$)');
+		var els = node.getElementsByTagName("*");
+		for (var i = 0, j = els.length; i < j; i++)
+			if (re.test(els[i].className))
+				a.push(els[i]);
+		return a;
 	}
 }
 
@@ -344,4 +338,45 @@ Math.toDegrees = function(angle) {
 
 Math.toRadians = function(angle) {
 	return angle * (Math.PI / 180);
+}
+
+if (!document.getElementsByClassName) {
+	document.getElementsByClassName = function(search) {
+		var d = document, elements, pattern, i, results = [];
+		if (d.querySelectorAll) {// IE8
+			return d.querySelectorAll("." + search);
+		}
+		if (d.evaluate) {// IE6, IE7
+			pattern = ".//*[contains(concat(' ', @class, ' '), ' " + search + " ')]";
+			elements = d.evaluate(pattern, d, null, 0, null);
+			while (( i = elements.iterateNext())) {
+				results.push(i);
+			}
+		} else {
+			elements = d.getElementsByTagName("*");
+			pattern = new RegExp("(^|\\s)" + search + "(\\s|$)");
+			for ( i = 0; i < elements.length; i++) {
+				if (pattern.test(elements[i].className)) {
+					results.push(elements[i]);
+				}
+			}
+		}
+		return results;
+	}
+}
+if ( typeof Array.indexOf != Function) {
+	console.log("no indexof");
+	Array.prototype.indexOf = function(a, b, c) {
+		for ( c = this.length, b = (c + ~~b) % c; b < c && (!( b in this) || this[b] !== a); b++);
+		return b ^ c ? b : -1;
+	}
+}
+
+
+if ( !window.Element )
+{
+	console.log("OLOLFOUND");
+        Element = function(){}
+
+        Element.prototype.getElementsByClassName = document.getElementsByClassName;
 }
