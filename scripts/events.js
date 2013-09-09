@@ -1,73 +1,65 @@
 google.maps.event.addDomListener(window, 'load', maps.initialize);
-var heartInterval = 30;
-var heartBeat = 0;
 
-function setSSE(){
-	if (!!window.EventSource) {
-		var source = new EventSource('http://localhost:1337/events');
-		source.addEventListener('message', function(e) {
-			  var interval = window.setInterval(function(){
-			  	if(heartBeat+ (heartInterval*1000) < new Date().getTime()){
-			  		console.log("SHUTTING UP SHOP");
-			  		window.clearInterval(interval);
-			  		interval = null;
-			  		source.close();
-			  		//setSSE();
-			  	}
-			  },30000)
-			if(JSON.parse(e.data).hasOwnProperty("type")){
-				if(JSON.parse(e.data).type == "heartbeat"){
-					console.log("HEARTBEAT");
-				}
-			}
-			heartBeat = JSON.parse(e.data).timestamp;
-			sse.longtroll(e);
-		}, false);
-	
-		source.addEventListener('open', function(e) {
-			console.log("Yay!");
-		}, false);
-	//scroll handler for scroll box is in main.js. Aww yis.
-		source.addEventListener('error', function(e) {
-			console.log("erroring");
-			if (e.readyState == EventSource.CLOSED) {
-				console.log("A dragon appeared!");
-				setSSE();
-			}
-			else{
-				source.close();
-//				window.setTimeout(setSSE(),5000);
-			}
-		}, false);
-	
-	} else {
-		// Result to xhr polling :(
-		console.log("no SSE support here; xhr only.");
-		//tpht.easyXML("get","http://localhost:1337/events","",sse.longtroll(response));
+var lastMessage = new Date().getTime();
+function checkId() {
+	console.log(lastEventId - messageId);
+	if (lastEventId < messageId) {
+		return true;
 	}
+
+	return false;
 }
+
+function setSSE() {
+	var es = new EventSource("http://localhost:1337/events");
+	/*es.addEventListener("open", function(e) {
+		console.log("Connected!");
+	});
+	es.addEventListener("error", function(e) {
+		console.log("erroring");
+	});
+	es.addEventListener("info", function(event) {
+		console.log(event);
+	});*/
+	es.addEventListener("message", function(event) {
+			console.log(event);
+			console.log(new Date().getTime());
+//		event = event.originalEvent;
+		//lastEventId = messageId;
+		if(parseInt(JSON.parse(event.data).timestamp,10) > lastMessage){
+			lastMessage = parseInt(JSON.parse(event.data).timestamp,10);
+			sse.longtroll(event.data);
+		}
+		//
+	});
+
+}
+
 window.onload = function() {
-	setSSE();
 	tags.retrieve();
-	tpht.bindEvent(document.getElementById("searchClear"),'click', function(){
+	$(document.getElementById("searchClear")).bind('click', function() {
 		document.getElementById("searchField").value = "";
-		document.getElementById("searchClear").style.display="none";
+		document.getElementById("searchClear").style.display = "none";
 		tags.filtration = "";
 		elements.fullUpdate();
 	});
-	tpht.bindEvent(document.getElementById("searchMe"),'click', function(){
-		var stuff = document.getElementById("searchField").value;
-		if(tags.filtration != stuff){
-			if(stuff == ""){
-				document.getElementById("searchClear").style.display="none";
-			}else{
-				document.getElementById("searchClear").style.display="block";
+	$(document.getElementById("searchMe")).bind('click', function() {
+		console.log("CALLING");
+		var stuff = $("#searchField").val();
+		console.log(stuff);
+		if (tags.filtration != stuff) {
+			if (stuff == "") {
+				$("#searchClear").css("display", "none");
+			} else {
+				$("#searchClear").css("display", "block");
 			}
 			tags.filtration = stuff;
 		}
-		elements.fullUpdate();		
+		elements.fullUpdate();
 	});
-	tpht.bindEvent(document.getElementById("facebookShare"),'click', function() {
+		setSSE();
+
+	$(document.getElementById("facebookShare")).bind('click', function() {
 		/*document.getElementById("facebookShare").preventDefault();
 		 FB.ui(
 		 {
@@ -80,7 +72,7 @@ window.onload = function() {
 		var inputToSend = "";
 		general.customModal({
 			"type" : "dialog",
-			"message" : "<strong>What do you want to say?</strong><p>Here's your chance to be awesome. Don't be shy!</p>" +tags.singleTag +" <input type='text' id='facebookInput'/>",
+			"message" : "<strong>What do you want to say?</strong><p>Here's your chance to be awesome. Don't be shy!</p>" + tags.singleTag + " <input type='text' id='facebookInput'/>",
 			"confirm" : function() {
 				inputToSend = document.getElementById("facebookInput").value;
 				FB.login(function(response) {
@@ -103,7 +95,7 @@ window.onload = function() {
 								console.log(response);
 								if (!response || response.error) {
 									//alert('Error occured');
-									document.getElementById("facebookInput").value = "There was an error: "+response.error;
+									document.getElementById("facebookInput").value = "There was an error: " + response.error;
 								} else {
 									document.getElementById("modalDialogue").style.display = "none";
 									document.getElementById("modalInside").innerHTML = "";

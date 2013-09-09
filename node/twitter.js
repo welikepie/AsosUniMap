@@ -20,12 +20,13 @@ t = new twitter({
 startStream();
 function startStream() {
 	console.log("streaming");
+	console.log(credentials.tags.location);
 	t.stream('statuses/filter', {
 		//track : credentials.tags.campaign
 		track : credentials.tags.location
 	}, function(stream) {
-		
-		stream.on('data', function(tweet) {
+		stream.on('data', function(tweet,err) {
+			console.log(err);
 			console.log(tweet);
 			if(tweet.hasOwnProperty("disconnect")){
 				startStream();

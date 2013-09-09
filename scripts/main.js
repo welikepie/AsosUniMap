@@ -4,7 +4,21 @@ var config = {
 	"startZoom" : 6, //starting zoom to have.
 	"markerMinZoom" : 5,
 	"baseURL" : "",
-	"ulLimit" : 50
+	"ulLimit" : 50,
+	"bandSizes" : {
+		20 : 12,
+		40 : 16,
+		60 : 20,
+		80 : 24,
+		100 : 28,
+		120 : 32,
+		140 : 36,
+		160 : 40,
+		180 : 44,
+		200 : 48,
+		220 : 52,
+		260 : 56
+	}
 };
 var maps = {
 	oldInfoBox : null,
@@ -99,14 +113,7 @@ var maps = {
 			console.log("calling doNothing");
 			tags.filterBasedOnBound("doNothing");
 			//elements.fullUpdate();
-
 		});
-			google.maps.event.addListener(maps.map, "rightclick", function(event) {
-				    var lat = event.latLng.lat();
-				    var lng = event.latLng.lng();
-				    // populate yor box/field with lat, lng
-				    alert("Lat=" + lat + "; Lng=" + lng);
-				});
 
 		google.maps.event.addListener(maps.map, 'dragend', function() {
 			//tpht.getById("map-canvas").onclick = function() {
@@ -119,6 +126,7 @@ var maps = {
 			//tags.update();
 			//}
 		});
+		google.maps.event.addListener(maps.map,'tilesloaded',general.refreshLabelSize);
 		google.maps.event.addListenerOnce(maps.map, 'idle', function() {
 			// do something only the first time the map is loaded
 			var bounds = maps.map.getBounds();
@@ -160,12 +168,19 @@ var mmanager = {
 			}
 			obj.info.open(maps.map, obj);
 			maps.oldInfoBox = obj.info;
-			//			document.getElementById("infoBox"+obj.id).getElementsByTagName("img")[0].setAttribute("src",document.getElementById(obj.id).getElementsByTagName(0).getAttribute("img-data-src"));
-			if (document.getElementsByClassName("infoBox")[0].getElementsByTagName("img").length > 0) {
-				document.getElementsByClassName("infoBox")[0].getElementsByTagName("img")[0].addEventListener("error", function() {
-					document.getElementsByClassName("infoBox")[0].getElementsByTagName("img")[0].style.display = "none";
+			$(obj.info).bind("ready",function(){console.log("WAT");});
+			//			document.getElementById("infoBox"+obj.id).getElementsByTagName("img")[0].attr("src",document.getElementById(obj.id).getElementsByTagName(0).getAttribute("data-img-src"));
+			console.log($(".infoBox").first().find("img"));
+			if ($(".infoBox").first().find("img")) {
+				$(".infoBox").first().find("img").first().bind("error", function() {
+					$(".infoBox").first().find("img").first().css("display:none;");
 				});
-				document.getElementsByClassName("infoBox")[0].getElementsByTagName("img")[0].setAttribute("src", document.getElementsByClassName("infoBox")[0].getElementsByTagName("img")[0].getAttribute("img-data-src"));
+				console.log($(".infoBox").first());
+				console.log($(".infoBox").first().find("img"));
+				console.log($(".infoBox").first().find("img").data("img-src"));
+				
+				
+				$(".infoBox").first().find("img").attr("src", $(".infoBox").first().find("img").data("img-src"));
 			}
 			//mmanager.tagManager.refresh();
 		});
@@ -174,23 +189,26 @@ var mmanager = {
 		var thisMarker;
 		hashContentManager = new MarkerManager(maps.map);
 		var element = 3;
+		console.log(tags.optionaltags);
 		for (var zed in tags.locations) {
+
 			if (tags.locations[zed].latitude != null && tags.locations[zed].longitude != null) {
 				//console.log(new google.maps.LatLng(tags.locations[zed].latitude, tags.locations[zed].longitude));
 				//thisMarker = new google.maps.Marker({
-					var toInsert = "";
-					if(tags.optionaltags[zed]!=""){
-						toInsert = tags.optionaltags[zed];
-					}
-					else{
-						toInsert = "#"+zed;
-					}
-					
+				var toInsert = "";
+				console.log(zed);
+				console.log(tags.optionaltags[zed]);
+				if (tags.optionaltags[zed] != "" && tags.optionaltags.hasOwnProperty(zed)) {
+					toInsert = tags.optionaltags[zed];
+				} else {
+					toInsert = "#" + zed;
+				}
+				
 				thisMarker = new MarkerWithLabel({
 					position : new google.maps.LatLng(tags.locations[zed].latitude, tags.locations[zed].longitude),
 					title : "#" + zed,
 					zIndex : 9010,
-					labelContent : "<h2 style='font-size:"+(element*6)+"px'class='domHash' data-rel-hash='"+zed+"'>" + toInsert + "</h2>",
+					labelContent : "<h2 style='font-size:26px' class='domHash' data-rel-hash='" + zed + "'>" + toInsert + "</h2>",
 					labelAnchor : new google.maps.Point(0, 0),
 					labelClass : "labels", // the CSS class for the label
 					icon : "images/marker.png"
@@ -200,7 +218,7 @@ var mmanager = {
 				mmanager.addClickToOverHashes(thisMarker);
 				mmanager.overMark.push(thisMarker);
 			}
-			
+
 			//			console.log(mmanager.overMark[mmanager.overMark.length-1]);
 		}
 		mmanager.tagManager = new MarkerManager(maps.map);
@@ -210,7 +228,7 @@ var mmanager = {
 			//console.log(mmanager.tagManager);
 			mmanager.tagManager.refresh();
 			tags.labelRefresh();
-			
+
 			google.maps.event.addListener(maps.map, 'zoom_changed', function() {
 				mmanager.tagManager.refresh();
 			});
@@ -221,7 +239,7 @@ var mmanager = {
 }
 var tags = {
 	"filtration" : "",
-	"singleTag" : "",//this is the tag closest to the center which is pulled and used for FB and tweets.
+	"singleTag" : "", //this is the tag closest to the center which is pulled and used for FB and tweets.
 	"contentInnerHeight" : 0,
 	"locations" : {},
 	"optionaltags" : {}, //use optionaltags to traverse locations and get data.
@@ -233,21 +251,26 @@ var tags = {
 	"MAPrenderOnPage" : new Array(),
 	"DOMrenderOnPage" : new Array(),
 	"markerTags" : {},
-	"setOrdering" : function(){
+	"setOrdering" : function() {
 		//document.getElementsByClassName("domHash")[0].parentNode.parentNode.parentNode.style.zIndex = 650;
 	},
-	"labelRefresh" : function(){
-		var thing = window.setInterval(function(){
-		//console.log(document.getElementsByClassName("labels"));
-		var elements = document.getElementsByClassName("labels");
-		 if(elements.length>0){
-		 	window.clearInterval(thing);		 
-		 }
-		},100);
+	"inString" : function(haystack,needle){
+		if(needle == ""){return true;}
+//		console.log(new RegExp(needle.toLowerCase()).test(haystack.toLowerCase()));
+		return new RegExp(needle.toLowerCase()).test(haystack.toLowerCase()); // false
+	},
+	"labelRefresh" : function() {
+		var thing = window.setInterval(function() {
+			//console.log(document.getElementsByClassName("labels"));
+			var elements = $(".labels");
+			if (elements.length > 0) {
+				window.clearInterval(thing);
+			}
+		}, 100);
 
-//		 for(var i = 0, length = elements.length; i < length; i++) {
-//		 	console.log(elements.item(i));
-//		 }
+		//		 for(var i = 0, length = elements.length; i < length; i++) {
+		//		 	console.log(elements.item(i));
+		//		 }
 	},
 	"markerPos" : function() {
 		//for(var i in tags.optionaltags){
@@ -263,9 +286,10 @@ var tags = {
 		var waiting;
 		tpht.easyXHR("get", config.baseURL + "node/tags.json", "", function(response) {
 			var ans = JSON.parse(response).data;
-			if (ans.hasOwnProperty("locations")) {
+			if (Object.prototype.hasOwnProperty.call(ans, "locations")) {
 				tags.locations = ans.locations;
 			}
+			//			console.log(tags);
 			if (ans.hasOwnProperty("optionaltags")) {
 				tags.optionaltags = ans.optionaltags;
 				//tpht.ping();
@@ -282,35 +306,39 @@ var tags = {
 				}, 500);
 			}
 			general.updateSinglePoint();
+			console.log("filterBased");
+
 			//tags.markerPos();
 
 		});
 	},
 	"filterBasedOnBound" : function(carryOn) {
-
 		tags.inBound = new Array();
 		for (var i in tags.locations) {
 			if (tags.locations[i].latitude != null && tags.locations[i].longitude != null) {
 				if (tags.locations[i].radius == null) {
 					tags.locations[i].radius = 0;
 				}
+				console.log(maps.boundingBox);
 				var near = tpht.compareBoxesRect(maps.boundingBox, tpht.haversine(tags.locations[i].latitude, tags.locations[i].longitude, tags.locations[i].radius));
 				if (near == true) {
 					tags.inBound.push(i);
 				}
 			}
 		}
-		//console.log(tags.inBound);
-					elements.fullUpdate();
+		console.log(tags.inBound);
+		elements.fullUpdate();
 
 		if (carryOn == true || carryOn == "update") {
 			tags.loadTagFiles(tags.inBound, "");
 		}
 		general.updateSinglePoint();
+		console.log("preLoadTagFiles");
 	},
 	"loadTagFiles" : function(arr, updater) {
 		tpht.asyncLoop(arr.length, function(loop, i) {
 			//		console.log("node/jsons/"+tags.inBound[t]+".json");
+			console.log(tags.inBound);
 			tpht.easyXHR("get", config.baseURL + "node/jsons/" + tags.inBound[i] + ".json", "", function(response) {
 				//console.log(response);
 				if (!JSON.parse(response).hasOwnProperty("error")) {
@@ -330,20 +358,20 @@ var tags = {
 		console.log(tags.tagData);
 		for (var i in tags.tagData) {
 			console.log(i);
-			
+
 			//console.log(tags.tagData[i]);
 			var arrMake = tags.tagData[i];
 			var arrTags = arrMake.tag;
 			var arrAns = arrMake.answers;
 			var arrTime = arrMake.time;
-			
+
 			for (var t in arrAns) {
 				//console.log(JSON.stringify(arrAns[t]));
 				//		console.log(new Date(arrAns[t].time).getTime()/1000);
 				//console.log(new Date());
 				//console.log((new Date(arrAns[t].time).getTime() / 1000));
-//				console.log(arrAns[t].time);
-//				console.log(new Date(arrAns[t].time).getTime());
+				//				console.log(arrAns[t].time);
+				//				console.log(new Date(arrAns[t].time).getTime());
 				if (new Date(arrAns[t].time).getTime() / 1000 >= config.minTime) {
 					if (arrAns[t].lat != null) {
 						//console.log(arrAns[t]);
@@ -386,16 +414,20 @@ var tags = {
 		console.log("starting");
 		for (var zed in tags.MAPrender) {
 			var obj = tags.MAPrender[zed];
-			var marker = new google.maps.Marker({
-				position : obj.position,
-				map : obj.map,
-				zIndex : 9000,
-				addedInfo : obj,
-				disableAutoPan : true
-			});
+			//console.log(obj.position);
+			var marker = new google.maps.Marker(
+				{
+				"position" : obj.position,
+				"map" : obj.map,
+				"addedInfo" : obj,
+				"zIndex" : 9000,
+				"disableAutoPan" : true,
+				"batchSizeIE" : 50
+			}
+			);
 			marker.info = new google.maps.InfoWindow({
-				content : elements.info(obj),
-				zIndex : 9005
+				"content" : elements.info(obj),
+				"zIndex" : 9005
 			});
 			mmanager.addClickToHashes(marker);
 			mmanager.hashContentArr.push(marker);
@@ -408,13 +440,14 @@ var tags = {
 		for (var zed in tags.DOMrender) {
 			if (zed < config.ulLimit) {
 				tags.renderToList(tags.DOMrender[zed], false);
-				tags.DOMrenderOnPage.push(obj.id);
+				tags.DOMrenderOnPage.push(tags.DOMrender[zed].id);
 
 				//console.log(document.getElementById("sideBar"+obj.id));
 				//	console.log(t);
 				//	tpht.ping();
 			}
 		}
+		//console.log("rendered");
 		var iterate = document.getElementsByTagName("li");
 		var carried = false;
 		document.getElementById("surrounder").onscroll = function() {
@@ -442,31 +475,35 @@ var tags = {
 				}
 			}
 		}
+		console.log("addedRender");
+		general.refreshLabelSize();
 		//console.log(tags.DOMrender.length);
 	},
 	"listImageLoad" : function() {
 
-		var unloaded = document.getElementsByClassName("image");
+		var unloaded = $(".image");
 		for (var i in unloaded) {
 			//console.log( typeof (unloaded[i]));
 			if ( typeof (unloaded[i]) == "object") {
 				//console.log(unloaded[i]);
-				unloaded[i].addEventListener("error", function() {
-					unloaded[i].style.display = 'none';
+				$(unloaded[i]).bind("error", function() {
+					$("#sideBar" + obj.id).children("img")[0].css("display:none;");
 				});
-				unloaded[i].setAttribute("src", unloaded[i].getAttribute("data-img-src"));
+				$(unloaded[i]).attr("src", $(unloaded[i]).data("img-src"));
+				$(unloaded[i]).removeAttr("width");
+				$(unloaded[i]).removeAttr("height");
 			}
 		}
 
 	},
 	"renew" : function(arr) {
-		console.log(arr.length);
+		//console.log(arr.length);
 		var longWay = 500;
 		//		console.log(longWay);
 		tpht.asyncLoop(arr.length, function(loop, i) {
 			//	console.log(arr[i]);
 			//		console.log(new Date(arrAns[t].time).getTime()/1000);
-			
+
 			//	console.log(new Date(arr[i].time).getTime() + "," + config.minTime);
 			if (new Date(arr[i].time).getTime() >= config.minTime) {
 				if (arr[i].lat != null) {
@@ -534,17 +571,24 @@ var tags = {
 	},
 
 	"renderToMap" : function(obj, callback) {
-		mcOptions = {
-			maxZoom : 18
+		console.log("instantiationg");
+		var mcOptions = {
+			"maxZoom" : 18,
+			"batchSizeIE" : 50
 		};
+		
 		//var mcOptions = {gridSize: 50, maxZoom: 15};
-		mmanager.hashContentManager = new MarkerClusterer(maps.map, obj, mcOptions);
-		google.maps.event.addListener(mmanager.hashContentManager, 'loaded', function() {
-			console.log("+++++++++++++++++++++++++++++++++");
-			mmanager.hashContentManager.refresh();
-			
-		});
+		console.log("instantiationg");
+		console.log(obj);
+		try{
+			mmanager.hashContentManager = new MarkerClusterer(maps.map,obj,mcOptions);
+		}catch(e){
+			alert(e.stack);
+		}
+		console.log("markerClusterer");
+		console.log("listener");
 		mmanager.initialise();
+		console.log("init");
 
 		//tpht.lazyLoader("data-image-src");
 		//	mmanager.hashContentManager = new MarkerManager(maps.map);
@@ -554,119 +598,134 @@ var tags = {
 		//		mmanager.tagManager.refresh();
 		//	});
 		//tags.MAPrenderOnPage.push(obj.id);
+		
 	},
 	"renderToList" : function(obj, inb4) {
 		var append = document.getElementById("content");
 		var toAdd;
-		
+
 		if (tags.inBound.indexOf(obj.hashtag) == -1) {
 			toAdd = elements.list(obj, true, inb4);
 		} else {
 			toAdd = elements.list(obj, false, inb4);
 		}
-		if(tags.inBound.indexOf(toAdd.getAttribute("data-rel-hashtag"))==-1 || elements.filter(toAdd.getElementsByClassName("text")[0].textContent,tags.filtration)==false){
-					toAdd.style.display="none";
-				}
-				else{
-					toAdd.style.display="block";
-				}
-		
+		//console.log($(toAdd).children(".text").text());
+
+		if (tags.inBound.indexOf($(toAdd).attr("data-rel-hashtag")) == -1 || elements.filter($(toAdd).children(".text").text(), tags.filtration) == false) {
+			$(toAdd).css("display" , "none");
+		} else {
+			$(toAdd).css("display" , "block");
+		}
+
 		if (inb4 == true) {
 			tpht.appendFirst(toAdd, append);
+			console.log($(toAdd).html());
+			//console.log("MEFIRST");
 		} else {
 			append.appendChild(toAdd);
+			//console.log($(toAdd).html());
+			//console.log("FOUND");
 		}
 	}
 }
 var elements = {
-	"fullUpdate" : function(){
-		var ins = document.getElementsByClassName("sideBar");
-		for(var i in ins){
-			if(ins.hasOwnProperty(i)&&ins[i]!=ins.length){
-				if(tags.inBound.indexOf(ins[i].getAttribute("data-rel-hashtag"))==-1 || elements.filter(ins[i].getElementsByClassName("text")[0].textContent,tags.filtration)==false){
-					ins[i].style.display="none";
-				}
-				else{
-					ins[i].style.display="block";
+	"fullUpdate" : function() {
+		var ins = $(".sideBar");
+		console.log(ins);
+		if(ins.length>0){
+			for (var i = 0; i < ins.length; i++) {
+				if (Object.prototype.hasOwnProperty.call(ins, i)) {	
+					if (tags.inBound.indexOf($(ins[i]).data("rel-hashtag")) == -1 || tags.inString($(ins[i]).children(".text").text(),tags.filtration) == false) {
+						console.log(tags.inBound.indexOf($(ins[i]).data("rel-hashtag")));
+						console.log(ins[i]);
+						$(ins[i]).css("display","none");
+					} else {
+						$(ins[i]).css("display","block");
+					}
 				}
 			}
 		}
 	},
-	"filter" : function(input,string){
-		if(input.substring(0,5)=="text:"){
-			input = input.substring(6,input.length);
+	"filter" : function(input, string) {
+		if (input.substring(0, 5) == "text:") {
+			input = input.substring(6, input.length);
 		}
-		if(input.toLowerCase().indexOf(string.toLowerCase()) > -1){return true;}
+		if (input.toLowerCase().indexOf(string.toLowerCase()) > -1) {
+			return true;
+		}
 		return false;
 	},
 	"list" : function(obj, hidden, notLazyLoad) {
 		notLazyLoad = true;
 		var li = document.createElement("li");
-		li.setAttribute("id", "sideBar" + obj.id);
+		$(li).attr("id", "sideBar" + obj.id);
 		if (hidden == true) {
-			li.style.display = "none";
+			$(li).css("display","none");
 		}
-		li.setAttribute("class", "sideBar");
-		li.setAttribute("data-rel-hashtag", obj.hashtag.replace(/#/g, ""));
+		$(li).attr("class", "sideBar");
+		$(li).attr("data-rel-hashtag", obj.hashtag.replace(/#/g, ""));
+		$(li).attr("data-timestamp",obj.time);
 		if (obj.img_small != undefined) {
 			var div = document.createElement("img");
-			div.setAttribute("class", "image");
+			$(div).attr("class", "image");
 			if (obj.src == "TWTTR") {
 				if (notLazyLoad == false) {
-					div.setAttribute("data-img-src", "http://" + obj.img_small);
+					$(div).attr("data-img-src", "http://" + obj.img_small);
 				} else {
-					div.setAttribute("src", "http://" + obj.img_small);
+					$(div).attr("src", "http://" + obj.img_small);
 				}
 			} else {
 				if (notLazyLoad == false) {
-					div.setAttribute("data-img-src", obj.img_small);
+					$(div).attr("data-img-src", obj.img_small);
 				} else {
-					div.setAttribute("src", obj.img_small);
+					$(div).attr("src", obj.img_small);
 				}
 
 			}//"sideBar" + obj.id
-			//div.setAttribute("onerror",)
+			//div.attr("onerror",)
 			//			tpht.setAttr(div, "onError", tpht.setAttr(div,"style","display:none;"));
 
-			div.addEventListener("error", function() {
+			$(div).bind("error", function() {
 				//console.log("sideBar" + obj.id);
-				document.getElementById("sideBar" + obj.id).getElementsByTagName("img")[0].style.display = "none";
+				$("#sideBar" + obj.id).children("img").first().css("display","none;");
 			})
 			li.appendChild(div);
 		}
 		var div = document.createElement("div");
-		div.textContent = "source: " + obj.source;
+		$(div).html("source: " + obj.source);
 		li.appendChild(div);
 		var div = document.createElement("div");
-		div.setAttribute("class", "user");
-		div.textContent = "user: " + obj.user;
+		$(div).attr("class", "user");
+		$(div).html("user: " + obj.user);
+		//= ;
 		li.appendChild(div);
 
 		if (obj.text != undefined) {
 			var div = document.createElement("div");
-			div.setAttribute("class", "text");
-			div.textContent = "text: " + obj.text;
+			$(div).attr("class", "text");
+			$(div).html("text: " + obj.text);
 			li.appendChild(div);
 		}
 		var div = document.createElement("div");
-		div.setAttribute("class", "date");
-		div.textContent = "date added: " + new Date(obj.time);
+		$(div).attr("class", "date");
+		$(div).html("date added: " + new Date(obj.time));
 		li.appendChild(div);
-		//console.log(li);
+		//		console.log($(li).html());
 		return li;
 	},
 	"info" : function(obj) {
 		var li = document.createElement("div");
-		li.setAttribute("id", "infoBox" + obj.id);
-		li.setAttribute("class", "infoBox");
+		$(li).attr("id", "infoBox" + obj.id);
+		$(li).attr("class", "infoBox");
 		if (obj.img_small != undefined) {
 			var div = tpht.createElement("img");
-			tpht.setClass(div, "image");
+			$(div).attr("class","image");
 			if (obj.src == "TWTTR") {
-				tpht.setAttr(div, "img-data-src", "http://" + obj.img_small);
+				$(div).attr("data-img-src", "http://" + obj.img_small);
 			} else {
-				tpht.setAttr(div, "img-data-src", obj.img_small);
-			}//tpht.setAttr(div,"src","images/marker.png");
+				$(div).attr("data-img-src", obj.img_small);
+			}
+//			$(div).attr("src","images/marker.png");
 			li.appendChild(div);
 		}
 		var div = tpht.createElement("div");
@@ -694,7 +753,7 @@ var elements = {
 var sse = {
 	"longtroll" : function(input) {
 		console.log(input);
-		var ins = JSON.parse(input.data);
+		var ins = JSON.parse(input);
 		//console.log(ins);
 		if (ins.hasOwnProperty("tag")) {
 			//	tag.loadTagFiles([input]);
@@ -734,63 +793,87 @@ var sse = {
 }
 
 var general = {
-	"customModal" : function(opts){
-/*	{
-				"type" : "dialog",
-				"message" : "<strong>Warning!</strong><p>The file is already being edited and has been since " + new Date(parseInt(response.data.timestamp, 10)) + "</p>" + "<p>If you are sure you want to edit anyways, click \"Confirm\".</p>",
-				"confirm" : function() {
-					commandSend("force", "post", function() {
-						loadTagJSON("get", -1);
-					});
-				}
-			});*/
-	console.log(opts);
-	var content = document.getElementById("modalInside");
-	var textIn = document.createElement("div");
-	textIn.setAttribute("id", "modalText");
-	var decline = document.createElement("input");
-	decline.setAttribute("type", "button");
-	decline.setAttribute("class", "btn btn-large btn-danger");
-	decline.setAttribute("id", "modalDeny");
-	decline.setAttribute("value", "Dismiss");
-	decline.onclick = function() {
-		document.getElementById("modalDialogue").style.display = "none";
-		document.getElementById("modalInside").innerHTML = "";
-	}
-	content.appendChild(decline);
-	if (opts.type == "dialog") {
-		console.log(opts.message);
-		textIn.innerHTML = opts.message;
-		var confirm = document.createElement("input");
-		confirm.setAttribute("type", "button");
-		confirm.setAttribute("class", "btn btn-large btn-success");
-		confirm.setAttribute("id", "modalConfirm");
-		confirm.setAttribute("value", "Confirm");
-		confirm.onclick = function() {
-			opts.confirm();
+	"refreshLabelSize": function(){
+		console.log("WORKING!!!");
+		$(".domHash").each(function(index,value){
+			console.log(index+","+value);
+		});
+		
+	},
+	"closestSize" : function(key){
+		
+		console.log(tags.tagData);
+		for (var i in config.bandSizes) {
+		  if (config.bandSizes.hasOwnProperty(i)) {
+		    if(tpht.distance1(tags.tagData[key].answers.length,key) <= 10){
+		    	return config.bandSizes[i];
+		    }
+		  }
 		}
-		content.appendChild(confirm);
-	}
-	content.appendChild(textIn);
-	document.getElementById("modalDialogue").style.display = "block";
+		return 72;
+	},
+	"customModal" : function(opts) {
+		/*	{
+		 "type" : "dialog",
+		 "message" : "<strong>Warning!</strong><p>The file is already being edited and has been since " + new Date(parseInt(response.data.timestamp, 10)) + "</p>" + "<p>If you are sure you want to edit anyways, click \"Confirm\".</p>",
+		 "confirm" : function() {
+		 commandSend("force", "post", function() {
+		 loadTagJSON("get", -1);
+		 });
+		 }
+		 });*/
+		console.log(opts);
+		var content = document.getElementById("modalInside");
+		var textIn = document.createElement("div");
+		$(textIn).attr("id", "modalText");
+		var decline = document.createElement("input");
+		$(decline).attr("type", "button");
+		$(decline).attr("class", "btn btn-large btn-danger");
+		$(decline).attr("id", "modalDeny");
+		$(decline).attr("value", "Dismiss");
+		decline.onclick = function() {
+			document.getElementById("modalDialogue").css("display", "none");
+			document.getElementById("modalInside").innerHTML = "";
+		}
+		content.appendChild(decline);
+		if (opts.type == "dialog") {
+			console.log(opts.message);
+			textIn.innerHTML = opts.message;
+			var confirm = document.createElement("input");
+			$(confirm).attr("type", "button");
+			$(confirm).attr("class", "btn btn-large btn-success");
+			$(confirm).attr("id", "modalConfirm");
+			$(confirm).attr("value", "Confirm");
+			confirm.onclick = function() {
+				opts.confirm();
+			}
+			content.appendChild(confirm);
+		}
+		content.appendChild(textIn);
+		document.getElementById("modalDialogue").css("display","block");
 
-},
+	},
 	"updateSinglePoint" : function() {
 		var extraString = "twitButton.html#type=hashtag&count=none";
 		if (tags.inBound.length > 0) {
 			var center = maps.map.getCenter().toString().replace(/[()]/g, "").split(",");
 			console.log(center);
 			var dist = [999, ""];
+
 			for (var i in tags.inBound) {
-				if (tpht.distanceBetweenPoints([parseFloat(center[0]), parseFloat(center[1])], [tags.locations[tags.inBound[i]].latitude, tags.locations[tags.inBound[i]].longitude]) < dist[0]) {
-					dist[1] = "#" + tags.inBound[i];
-					dist[0] = tpht.distanceBetweenPoints([parseFloat(center[0]), parseFloat(center[1])], [tags.locations[tags.inBound[i]].latitude, tags.locations[tags.inBound[i]].longitude]);
-				}//latitude, longitude
+				if (tags.inBound.hasOwnProperty(i)) {
+					if (tpht.distanceBetweenPoints([parseFloat(center[0]), parseFloat(center[1])], [tags.locations[tags.inBound[i]].latitude, tags.locations[tags.inBound[i]].longitude]) < dist[0]) {
+						dist[1] = "#" + tags.inBound[i];
+						dist[0] = tpht.distanceBetweenPoints([parseFloat(center[0]), parseFloat(center[1])], [tags.locations[tags.inBound[i]].latitude, tags.locations[tags.inBound[i]].longitude]);
+					}//latitude, longitude
+				}
 			}
 			tags.singleTag = dist[1];
 		} else {
 			tags.singleTag = "";
 		}
+		console.log("-----------------------------------------------");
+		console.log(tags.singleTag);
 		//		tags.locations
 
 		/*var toAdd = tags.campaign;
@@ -811,8 +894,8 @@ var general = {
 		 extraString+=tags.inBound[0];
 		 }*/
 		var tweet = document.getElementById("twitterButton");
-		extraString = extraString+"&hashtags="+tags.singleTag.replace(/#/g,"");
-		tweet.setAttribute("src", extraString);
+		extraString = extraString + "&hashtags=" + tags.singleTag.replace(/#/g, "");
+		$(tweet).attr("src", extraString);
 		tweet.contentWindow.location.reload();
 	}
 }

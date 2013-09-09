@@ -25,10 +25,6 @@ $json = json_decode(file_get_contents("../../node/tags.json"),true);
 		$newThings = array();
 		foreach($tested as $ind=>$value){
 			if(isset($value["grouptag"])){
-				
-				if(!isset($newThings[$ind])){
-					$newThings[$ind] = "";
-				}	
 				$newThings[$ind] = $value["grouptag"];
 			}
 		}
@@ -37,9 +33,10 @@ $json = json_decode(file_get_contents("../../node/tags.json"),true);
 	if(isset($_POST["location"])){
 	$arr = explode(",",$_POST["location"]);
 		foreach($arr as $index=>$val){
-			$arr[$index] = "#".$val;
+			$arr[$index] = trim("#".$val);
+
 		if(!file_exists("../../node/jsons/".$val.".json")){
-			file_put_contents("../../node/jsons/".$val.".json",'{"tag":"'.$val.'","timestamp":0,""length":0,"answers":[]}');
+			file_put_contents("../../node/jsons/".$val.".json",'{"tag":"'.$val.'","timestamp":0,"length":0,"answers":[]}');
 		}			
 		}
 	$json["data"]["location"] = $arr;
