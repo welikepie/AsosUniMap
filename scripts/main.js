@@ -6,18 +6,25 @@ var config = {
 	"baseURL" : "",
 	"ulLimit" : 50,
 	"bandSizes" : {
-		20 : 12,
-		40 : 16,
-		60 : 20,
-		80 : 24,
-		100 : 28,
-		120 : 32,
-		140 : 36,
-		160 : 40,
-		180 : 44,
-		200 : 48,
-		220 : 52,
-		260 : 56
+		10 : 12,
+		25 : 16,
+		75 : 20,
+		150 : 24,
+		305 : 28,
+		610 : 32,
+		1250 : 36,
+		2500 : 40,
+		5000 : 44,
+		10000 : 48,
+		20000 : 52,
+		50000 : 56,
+		100000 : 62
+	},
+	"sizesOfLabels" : function() {
+		tpht.easyXHR("get", "node/jsons/TAGSSIZES.json", "", function(response) {
+			console.log(response);
+			config.sizesOfLabels = JSON.parse(response);
+		})
 	}
 };
 var maps = {
@@ -126,7 +133,6 @@ var maps = {
 			//tags.update();
 			//}
 		});
-		google.maps.event.addListener(maps.map,'tilesloaded',general.refreshLabelSize);
 		google.maps.event.addListenerOnce(maps.map, 'idle', function() {
 			// do something only the first time the map is loaded
 			var bounds = maps.map.getBounds();
@@ -168,7 +174,9 @@ var mmanager = {
 			}
 			obj.info.open(maps.map, obj);
 			maps.oldInfoBox = obj.info;
-			$(obj.info).bind("ready",function(){console.log("WAT");});
+			$(obj.info).bind("ready", function() {
+				console.log("WAT");
+			});
 			//			document.getElementById("infoBox"+obj.id).getElementsByTagName("img")[0].attr("src",document.getElementById(obj.id).getElementsByTagName(0).getAttribute("data-img-src"));
 			console.log($(".infoBox").first().find("img"));
 			if ($(".infoBox").first().find("img")) {
@@ -178,8 +186,7 @@ var mmanager = {
 				console.log($(".infoBox").first());
 				console.log($(".infoBox").first().find("img"));
 				console.log($(".infoBox").first().find("img").data("img-src"));
-				
-				
+
 				$(".infoBox").first().find("img").attr("src", $(".infoBox").first().find("img").data("img-src"));
 			}
 			//mmanager.tagManager.refresh();
@@ -190,6 +197,7 @@ var mmanager = {
 		hashContentManager = new MarkerManager(maps.map);
 		var element = 3;
 		console.log(tags.optionaltags);
+		general.refreshLabelSize();
 		for (var zed in tags.locations) {
 
 			if (tags.locations[zed].latitude != null && tags.locations[zed].longitude != null) {
@@ -203,17 +211,18 @@ var mmanager = {
 				} else {
 					toInsert = "#" + zed;
 				}
-				
+
 				thisMarker = new MarkerWithLabel({
 					position : new google.maps.LatLng(tags.locations[zed].latitude, tags.locations[zed].longitude),
 					title : "#" + zed,
 					zIndex : 9010,
-					labelContent : "<h2 style='font-size:26px' class='domHash' data-rel-hash='" + zed + "'>" + toInsert + "</h2>",
+					labelContent : "<h2 style='font-size:" + config.bandSizes[config.sizesOfLabels[zed]] + "px' class='domHash' data-rel-hash='" + zed + "'>" + toInsert + "</h2>",
 					labelAnchor : new google.maps.Point(0, 0),
 					labelClass : "labels", // the CSS class for the label
 					icon : "images/marker.png"
 				});
 				element++;
+
 				//thisMarker.setVisible(false);
 				mmanager.addClickToOverHashes(thisMarker);
 				mmanager.overMark.push(thisMarker);
@@ -254,10 +263,13 @@ var tags = {
 	"setOrdering" : function() {
 		//document.getElementsByClassName("domHash")[0].parentNode.parentNode.parentNode.style.zIndex = 650;
 	},
-	"inString" : function(haystack,needle){
-		if(needle == ""){return true;}
-//		console.log(new RegExp(needle.toLowerCase()).test(haystack.toLowerCase()));
-		return new RegExp(needle.toLowerCase()).test(haystack.toLowerCase()); // false
+	"inString" : function(haystack, needle) {
+		if (needle == "") {
+			return true;
+		}
+		//		console.log(new RegExp(needle.toLowerCase()).test(haystack.toLowerCase()));
+		return new RegExp(needle.toLowerCase()).test(haystack.toLowerCase());
+		// false
 	},
 	"labelRefresh" : function() {
 		var thing = window.setInterval(function() {
@@ -415,16 +427,14 @@ var tags = {
 		for (var zed in tags.MAPrender) {
 			var obj = tags.MAPrender[zed];
 			//console.log(obj.position);
-			var marker = new google.maps.Marker(
-				{
+			var marker = new google.maps.Marker({
 				"position" : obj.position,
 				"map" : obj.map,
 				"addedInfo" : obj,
 				"zIndex" : 9000,
 				"disableAutoPan" : true,
 				"batchSizeIE" : 50
-			}
-			);
+			});
 			marker.info = new google.maps.InfoWindow({
 				"content" : elements.info(obj),
 				"zIndex" : 9005
@@ -476,7 +486,6 @@ var tags = {
 			}
 		}
 		console.log("addedRender");
-		general.refreshLabelSize();
 		//console.log(tags.DOMrender.length);
 	},
 	"listImageLoad" : function() {
@@ -576,13 +585,13 @@ var tags = {
 			"maxZoom" : 18,
 			"batchSizeIE" : 50
 		};
-		
+
 		//var mcOptions = {gridSize: 50, maxZoom: 15};
 		console.log("instantiationg");
 		console.log(obj);
-		try{
-			mmanager.hashContentManager = new MarkerClusterer(maps.map,obj,mcOptions);
-		}catch(e){
+		try {
+			mmanager.hashContentManager = new MarkerClusterer(maps.map, obj, mcOptions);
+		} catch(e) {
 			alert(e.stack);
 		}
 		console.log("markerClusterer");
@@ -598,7 +607,7 @@ var tags = {
 		//		mmanager.tagManager.refresh();
 		//	});
 		//tags.MAPrenderOnPage.push(obj.id);
-		
+
 	},
 	"renderToList" : function(obj, inb4) {
 		var append = document.getElementById("content");
@@ -612,9 +621,9 @@ var tags = {
 		//console.log($(toAdd).children(".text").text());
 
 		if (tags.inBound.indexOf($(toAdd).attr("data-rel-hashtag")) == -1 || elements.filter($(toAdd).children(".text").text(), tags.filtration) == false) {
-			$(toAdd).css("display" , "none");
+			$(toAdd).css("display", "none");
 		} else {
-			$(toAdd).css("display" , "block");
+			$(toAdd).css("display", "block");
 		}
 
 		if (inb4 == true) {
@@ -632,15 +641,15 @@ var elements = {
 	"fullUpdate" : function() {
 		var ins = $(".sideBar");
 		console.log(ins);
-		if(ins.length>0){
+		if (ins.length > 0) {
 			for (var i = 0; i < ins.length; i++) {
-				if (Object.prototype.hasOwnProperty.call(ins, i)) {	
-					if (tags.inBound.indexOf($(ins[i]).data("rel-hashtag")) == -1 || tags.inString($(ins[i]).children(".text").text(),tags.filtration) == false) {
+				if (Object.prototype.hasOwnProperty.call(ins, i)) {
+					if (tags.inBound.indexOf($(ins[i]).data("rel-hashtag")) == -1 || tags.inString($(ins[i]).children(".text").text(), tags.filtration) == false) {
 						console.log(tags.inBound.indexOf($(ins[i]).data("rel-hashtag")));
 						console.log(ins[i]);
-						$(ins[i]).css("display","none");
+						$(ins[i]).css("display", "none");
 					} else {
-						$(ins[i]).css("display","block");
+						$(ins[i]).css("display", "block");
 					}
 				}
 			}
@@ -660,11 +669,11 @@ var elements = {
 		var li = document.createElement("li");
 		$(li).attr("id", "sideBar" + obj.id);
 		if (hidden == true) {
-			$(li).css("display","none");
+			$(li).css("display", "none");
 		}
 		$(li).attr("class", "sideBar");
 		$(li).attr("data-rel-hashtag", obj.hashtag.replace(/#/g, ""));
-		$(li).attr("data-timestamp",obj.time);
+		$(li).attr("data-timestamp", obj.time);
 		if (obj.img_small != undefined) {
 			var div = document.createElement("img");
 			$(div).attr("class", "image");
@@ -687,7 +696,7 @@ var elements = {
 
 			$(div).bind("error", function() {
 				//console.log("sideBar" + obj.id);
-				$("#sideBar" + obj.id).children("img").first().css("display","none;");
+				$("#sideBar" + obj.id).children("img").first().css("display", "none;");
 			})
 			li.appendChild(div);
 		}
@@ -719,13 +728,13 @@ var elements = {
 		$(li).attr("class", "infoBox");
 		if (obj.img_small != undefined) {
 			var div = tpht.createElement("img");
-			$(div).attr("class","image");
+			$(div).attr("class", "image");
 			if (obj.src == "TWTTR") {
 				$(div).attr("data-img-src", "http://" + obj.img_small);
 			} else {
 				$(div).attr("data-img-src", obj.img_small);
 			}
-//			$(div).attr("src","images/marker.png");
+			//			$(div).attr("src","images/marker.png");
 			li.appendChild(div);
 		}
 		var div = tpht.createElement("div");
@@ -793,24 +802,29 @@ var sse = {
 }
 
 var general = {
-	"refreshLabelSize": function(){
-		console.log("WORKING!!!");
-		$(".domHash").each(function(index,value){
-			console.log(index+","+value);
-		});
-		
-	},
-	"closestSize" : function(key){
-		
-		console.log(tags.tagData);
-		for (var i in config.bandSizes) {
-		  if (config.bandSizes.hasOwnProperty(i)) {
-		    if(tpht.distance1(tags.tagData[key].answers.length,key) <= 10){
-		    	return config.bandSizes[i];
-		    }
-		  }
+	"refreshLabelSize" : function() {
+		if ( typeof config.sizesOfLabels != "function") {
+			console.log("WORKING!!!");
+			console.log(config.sizesOfLabels);
+			var max = 0;
+			for (var i in config.sizesOfLabels) {
+				if (config.sizesOfLabels.hasOwnProperty(i)) {
+					for (var q in config.bandSizes) {
+						if (config.bandSizes.hasOwnProperty(q)) {
+							if (config.sizesOfLabels[i] - q < q) {
+								config.sizesOfLabels[i] = q;
+								break;
+							}
+						}
+					}
+				}
+			}
+			//console.log(max);
+			console.log(config.sizesOfLabels);
+		} else {
+			general.refreshLabelSize();
 		}
-		return 72;
+
 	},
 	"customModal" : function(opts) {
 		/*	{
@@ -850,7 +864,7 @@ var general = {
 			content.appendChild(confirm);
 		}
 		content.appendChild(textIn);
-		document.getElementById("modalDialogue").css("display","block");
+		document.getElementById("modalDialogue").css("display", "block");
 
 	},
 	"updateSinglePoint" : function() {

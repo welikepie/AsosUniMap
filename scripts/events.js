@@ -37,6 +37,7 @@ function setSSE() {
 
 window.onload = function() {
 	tags.retrieve();
+	config.sizesOfLabels();
 	$(document.getElementById("searchClear")).bind('click', function() {
 		document.getElementById("searchField").value = "";
 		document.getElementById("searchClear").style.display = "none";
