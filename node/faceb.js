@@ -50,11 +50,11 @@ function getFacebook(input){
 			connection : "keep-alive"
 		}
 	};
-	//console.log(credentials.tags.campaign);
-//--	asyncLoop(credentials.tags.campaign.length,function(loop,i){
-asyncLoop(credentials.tags.location.length,function(loop,i){
-		//console.log(i);
-//--		console.log(credentials.tags.campaign[i]);
+		//console.log(credentials.tags.campaign);
+		//--	asyncLoop(credentials.tags.campaign.length,function(loop,i){
+		asyncLoop(credentials.tags.location.length,function(loop,i){
+				//console.log(i);
+		//--		console.log(credentials.tags.campaign[i]);
 		console.log(credentials.tags.location[i])
 		fb.search({
 			//--q : credentials.tags.campaign[i].substring(1, credentials.tags.campaign[i].length),
@@ -70,16 +70,19 @@ asyncLoop(credentials.tags.location.length,function(loop,i){
 			for (var zed in res.data) {
 				//console.log(res.data[zed]);
 				if (res.data[zed].type == "photo" || res.data[zed].type == "status") {
-					////console.log(res.data[zed]);
 					if (res.data[zed].hasOwnProperty("message")) {
 						if (res.data[zed].message.indexOf(localTag) > -1) {
+							console.log(res.data[zed]);
 							var send = db.sendNew();
 							send.hashtag = filterForHash(res.data[zed].message,credentials.tags.location);
 							send.id = res.data[zed].id;
 							send.text = res.data[zed].message;
-							send.user = res.data[zed].from.name;
-							console.log(res.data[zed].from);
+							send.user = res.data[zed].from.id;
+							send.name = res.data[zed].from.name;
+							send.userIMG = "http://graph.facebook.com/"+res.data[zed].from.id+"/picture"; 
 							send.time = res.data[zed].created_time;
+							var splitId = send.id.split("_");
+							send.link = "https://www.facebook.com/"+splitId[0]+"/posts/"+splitId[1];
 							if (res.data[zed].type == "photo") {
 								//console.log(res.data[zed]);
 								send.img_large = res.data[zed].picture.substring(0, res.data[zed].picture.length - 5) + "b.jpg";
@@ -96,7 +99,11 @@ asyncLoop(credentials.tags.location.length,function(loop,i){
 							//console.log(send.hashtag);
 							if(send.hashtag != ""){
 								//console.log(send);
-								db.connection.query('INSERT INTO content SET ? ON DUPLICATE KEY UPDATE hashtag = ?, id = ?, text = ?, user = ?, time = ?, img_large = ?, img_med = ?, img_small = ?, lat = ?, lon = ?', [send, send.hashtag,send.id,send.text,send.user,send.time,send.img_large,send.img_med,send.img_small,send.lat,send.lon], function(err, result) {
+								db.connection.query('INSERT INTO content SET ? ON DUPLICATE KEY UPDATE hashtag = ?, id = ?, text = ?, user = ?, name = ?, userIMG = ?, time = ?, link = ?, img_large = ?, img_med = ?, img_small = ?, lat = ?, lon = ?', [send, send.hashtag,send.id,send.text,send.user,send.name,send.userIMG,send.time,send.link, send.img_large,send.img_med,send.img_small,send.lat,send.lon], function(err, result) {
+									if(err){
+										console.log(err);
+									}
+									console.log(result);
 									//console.log(err + "," + result);
 						//			loop.next();
 								});

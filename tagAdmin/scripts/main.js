@@ -487,5 +487,5 @@ function hadamar(src,lat, lon, rad) {
 }
 
 function placeObj(lat,lon,radius){
-	return {"latitude":lat,"longitude":lon,"radius":radius};
+	return {"latitude":lon,"longitude":lat,"radius":radius};
 }

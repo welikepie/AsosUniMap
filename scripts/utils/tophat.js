@@ -87,19 +87,11 @@ var tpht = {
 		var content = document.getElementById("modalInside");
 		var textIn = document.createElement("div");
 		textIn.setAttribute("id", "modalText");
-		var decline = document.createElement("input");
-		decline.setAttribute("type", "button");
-		decline.setAttribute("class", "btn btn-large btn-danger");
-		decline.setAttribute("id", "modalDeny");
-		decline.setAttribute("value", "Dismiss");
-		decline.onclick = function() {
-			document.getElementById("modalDialogue").style.display = "none";
-			document.getElementById("modalInside").innerHTML = "";
-		}
-		content.appendChild(decline);
 		if (opts.type == "dialog") {
 			console.log(opts.message);
 			textIn.innerHTML = opts.message;
+			content.appendChild(textIn);
+			console.log("appended");
 			var confirm = document.createElement("input");
 			confirm.setAttribute("type", "button");
 			confirm.setAttribute("class", "btn btn-large btn-success");
@@ -112,7 +104,20 @@ var tpht = {
 			}
 			content.appendChild(confirm);
 		}
-		content.appendChild(textIn);
+		else if (opts.type!= "dialog"){
+			content.appendChild(textIn);
+		}
+		var decline = document.createElement("input");
+		decline.setAttribute("type", "button");
+		decline.setAttribute("class", "btn btn-large btn-danger");
+		decline.setAttribute("id", "modalDeny");
+		decline.setAttribute("value", "Dismiss");
+		decline.onclick = function() {
+			document.getElementById("modalDialogue").style.display = "none";
+			document.getElementById("modalInside").innerHTML = "";
+		}
+		content.appendChild(decline);
+		
 		document.getElementById("modalDialogue").style.display = "block";
 
 	},
@@ -364,14 +369,16 @@ if (!document.getElementsByClassName) {
 		return results;
 	}
 }
-if ( typeof Array.indexOf != Function) {
-	console.log("no indexof");
-	Array.prototype.indexOf = function(a, b, c) {
-		for ( c = this.length, b = (c + ~~b) % c; b < c && (!( b in this) || this[b] !== a); b++);
-		return b ^ c ? b : -1;
-	}
-}
-
+if(!Array.indexOf){
+            Array.prototype.indexOf = function(obj){
+                for(var i=0; i<this.length; i++){
+                    if(this[i]==obj){
+                        return i;
+                    }
+                }
+                return -1;
+            }
+        }
 
 if ( !window.Element )
 {
@@ -380,3 +387,7 @@ if ( !window.Element )
 
         Element.prototype.getElementsByClassName = document.getElementsByClassName;
 }
+
+
+Date.now = Date.now || function() { return +new Date; };
+String.prototype.trim=function(){return this.replace(/^\s+|\s+$/g, '');};

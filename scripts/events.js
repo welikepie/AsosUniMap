@@ -1,33 +1,38 @@
-google.maps.event.addDomListener(window, 'load', maps.initialize);
+try {
+	google.maps.event.addDomListener(window, 'load', maps.initialize);
+} catch(e) {
+	console.log("Your maps, they seem to have failed to load.");
+}
 
-var lastMessage = new Date().getTime();
+var currSel = "";
+var lastMessage = Date.now();
+
 function checkId() {
 	console.log(lastEventId - messageId);
 	if (lastEventId < messageId) {
 		return true;
 	}
-
 	return false;
 }
 
 function setSSE() {
 	var es = new EventSource("http://localhost:1337/events");
 	/*es.addEventListener("open", function(e) {
-		console.log("Connected!");
-	});
-	es.addEventListener("error", function(e) {
-		console.log("erroring");
-	});
-	es.addEventListener("info", function(event) {
-		console.log(event);
-	});*/
+	 console.log("Connected!");
+	 });
+	 es.addEventListener("error", function(e) {
+	 console.log("erroring");
+	 });
+	 es.addEventListener("info", function(event) {
+	 console.log(event);
+	 });*/
 	es.addEventListener("message", function(event) {
-			console.log(event);
-			console.log(new Date().getTime());
-//		event = event.originalEvent;
+		console.log(event);
+		console.log(Date.now());
+		//		event = event.originalEvent;
 		//lastEventId = messageId;
-		if(parseInt(JSON.parse(event.data).timestamp,10) > lastMessage){
-			lastMessage = parseInt(JSON.parse(event.data).timestamp,10);
+		if (parseInt(JSON.parse(event.data).timestamp, 10) > lastMessage) {
+			lastMessage = parseInt(JSON.parse(event.data).timestamp, 10);
 			sse.longtroll(event.data);
 		}
 		//
@@ -58,9 +63,16 @@ window.onload = function() {
 		}
 		elements.fullUpdate();
 	});
-		setSSE();
+	//		setSSE();
+	$(document.getElementById("insta")).bind('click', function() {
+		$("#modalInside").html("");
+		general.customModal({
+			"type" : "alert",
+			"message" : document.getElementById("JS-instaInput").innerHTML
+		});
 
-	$(document.getElementById("facebookShare")).bind('click', function() {
+	});
+	$(document.getElementById("faceb")).bind('click', function() {
 		/*document.getElementById("facebookShare").preventDefault();
 		 FB.ui(
 		 {
@@ -70,37 +82,33 @@ window.onload = function() {
 		 description: 'This is the content of the "description" field, below the caption.',
 		 message: 'Things Testing'
 		 });*/
+		$("#modalInside").html("");
 		var inputToSend = "";
 		general.customModal({
 			"type" : "dialog",
-			"message" : "<strong>What do you want to say?</strong><p>Here's your chance to be awesome. Don't be shy!</p>" + tags.singleTag + " <input type='text' id='facebookInput'/>",
+			"message" : document.getElementById("JS-facebookInput").innerHTML,
 			"confirm" : function() {
-				inputToSend = document.getElementById("facebookInput").value;
+				inputToSend = $(".facebookInput").last().val();
 				FB.login(function(response) {
 					//alert('1');
 					if (response.authResponse) {
 						var access_token = FB.getAuthResponse()['accessToken'];
-						//alert('Access Token = ' + access_token);
 						FB.api('/me', function(response) {
-							//alert('Good to see you, ' + response.name + '.');
 							userName = response.name;
-							//     document.getElementById('btnPostFeed').style.display = 'block';
-
 							FB.api('/me/feed', 'post', {
 								"oauth" : auth,
-								"message" : tags.singleTag + " " + inputToSend,
+								"message" : inputToSend,
 								privacy : {
 									'value' : "EVERYONE"
 								}
 							}, function(response) {
-								console.log(response);
 								if (!response || response.error) {
 									//alert('Error occured');
-									document.getElementById("facebookInput").value = "There was an error: " + response.error;
+									$(".facebookInput").last().val("There was an error: " + response.error.message);
 								} else {
-									document.getElementById("modalDialogue").style.display = "none";
-									document.getElementById("modalInside").innerHTML = "";
-									//alert('Post ID: ' + response.id);
+									document.getElementById("modalInside").innerHTML = "<h3>Thanks for being awesome!</h3>";									
+									$("#modalDialogue").delay(1000).slideUp(400,function(){					document.getElementById("modalInside").innerHTML = "";});
+				
 								}
 							});
 						});
@@ -112,15 +120,17 @@ window.onload = function() {
 				});
 			}
 		});
+		$(".facebookInput").last().val(tags.singleTag);
 	});
 }
-//		  FB.api('/me/feed/','post',{"access_token":"","message":"First P0st!"},function(user) {
+//FB.api('/me/feed/','post',{"access_token":"","message":"First P0st!"},function(user) {
 //'/me/feed/',
 //'post',
 //array('access_token' => $this->access_token, 'message' => 'Playing around with FB Graph..')
 //          console.log(user);
 //         });
-/*	FB.ui({
+ /*	
+ FB.ui({
  method: 'feed',
  name: 'This is the content of the "name" field.',
  link: ' http://www.hyperarts.com/',
@@ -128,5 +138,6 @@ window.onload = function() {
  caption: 'This is the content of the "caption" field.',
  description: 'This is the content of the "description" field, below the caption.',
  message: 'Testing Things'
- }, function(response){console.log(response)});*/
+ }, function(response){console.log(response)});
+ */
 

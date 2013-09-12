@@ -186,7 +186,7 @@ function writEm() {
 			console.log(results);
 			asyncLoop(results.length, function(loop, i) {
 				console.log(results[i]);
-				var prepare = "SELECT * FROM asosUniMap.content WHERE hashtag = '" + results[i] + "'";
+				var prepare = "SELECT id,user,name,userIMG, UNIX_TIMESTAMP(time) as time,lat,lon,text,img_small,img_med,img_large,source,hashtag,link FROM asosUniMap.content WHERE hashtag = '" + results[i] + "'";
 				db.connection.query(prepare, function(err, result) {
 					console.log(result.length);
 					if (err) {

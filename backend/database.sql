@@ -12,7 +12,10 @@ USE `asosUniMap` ;
 CREATE  TABLE IF NOT EXISTS `asosUniMap`.`content` (
   `id` VARCHAR(30) NOT NULL ,
   `user` VARCHAR(45) NULL ,
+  `userIMG` VARCHAR(200) NULL ,
+  `name` VARCHAR(60) NOT NULL,
   `time` TIMESTAMP NOT NULL ,
+  `link` VARCHAR(200) NOT NULL ,
   `lat` DECIMAL(9,6) NULL ,
   `lon` DECIMAL(9,6) NULL ,
   `text` TEXT NULL ,

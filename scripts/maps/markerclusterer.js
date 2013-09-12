@@ -281,7 +281,7 @@ ClusterIcon.prototype.useStyle = function (sums) {
   this.width_ = style.width;
   this.anchor_ = style.anchor;
   this.anchorIcon_ = style.anchorIcon || [parseInt(this.height_ / 2, 10), parseInt(this.width_ / 2, 10)];
-  this.textColor_ = style.textColor || "black";
+  this.textColor_ = style.textColor || "white";
   this.textSize_ = style.textSize || 11;
   this.textDecoration_ = style.textDecoration || "none";
   this.fontWeight_ = style.fontWeight || "bold";
@@ -726,7 +726,7 @@ function MarkerClusterer(map, opt_markers, opt_options) {
   }
 
   this.setupStyles_();
-
+//	console.log(JSON.stringify(opt_markers));
   this.addMarkers(opt_markers, true);
   this.setMap(map); // Note: this causes onAdd to be called
 }
@@ -1592,7 +1592,7 @@ MarkerClusterer.CALCULATOR = function (markers, numStyles) {
 
   index = Math.min(index, numStyles);
   return {
-    text: "",
+    text: count,
     index: index,
     title: title
   };
@@ -1641,4 +1641,4 @@ MarkerClusterer.IMAGE_EXTENSION = "png";
  * @type {Array.<number>}
  * @constant
  */
-MarkerClusterer.IMAGE_SIZES = [53, 56, 66, 78, 90];
+MarkerClusterer.IMAGE_SIZES = [53, 53, 53, 53, 53];

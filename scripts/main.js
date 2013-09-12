@@ -1,24 +1,19 @@
+"use strict";
+
 var config = {
 	"minTime" : 0, //usually looks like 1376501470
 	"minZoom" : 6, //minimum zoom to have.
 	"startZoom" : 6, //starting zoom to have.
 	"markerMinZoom" : 5,
 	"baseURL" : "",
-	"ulLimit" : 50,
+	"ulLimit" : 10,
 	"bandSizes" : {
-		10 : 12,
-		25 : 16,
-		75 : 20,
-		150 : 24,
-		305 : 28,
-		610 : 32,
-		1250 : 36,
-		2500 : 40,
-		5000 : 44,
-		10000 : 48,
-		20000 : 52,
-		50000 : 56,
-		100000 : 62
+		10 : 16,
+		25 : 20,
+		75 : 24,
+		150 : 28,
+		305 : 32,
+		610 : 36
 	},
 	"sizesOfLabels" : function() {
 		tpht.easyXHR("get", "node/jsons/TAGSSIZES.json", "", function(response) {
@@ -34,47 +29,18 @@ var maps = {
 	boundingBox : new Array(),
 	"initialize" : function() {
 		var styles = [{
-			featureType : "landscape",
-			stylers : [{
-				visibility : "off"
-			}]
-		}, {
-			featureType : "road",
-			stylers : [{
-				visibility : "off"
-			}]
-		}, {
-			featureType : "administrative",
-			elementType : "all",
-			stylers : [{
-				visibility : "off"
-			}]
-		}, {
-			featureType : "poi",
-			elementType : "all",
-			stylers : [{
-				visibility : "off"
-			}]
-		}, {
-			featureType : "landscape",
-			elementType : "labels",
-			stylers : [{
-				visibility : "off"
-			}]
-		}, {
-			featureType : "transit",
-			elementType : "labels",
-			stylers : [{
-				visibility : "off"
-			}]
-		}, {
-			featureType : "water",
-			elementType : "labels",
+			featureType : "all",
 			stylers : [{
 				visibility : "off"
 			}]
 		}];
 		var mapOptions = {
+			streetViewControl : false,
+			mapTypeControl : false,
+			panControl : false,
+			zoomControlOptions : {
+				position : google.maps.ControlPosition.LEFT_CENTER
+			},
 			center : new google.maps.LatLng(54.53389810146441, 1.95556640625),
 			zoom : config.startZoom,
 			styles : styles,
@@ -84,12 +50,11 @@ var maps = {
 
 		maps.map = new google.maps.Map(tpht.getById("map-canvas"), mapOptions);
 
-		var image = 'images/looksbetter.png';
-		var myLatLng = new google.maps.LatLng(49.5, -4.67);
+		var myLatLng = new google.maps.LatLng(49.5, -2.4);
 
 		var beachMarker = new google.maps.Marker({
 			position : myLatLng,
-			icon : 'images/looksbetter.png',
+			icon : 'images/island.png',
 			pane : "mapPane",
 			zIndex : 500
 		});
@@ -101,11 +66,19 @@ var maps = {
 		google.maps.event.addListener(maps.map, 'zoom_changed', function() {
 			console.log(maps.map.getZoom());
 			var bounds = maps.map.getBounds();
-			oldBounds = bounds;
+			maps.oldBounds = bounds;
 			var bArr = bounds.toString().replace(/[()]/g, "").split(",");
 			maps.boundingBox = [parseFloat(bArr[1]), parseFloat(bArr[0]), parseFloat(bArr[3]), parseFloat(bArr[2])];
 
 			if (maps.map.getZoom() > config.minZoom) {
+				maps.map.setOptions({
+					"styles" : [{
+						"featureType" : "water",
+						"stylers" : [{
+							"color" : "#54bec6"
+						}]
+					}]
+				});
 				if (maps.map.getZoom() > config.minZoom + 1) {
 					mmanager.tagManager.hide();
 				} else {
@@ -113,7 +86,14 @@ var maps = {
 				}
 				beachMarker.setVisible(false);
 			} else {
-
+				maps.map.setOptions({
+					"styles" : [{
+						featureType : "all",
+						stylers : [{
+							visibility : "off"
+						}]
+					}]
+				});
 				beachMarker.setVisible(true);
 			}
 			mmanager.tagManager.refresh();
@@ -136,7 +116,7 @@ var maps = {
 		google.maps.event.addListenerOnce(maps.map, 'idle', function() {
 			// do something only the first time the map is loaded
 			var bounds = maps.map.getBounds();
-			oldBounds = bounds;
+			maps.oldBounds = bounds;
 			var bArr = bounds.toString().replace(/[()]/g, "").split(",");
 			maps.boundingBox = [parseFloat(bArr[1]), parseFloat(bArr[0]), parseFloat(bArr[3]), parseFloat(bArr[2])];
 			console.log(maps.map.getCenter());
@@ -156,7 +136,7 @@ var mmanager = {
 			maps.map.panTo(obj.getPosition());
 			maps.map.setZoom(9);
 			var bounds = maps.map.getBounds();
-			oldBounds = bounds;
+			maps.oldBounds = bounds;
 			var bArr = bounds.toString().replace(/[()]/g, "").split(",");
 			maps.boundingBox = [parseFloat(bArr[1]), parseFloat(bArr[0]), parseFloat(bArr[3]), parseFloat(bArr[2])];
 			tags.filterBasedOnBound("doNothing");
@@ -168,33 +148,38 @@ var mmanager = {
 		//console.log("added");
 		google.maps.event.addListener(obj, 'click', function() {
 			console.log("click");
-			maps.map.panTo(obj.getPosition());
+			//maps.map.panTo(obj.getPosition());
 			if (maps.oldInfoBox != null) {
 				maps.oldInfoBox.close();
 			}
 			obj.info.open(maps.map, obj);
 			maps.oldInfoBox = obj.info;
+			twttr.widgets.load();
+			console.log("loading!");
+			//
+			//			$('#infoBoxDisplay').parent().parent().siblings().children().first().children().addClass("labelRoot");
 			$(obj.info).bind("ready", function() {
 				console.log("WAT");
 			});
 			//			document.getElementById("infoBox"+obj.id).getElementsByTagName("img")[0].attr("src",document.getElementById(obj.id).getElementsByTagName(0).getAttribute("data-img-src"));
-			console.log($(".infoBox").first().find("img"));
-			if ($(".infoBox").first().find("img")) {
-				$(".infoBox").first().find("img").first().bind("error", function() {
-					$(".infoBox").first().find("img").first().css("display:none;");
+			console.log($("#infoBoxDisplay"));
+			if ($(".infoBox").last().find(".image")) {
+				console.log($(".infoBox").last())
+				$(".infoBox").last().find(".image").bind("error", function() {
+					$(".infoBox").last().find(".image").first().css("display", "none");
 				});
 				console.log($(".infoBox").first());
 				console.log($(".infoBox").first().find("img"));
 				console.log($(".infoBox").first().find("img").data("img-src"));
 
-				$(".infoBox").first().find("img").attr("src", $(".infoBox").first().find("img").data("img-src"));
+				//$(".infoBox").first().find("img").attr("src", $(".infoBox").first().find("img").data("img-src"));
 			}
 			//mmanager.tagManager.refresh();
 		});
 	},
 	"initialise" : function() {
 		var thisMarker;
-		hashContentManager = new MarkerManager(maps.map);
+		mmanager.hashContentManager = new MarkerManager(maps.map);
 		var element = 3;
 		console.log(tags.optionaltags);
 		general.refreshLabelSize();
@@ -212,13 +197,23 @@ var mmanager = {
 					toInsert = "#" + zed;
 				}
 
+				var div = document.createElement("div");
+				var h2 = document.createElement("h2");
+				h2.innerHTML = toInsert;
+				div.appendChild(h2);
+				div.setAttribute("class", "begin");
+				var domDiv = document.createElement("div");
+				domDiv.setAttribute("class", "end");
+				var addDiv = document.createElement("div");
+				addDiv.appendChild(div);
+				addDiv.appendChild(domDiv);
 				thisMarker = new MarkerWithLabel({
 					position : new google.maps.LatLng(tags.locations[zed].latitude, tags.locations[zed].longitude),
 					title : "#" + zed,
-					zIndex : 9010,
-					labelContent : "<h2 style='font-size:" + config.bandSizes[config.sizesOfLabels[zed]] + "px' class='domHash' data-rel-hash='" + zed + "'>" + toInsert + "</h2>",
+					zIndex : config.bandSizes[config.sizesOfLabels[zed]],
+					labelContent : addDiv.innerHTML,
 					labelAnchor : new google.maps.Point(0, 0),
-					labelClass : "labels", // the CSS class for the label
+					labelClass : "size" + (config.bandSizes[config.sizesOfLabels[zed]] + 16), // the CSS class for the label
 					icon : "images/marker.png"
 				});
 				element++;
@@ -298,7 +293,7 @@ var tags = {
 		var waiting;
 		tpht.easyXHR("get", config.baseURL + "node/tags.json", "", function(response) {
 			var ans = JSON.parse(response).data;
-			if (Object.prototype.hasOwnProperty.call(ans, "locations")) {
+			if (ans.hasOwnProperty("locations")) {
 				tags.locations = ans.locations;
 			}
 			//			console.log(tags);
@@ -353,10 +348,12 @@ var tags = {
 			console.log(tags.inBound);
 			tpht.easyXHR("get", config.baseURL + "node/jsons/" + tags.inBound[i] + ".json", "", function(response) {
 				//console.log(response);
+				console.log(response.length);
 				if (!JSON.parse(response).hasOwnProperty("error")) {
 					console.log("GETTING");
 					tags.tagData[JSON.parse(response).tag] = JSON.parse(response);
 				}
+				console.log(tags.tagData[JSON.parse(response).tag].answers.length);
 				//console.log(tags.tagData[JSON.parse(response).tag]);
 				loop.next();
 			});
@@ -367,8 +364,9 @@ var tags = {
 		});
 	},
 	"gather" : function() {
-		console.log(tags.tagData);
+		//		console.log(tags.tagData);
 		for (var i in tags.tagData) {
+			console.log("++++++++++++++++++++++++++++++++++++");
 			console.log(i);
 
 			//console.log(tags.tagData[i]);
@@ -384,11 +382,10 @@ var tags = {
 				//console.log((new Date(arrAns[t].time).getTime() / 1000));
 				//				console.log(arrAns[t].time);
 				//				console.log(new Date(arrAns[t].time).getTime());
-				if (new Date(arrAns[t].time).getTime() / 1000 >= config.minTime) {
+				if (parseInt(arrAns[t].time, 10) * 1000 >= config.minTime) {
 					if (arrAns[t].lat != null) {
-						//console.log(arrAns[t]);
+						//					console.log(arrAns[t]);
 						arrAns[t].position = new google.maps.LatLng(arrAns[t].lat, arrAns[t].lon);
-						arrAns[t].map = maps.map;
 						tags.MAPrender.push(arrAns[t]);
 						tags.DOMrender.push(arrAns[t]);
 					} else {//DOMrender, //MAPrender
@@ -398,8 +395,8 @@ var tags = {
 			}
 		}
 		tags.MAPrender.sort(function(a, b) {
-			var aTime = new Date(a.time).getTime() / 1000;
-			var bTime = new Date(b.time).getTime() / 1000;
+			var aTime = parseInt(a.time, 10) * 1000;
+			var bTime = parseInt(b.time, 10) * 1000;
 			if (aTime > bTime) {
 				return -1;
 			}
@@ -411,8 +408,8 @@ var tags = {
 
 		});
 		tags.DOMrender.sort(function(a, b) {
-			var aTime = new Date(a.time).getTime() / 1000;
-			var bTime = new Date(b.time).getTime() / 1000;
+			var aTime = parseInt(a.time, 10) * 1000;
+			var bTime = parseInt(b.time, 10) * 1000;
 			if (aTime > bTime) {
 				return -1;
 			}
@@ -426,19 +423,38 @@ var tags = {
 		console.log("starting");
 		for (var zed in tags.MAPrender) {
 			var obj = tags.MAPrender[zed];
+			//	console.log(obj);
 			//console.log(obj.position);
 			var marker = new google.maps.Marker({
 				"position" : obj.position,
 				"map" : obj.map,
-				"addedInfo" : obj,
+				"icon" : "images/mapMarker.png",
 				"zIndex" : 9000,
 				"disableAutoPan" : true,
-				"batchSizeIE" : 50
 			});
-			marker.info = new google.maps.InfoWindow({
-				"content" : elements.info(obj),
-				"zIndex" : 9005
-			});
+			/*			marker.info = new google.maps.InfoWindow({
+			"content" : elements.info(obj),
+			"zIndex" : 9005
+			});*/
+			//			var t = new In
+			marker.info = new InfoBubble({
+				content : elements.info(obj),
+				zIndex : 9001,
+				arrowStyle : 2,
+				padding : 10,
+				borderWidth : 1,
+				borderRadius : 0,
+				arrowSize : 65,
+				arrowTopSize : 20,
+				//maxHeight: 270,
+				minWidth : 320,
+				maxWidth : 320,
+				arrowPosition : 10,
+				borderColor : "#22b9c8",
+				backgroundColor : '#ffdf24'
+
+			})
+
 			mmanager.addClickToHashes(marker);
 			mmanager.hashContentArr.push(marker);
 		}
@@ -455,6 +471,9 @@ var tags = {
 				//console.log(document.getElementById("sideBar"+obj.id));
 				//	console.log(t);
 				//	tpht.ping();
+			}
+			if (zed == config.ulLimit) {
+				twttr.widgets.load();
 			}
 		}
 		//console.log("rendered");
@@ -478,6 +497,7 @@ var tags = {
 							//	tpht.ping();
 						}
 					}
+					twttr.widgets.load();
 					console.log(iterate.length);
 					console.log("ITERATIVE PROGRESS");
 					carried = false;
@@ -514,26 +534,43 @@ var tags = {
 			//		console.log(new Date(arrAns[t].time).getTime()/1000);
 
 			//	console.log(new Date(arr[i].time).getTime() + "," + config.minTime);
-			if (new Date(arr[i].time).getTime() >= config.minTime) {
+			if (parseInt(arr[i].time, 10) * 1000 >= config.minTime) {
 				if (arr[i].lat != null) {
 					//console.log(arrAns[t]);
 					arr[i].position = new google.maps.LatLng(arr[i].lat, arr[i].lon);
 					arr[i].map = maps.map;
 					tags.MAPrender.push(arr[i]);
+					//console.log(arr[i]);
 					//shove in to thing here.
 
 					var obj = arr[i];
 					var marker = new google.maps.Marker({
-						position : obj.position,
-						map : obj.map,
+						position : new google.maps.LatLng(arr[i].latitude, arr[i].longitude),
+						map : maps.map,
+						icon : "images/mapMarker.png",
 						zIndex : 9000,
-						addedInfo : obj,
 						disableAutoPan : true
 					});
-					marker.info = new google.maps.InfoWindow({
-						content : elements.info(obj),
-						zIndex : 9001
-					});
+					/*marker.info = new google.maps.InfoWindow({
+					content : elements.info(arr[i]),
+					zIndex : 9001
+					});*/
+					//map marker styling
+					marker.info = new InfoBubble({
+						content : elements.info(arr[i]),
+						zIndex : 9001,
+						padding : 10,
+						arrowStyle : 2,
+						borderWidth : 4,
+						borderRadius : 0,
+						arrowSize : 70,
+						minWidth : 320,
+						maxWidth : 320,
+						arrowPosition : 10,
+						//						maxHeight: 270,
+						borderColor : "#22b9c8",
+						backgroundColor : '#ffdf24'
+					})
 					mmanager.addClickToHashes(marker);
 
 					//	console.log(obj.position);
@@ -546,13 +583,16 @@ var tags = {
 					setTimeout(loop.next, Math.floor(longWay));
 				}
 			}
-
+			console.log(i);
+			if (i % 10 == 0 || i == arr.length - 1) {
+				twttr.widgets.load();
+			}
 		}, function() {
 			console.log("added all!")
 		});
 		tags.MAPrender.sort(function(a, b) {
-			var aTime = new Date(a.time).getTime() / 1000;
-			var bTime = new Date(b.time).getTime() / 1000;
+			var aTime = parseInt(a.time, 10) * 1000;
+			var bTime = parseInt(b.time, 10) * 1000;
 			if (aTime > bTime) {
 				return -1;
 			}
@@ -564,8 +604,8 @@ var tags = {
 
 		});
 		tags.DOMrender.sort(function(a, b) {
-			var aTime = new Date(a.time).getTime() / 1000;
-			var bTime = new Date(b.time).getTime() / 1000;
+			var aTime = parseInt(a.time, 10) * 1000;
+			var bTime = parseInt(b.time, 10) * 1000;
 			if (aTime > bTime) {
 				return -1;
 			}
@@ -579,20 +619,24 @@ var tags = {
 		//console.log(tags.DOMrender.length);
 	},
 
-	"renderToMap" : function(obj, callback) {
+	"renderToMap" : function(obj) {
 		console.log("instantiationg");
 		var mcOptions = {
 			"maxZoom" : 18,
-			"batchSizeIE" : 50
 		};
-
-		//var mcOptions = {gridSize: 50, maxZoom: 15};
 		console.log("instantiationg");
-		console.log(obj);
 		try {
-			mmanager.hashContentManager = new MarkerClusterer(maps.map, obj, mcOptions);
+			if (ie == false) {
+				mmanager.hashContentManager = new MarkerClusterer(maps.map, obj, mcOptions);
+			}
+			if (ie == true) {
+				tpht.asyncLoop(obj.length, function(loop, i) {
+					obj[i].setMap(maps.map);
+					window.setTimeout(loop.next(), 10);
+				}, function() {
+				});
+			}
 		} catch(e) {
-			alert(e.stack);
 		}
 		console.log("markerClusterer");
 		console.log("listener");
@@ -654,6 +698,8 @@ var elements = {
 				}
 			}
 		}
+		twttr.widgets.load();
+		console.log("callingWidgets");
 	},
 	"filter" : function(input, string) {
 		if (input.substring(0, 5) == "text:") {
@@ -666,117 +712,329 @@ var elements = {
 	},
 	"list" : function(obj, hidden, notLazyLoad) {
 		notLazyLoad = true;
-		var li = document.createElement("li");
-		$(li).attr("id", "sideBar" + obj.id);
-		if (hidden == true) {
-			$(li).css("display", "none");
-		}
-		$(li).attr("class", "sideBar");
-		$(li).attr("data-rel-hashtag", obj.hashtag.replace(/#/g, ""));
-		$(li).attr("data-timestamp", obj.time);
-		if (obj.img_small != undefined) {
-			var div = document.createElement("img");
-			$(div).attr("class", "image");
-			if (obj.src == "TWTTR") {
-				if (notLazyLoad == false) {
-					$(div).attr("data-img-src", "http://" + obj.img_small);
-				} else {
-					$(div).attr("src", "http://" + obj.img_small);
-				}
+		if (obj.source == "TWTTR") {
+
+			var insLI = document.createElement("li");
+			$(insLI).attr("id", "sideBar" + obj.id);
+			$(insLI).attr("class", "sideBar");
+			$(insLI).attr("data-rel-hashtag", obj.hashtag.replace(/#/g, ""));
+			$(insLI).attr("data-timestamp", obj.time);
+			$(insLI).attr("data-rel-source", obj.src);
+			if (hidden == true) {
+				$(insLI).css("display", "none");
+			}
+
+			var li = document.createElement("blockquote");
+			li.setAttribute("class", "twitter-tweet");
+			li.setAttribute("data-conversation", "none");
+			li.setAttribute("width", "290px");
+			var p = document.createElement("p");
+			p.innerHTML = obj.text;
+			li.appendChild(p);
+			if (obj.name != undefined) {
+				var inText = document.createTextNode("—" + obj.name + " (@" + obj.user + ")");
 			} else {
+				var inText = document.createTextNode("— @" + obj.user + " (@" + obj.user + ")");
+			}
+			li.appendChild(inText);
+			var link = document.createElement("a");
+			link.setAttribute("href", "https://twitter.com/" + obj.user + "/status/" + obj.id);
+			//link.setAttribute("data-datetime",new Date(obj.time).format("yyyy-MM-dd h:mm:ss"));
+			li.appendChild(link);
+			var lText = document.createTextNode("");
+			link.appendChild(lText);
+			insLI.appendChild(li);
+			return insLI;
+		} else if (obj.source != "TWITTR") {
+			var li = document.createElement("li");
+			$(li).attr("id", "sideBar" + obj.id);
+			if (hidden == true) {
+				$(li).css("display", "none");
+			}
+			$(li).attr("class", "sideBar");
+			$(li).attr("data-rel-hashtag", obj.hashtag.replace(/#/g, ""));
+			$(li).attr("data-timestamp", obj.time);
+			$(li).attr("data-rel-source", obj.src);
+			var topDiv = document.createElement("div");
+			topDiv.setAttribute("class", "topDiv");
+			if (obj.imgURL != "") {
+				var profImg = document.createElement("img");
+				profImg.setAttribute("src", obj.userIMG);
+				profImg.setAttribute("class", "profileImages");
+				topDiv.appendChild(profImg);
+				$(profImg).bind("error", function() {
+					//console.log("sideBar" + obj.id);
+					$(profImg).css("display", "none");
+				})
+			}
+
+			console.log(JSON.stringify(obj));
+			if (obj.name != null) {
+				var str = obj.name.replace(/(^\s+|\s+$)/g, ' ');
+				;
+			} else {
+				var str = "";
+			}
+			console.log(str);
+			var splitString = [str.substr(0, str.indexOf(" ")), str.substr(str.indexOf(" ") + 1)];
+			// "tocirah sneab"]
+			var classes = ["firstName", "lastName"];
+			var domDiv = document.createElement("div");
+			domDiv.setAttribute("class", "nameContainer");
+			for (var i = 0; i < splitString.length; i++) {
+				var addDiv = document.createElement("p");
+				addDiv.setAttribute("class", classes[i]);
+				var addDivText = document.createTextNode(splitString[i].toUpperCase());
+				addDiv.appendChild(addDivText);
+				domDiv.appendChild(addDiv);
+
+			}
+			var namesDiv = document.createElement("div");
+			namesDiv.setAttribute("class", "names");
+			namesDiv.appendChild(domDiv);
+
+			if (obj.source != "FACEB") {
+				var userDiv = document.createElement("p");
+				userDiv.setAttribute("class", "userNameTag");
+				var userDivText = document.createTextNode("@" + obj.user);
+				userDiv.appendChild(userDivText);
+				namesDiv.appendChild(userDiv);
+			}
+			topDiv.appendChild(namesDiv);
+
+			var bottomDiv = document.createElement("div");
+			bottomDiv.setAttribute("class", "bottomDiv");
+
+			if (obj.img_small != undefined && obj.img_small != "") {
+				var div = document.createElement("img");
+				$(div).attr("class", "image");
 				if (notLazyLoad == false) {
 					$(div).attr("data-img-src", obj.img_small);
 				} else {
 					$(div).attr("src", obj.img_small);
 				}
+				//"sideBar" + obj.id
+				//div.attr("onerror",)
+				//			tpht.setAttr(div, "onError", tpht.setAttr(div,"style","display:none;"));
+				$(div).bind("error", function() {
+					//console.log("sideBar" + obj.id);
+					$(div).css("display", "none;");
+				})
+				bottomDiv.appendChild(div);
+			}
 
-			}//"sideBar" + obj.id
+			if (obj.text != undefined) {
+				var div = document.createElement("div");
+				$(div).attr("class", "text");
+				if (obj.img_small != undefined && obj.img_small != "") {
+					$(div).attr("class", "textWithImg");
+				}
+				$(div).html(obj.text);
+				bottomDiv.appendChild(div);
+			}
+			if (obj.source == "FACEB") {
+				var a = document.createElement("a");
+				a.setAttribute("class", "socialLinkage");
+				var splitId = obj.id.split("_");
+				a.setAttribute("href", "https://www.facebook.com/" + splitId[0] + "/posts/" + splitId[1]);
+				a.setAttribute("target", "_blank");
+				a.appendChild(topDiv);
+				a.appendChild(bottomDiv);
+				li.appendChild(a);
+			} else if (obj.source = "INSTA") {
+				var a = document.createElement("a");
+				a.setAttribute("class", "socialLinkage");
+				var splitId = obj.id.split("_");
+				a.setAttribute("href", obj.link);
+				a.setAttribute("target", "_blank");
+				a.appendChild(topDiv);
+				a.appendChild(bottomDiv);
+				li.appendChild(a);
+			} else {
+				li.appendChild(topDiv);
+				li.appendChild(bottomDiv);
+			}
+			//		console.log($(li).html());
+			return li;
+		}
+	},
+	"info" : function(obj) {
+
+		/*if(obj.source == "TWTTR"){
+		var insLI = document.createElement("div");
+		$(insLI).attr("class","openedTweet");
+		$(insLI).attr("data-rel-hashtag", obj.hashtag.replace(/#/g, ""));
+		$(insLI).attr("data-timestamp", obj.time);
+		$(insLI).attr("data-rel-source",obj.src);
+
+		var li = document.createElement("blockquote");
+		li.setAttribute("class","twitter-tweet");
+		li.setAttribute("data-conversation","none");
+		li.setAttribute("width","290px");
+		var p = document.createElement("p");
+		p.innerHTML = obj.text;
+		li.appendChild(p);
+		if(obj.name!=undefined){
+		var inText = document.createTextNode("—"+ obj.name + " (@"+obj.user+")");
+		}
+		else{
+		var inText = document.createTextNode("— @"+obj.user + " (@"+obj.user+")");
+		}
+		li.appendChild(inText);
+		var link = document.createElement("a");
+		link.setAttribute("href","https://twitter.com/"+obj.user+"/status/"+obj.id);
+		//link.setAttribute("data-datetime",new Date(obj.time).format("yyyy-MM-dd h:mm:ss"));
+		li.appendChild(link);
+		var lText = document.createTextNode("");
+		link.appendChild(lText);
+		insLI.appendChild(li);
+		return insLI;
+		}*/
+
+		//else if(obj.source!="TWITTR"){
+		var li = document.createElement("div");
+		$(li).attr("id", "infoBoxDisplay");
+		$(li).attr("class", "infoBox");
+		//		console.log(JSON.stringify(obj));
+		//		console.log(obj.hashtag);
+		if ( typeof obj.hashtag != "string") {
+			obj.hashtag = "";
+		}
+		$(li).attr("data-rel-hashtag", obj.hashtag.toString().replace(/#/g, ""));
+		$(li).attr("data-timestamp", obj.time);
+		$(li).attr("data-rel-source", obj.src);
+		var topDiv = document.createElement("div");
+		topDiv.setAttribute("class", "topDiv");
+		if (obj.imgURL != "") {
+			var profImg = document.createElement("img");
+			profImg.setAttribute("src", obj.userIMG);
+			profImg.setAttribute("class", "profileImages");
+			topDiv.appendChild(profImg);
+			$(profImg).bind("error", function() {
+				//console.log("sideBar" + obj.id);
+				$(profImg).css("display", "none");
+			})
+		}
+
+		//console.log(JSON.stringify(obj));
+		if (obj.name != null) {
+			var str = obj.name.replace(/(^\s+|\s+$)/g, ' ');
+			;
+		} else {
+			var str = "";
+		}
+		//console.log(str);
+		var splitString = [str.substr(0, str.indexOf(" ")), str.substr(str.indexOf(" ") + 1)];
+		// "tocirah sneab"]
+		var classes = ["firstName", "lastName"];
+		var domDiv = document.createElement("div");
+		domDiv.setAttribute("class", "nameContainer");
+		for (var i = 0; i < splitString.length; i++) {
+			var addDiv = document.createElement("p");
+			addDiv.setAttribute("class", classes[i]);
+			var addDivText = document.createTextNode(splitString[i].toUpperCase());
+			addDiv.appendChild(addDivText);
+			domDiv.appendChild(addDiv);
+
+		}
+		var namesDiv = document.createElement("div");
+		namesDiv.setAttribute("class", "names");
+		namesDiv.appendChild(domDiv);
+
+		if (obj.source != "FACEB") {
+			var userDiv = document.createElement("p");
+			userDiv.setAttribute("class", "userNameTag");
+			var userDivText = document.createTextNode("@" + obj.user);
+			userDiv.appendChild(userDivText);
+			namesDiv.appendChild(userDiv);
+		}
+		topDiv.appendChild(namesDiv);
+		if (obj.source == "TWTTR") {
+			var follow = document.createElement("a");
+			follow.setAttribute("href", "https://twitter.com/" + obj.user);
+			follow.setAttribute("class", "twitter-follow-button");
+			//			follow.setAttribute("data-show-screen-name","false");
+			follow.setAttribute("data-show-count", "false");
+			var followText = document.createTextNode("Follow @" + obj.user);
+			follow.appendChild(followText);
+			topDiv.appendChild(follow);
+		}
+		var bottomDiv = document.createElement("div");
+		bottomDiv.setAttribute("class", "bottomDiv");
+
+		if (obj.img_small != undefined && obj.img_small != "") {
+			var div = document.createElement("img");
+			$(div).attr("class", "image");
+			$(div).attr("src", obj.img_small);
+			//"sideBar" + obj.id
 			//div.attr("onerror",)
 			//			tpht.setAttr(div, "onError", tpht.setAttr(div,"style","display:none;"));
-
 			$(div).bind("error", function() {
 				//console.log("sideBar" + obj.id);
-				$("#sideBar" + obj.id).children("img").first().css("display", "none;");
+				$(div).css("display", "none");
 			})
-			li.appendChild(div);
+			bottomDiv.appendChild(div);
 		}
-		var div = document.createElement("div");
-		$(div).html("source: " + obj.source);
-		li.appendChild(div);
-		var div = document.createElement("div");
-		$(div).attr("class", "user");
-		$(div).html("user: " + obj.user);
-		//= ;
-		li.appendChild(div);
 
 		if (obj.text != undefined) {
 			var div = document.createElement("div");
 			$(div).attr("class", "text");
-			$(div).html("text: " + obj.text);
-			li.appendChild(div);
+			if (obj.img_small != undefined && obj.img_small != "") {
+				$(div).attr("class", "textWithImg");
+			}
+			$(div).html(obj.text);
+			bottomDiv.appendChild(div);
 		}
-		var div = document.createElement("div");
-		$(div).attr("class", "date");
-		$(div).html("date added: " + new Date(obj.time));
-		li.appendChild(div);
+		if(obj.link!=null && obj.link!=""){
+		if (obj.source == "FACEB") {
+			var a = document.createElement("a");
+			a.setAttribute("class", "socialLinkage");
+			var splitId = obj.id.split("_");
+			a.setAttribute("href", "https://www.facebook.com/" + splitId[0] + "/posts/" + splitId[1]);
+			a.setAttribute("target", "_blank");
+			a.appendChild(topDiv);
+			a.appendChild(bottomDiv);
+			li.appendChild(a);
+		} else if (obj.source == "INSTA") {
+			var a = document.createElement("a");
+			a.setAttribute("class", "socialLinkage");
+			var splitId = obj.id.split("_");
+			a.setAttribute("href", obj.link);
+			a.setAttribute("target", "_blank");
+			a.appendChild(topDiv);
+			a.appendChild(bottomDiv);
+			li.appendChild(a);
+		} else if (obj.source == "TWTTR") {
+			var a = document.createElement("a");
+			a.setAttribute("class", "socialLinkage");
+			//var splitId = obj.id.split("_");
+			a.setAttribute("href", "https://twitter.com/" + obj.user + "/status/" + obj.id);
+			a.setAttribute("target", "_blank");
+			a.appendChild(topDiv);
+			a.appendChild(bottomDiv);
+			li.appendChild(a);
+		} }else {
+			li.appendChild(topDiv);
+			li.appendChild(bottomDiv);
+		}
 		//		console.log($(li).html());
 		return li;
-	},
-	"info" : function(obj) {
-		var li = document.createElement("div");
-		$(li).attr("id", "infoBox" + obj.id);
-		$(li).attr("class", "infoBox");
-		if (obj.img_small != undefined) {
-			var div = tpht.createElement("img");
-			$(div).attr("class", "image");
-			if (obj.src == "TWTTR") {
-				$(div).attr("data-img-src", "http://" + obj.img_small);
-			} else {
-				$(div).attr("data-img-src", obj.img_small);
-			}
-			//			$(div).attr("src","images/marker.png");
-			li.appendChild(div);
-		}
-		var div = tpht.createElement("div");
-		tpht.setText(div, "source: " + obj.source);
-		li.appendChild(div);
-		var div = tpht.createElement("div");
-		tpht.setClass(div, "user");
-		tpht.setText(div, "user: " + obj.user);
-		li.appendChild(div);
-
-		if (obj.text != undefined) {
-			var div = tpht.createElement("div");
-			tpht.setClass(div, "text");
-			tpht.setText(div, "text: " + obj.text);
-			li.appendChild(div);
-		}
-		var div = tpht.createElement("div");
-		tpht.setClass(div, "date");
-		tpht.setText(div, "date added: " + new Date(obj.time));
-		li.appendChild(div);
-		//console.log(li);
-		return li;
+		//}
 	}
 }
 var sse = {
 	"longtroll" : function(input) {
 		console.log(input);
 		var ins = JSON.parse(input);
-		//console.log(ins);
 		if (ins.hasOwnProperty("tag")) {
-			//	tag.loadTagFiles([input]);
-			//fill 'er up.
-			//			tags.tagData
-
 			var timeToBeat = 0;
 			console.log(tags.tagData);
 
 			var newPushArr = new Array();
 			for (var inputs in ins.answers) {
 				if (tags.tagData.hasOwnProperty(ins.answers[inputs].hashtag)) {
-					if (new Date(ins.answers[inputs].time).getTime() > tags.tagData[ins.answers[inputs].hashtag].timestamp) {
-						tags.tagData[ins.answers[inputs].hashtag].timestamp = new Date(ins.answers[inputs].time).getTime();
+					if (ins.answers[inputs].time * 1000 > tags.tagData[ins.answers[inputs].hashtag].timestamp) {
+						tags.tagData[ins.answers[inputs].hashtag].timestamp = ins.answers[inputs].time * 1000;
 						newPushArr.push(ins.answers[inputs]);
 					}
 				} else {
@@ -807,16 +1065,29 @@ var general = {
 			console.log("WORKING!!!");
 			console.log(config.sizesOfLabels);
 			var max = 0;
+			var maxJSON = 0;
+			for (var i in config.bandSizes) {
+				if (config.bandSizes.hasOwnProperty(i)) {
+					if (parseInt(i, 10) > maxJSON) {
+						maxJSON = parseInt(i, 10);
+					}
+				}
+			}
 			for (var i in config.sizesOfLabels) {
 				if (config.sizesOfLabels.hasOwnProperty(i)) {
+					console.log(i + "," + config.sizesOfLabels[i]);
 					for (var q in config.bandSizes) {
 						if (config.bandSizes.hasOwnProperty(q)) {
-							if (config.sizesOfLabels[i] - q < q) {
+							console.log((config.sizesOfLabels[i] - q) + "," + q);
+							if (config.sizesOfLabels[i] - q < q || config.sizesOfLabels[i] - q < 0) {
 								config.sizesOfLabels[i] = q;
 								break;
 							}
 						}
 					}
+				}
+				if (!config.bandSizes.hasOwnProperty(config.sizesOfLabels[i])) {
+					config.sizesOfLabels[i] = maxJSON.toString();
 				}
 			}
 			//console.log(max);
@@ -824,10 +1095,10 @@ var general = {
 		} else {
 			general.refreshLabelSize();
 		}
-
 	},
 	"customModal" : function(opts) {
-		/*	{
+		/*
+		 {
 		 "type" : "dialog",
 		 "message" : "<strong>Warning!</strong><p>The file is already being edited and has been since " + new Date(parseInt(response.data.timestamp, 10)) + "</p>" + "<p>If you are sure you want to edit anyways, click \"Confirm\".</p>",
 		 "confirm" : function() {
@@ -835,24 +1106,16 @@ var general = {
 		 loadTagJSON("get", -1);
 		 });
 		 }
-		 });*/
-		console.log(opts);
+		 });
+		 */
+//		console.log(opts);
 		var content = document.getElementById("modalInside");
 		var textIn = document.createElement("div");
 		$(textIn).attr("id", "modalText");
-		var decline = document.createElement("input");
-		$(decline).attr("type", "button");
-		$(decline).attr("class", "btn btn-large btn-danger");
-		$(decline).attr("id", "modalDeny");
-		$(decline).attr("value", "Dismiss");
-		decline.onclick = function() {
-			document.getElementById("modalDialogue").css("display", "none");
-			document.getElementById("modalInside").innerHTML = "";
-		}
-		content.appendChild(decline);
 		if (opts.type == "dialog") {
-			console.log(opts.message);
+//			console.log(opts.message);
 			textIn.innerHTML = opts.message;
+			content.appendChild(textIn);
 			var confirm = document.createElement("input");
 			$(confirm).attr("type", "button");
 			$(confirm).attr("class", "btn btn-large btn-success");
@@ -861,11 +1124,37 @@ var general = {
 			confirm.onclick = function() {
 				opts.confirm();
 			}
+			var decline = document.createElement("input");
+			$(decline).attr("type", "button");
+			$(decline).attr("class", "btn btn-large btn-danger");
+			$(decline).attr("id", "modalDeny");
+			$(decline).attr("value", "Dismiss");
+			decline.onclick = function() {
+				$("#modalDialogue").slideUp(400, 
+					function(){$("#modalInside").html("")}
+				);
+			}
 			content.appendChild(confirm);
-		}
-		content.appendChild(textIn);
-		document.getElementById("modalDialogue").css("display", "block");
+			content.appendChild(decline);
 
+		}
+		if (opts.type != "dialog") {
+			textIn.innerHTML = opts.message;
+			content.appendChild(textIn);
+
+			var decline = document.createElement("input");
+			$(decline).attr("type", "button");
+			$(decline).attr("class", "btn btn-large btn-danger");
+			$(decline).attr("id", "modalDeny");
+			$(decline).attr("value", "Dismiss");
+			decline.onclick = function() {
+				$("#modalDialogue").slideUp(400, 
+					function(){$("#modalInside").html("")}	
+				);				
+			}
+			content.appendChild(decline);
+		}
+		$("#modalDialogue").slideDown();
 	},
 	"updateSinglePoint" : function() {
 		var extraString = "twitButton.html#type=hashtag&count=none";
@@ -873,7 +1162,6 @@ var general = {
 			var center = maps.map.getCenter().toString().replace(/[()]/g, "").split(",");
 			console.log(center);
 			var dist = [999, ""];
-
 			for (var i in tags.inBound) {
 				if (tags.inBound.hasOwnProperty(i)) {
 					if (tpht.distanceBetweenPoints([parseFloat(center[0]), parseFloat(center[1])], [tags.locations[tags.inBound[i]].latitude, tags.locations[tags.inBound[i]].longitude]) < dist[0]) {
@@ -886,8 +1174,7 @@ var general = {
 		} else {
 			tags.singleTag = "";
 		}
-		console.log("-----------------------------------------------");
-		console.log(tags.singleTag);
+
 		//		tags.locations
 
 		/*var toAdd = tags.campaign;

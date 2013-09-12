@@ -33,8 +33,11 @@ setInterval(function() {
 								var send = db.sendNew();
 								send.id = imgData.id;
 								send.user = imgData.user.username;
+								send.name = imgData.user.full_name;
+								send.userIMG = imgData.user.profile_picture;
 								//console.log(imgData.created_time);
 								//console.log(parseInt(imgData.created_time, 10));
+								send.link = imgData.link;
 								send.time = db.formatDate(new Date(parseInt(imgData.created_time, 10) * 1000));
 								if(imgData.caption!=null){
 								send.text = imgData.caption.text;
@@ -52,7 +55,7 @@ setInterval(function() {
 								//console.log(send);
 								if(send.hashtag!=""){
 									console.log(send);
-									db.connection.query('INSERT INTO content SET ? ON DUPLICATE KEY UPDATE hashtag = ?, id = ?, text = ?, user = ?, time = ?, img_large = ?, img_med = ?, img_small = ?, lat = ?, lon = ?', [send, send.hashtag,send.id,send.text,send.user,send.time,send.img_large,send.img_med,send.img_small,send.lat,send.lon], function(err, result) {
+									db.connection.query('INSERT INTO content SET ? ON DUPLICATE KEY UPDATE hashtag = ?, id = ?, text = ?, user = ?, name = ?, userIMG = ?, time = ?, link = ?, img_large = ?, img_med = ?, img_small = ?, lat = ?, lon = ?', [send, send.hashtag,send.id,send.text,send.user,send.name,send.userIMG,send.time,send.link,send.img_large,send.img_med,send.img_small,send.lat,send.lon], function(err, result) {
 										//console.log(err + "," + result);
 									});
 								}

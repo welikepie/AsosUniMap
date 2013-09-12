@@ -1,39 +1,299 @@
+//tooltip styling is dictated by the javascript as part of the object constructor at line 558.
+//alternatively ctrl+f for "map marker styling"
+//a hands on example can be found here : http://google-maps-utility-library-v3.googlecode.com/svn/trunk/infobubble/examples/example.html/
+@yellow: #ffda00;
+@blue: #22b9c8;
+@black : #000000;
+@white : #FFFFFF;
+@red : #ec715f;
+@green : #bdcf23;
 html { 
+    *:focus {
+    outline: 0;
+}
+#JS-facebookInput{display:none; width:0px; height:0px;}
+#JS-instaInput{display:none; width:0px; height:0px;}
+#modalDialogue{
+    display:none;
+position: absolute;
+z-index: 9999;
+width: 100%;
+background-color: @yellow;
+border-bottom:1px solid @blue;
+box-shadow: 0px 0px 10px #888888;
+#modalInside{
+        display:block;
+        margin:0 auto;
+        max-width:420px;
+        font-family:"futura-pt-1","futura-pt-2", sans-serif;
+    .heading{
+        float:left;
+            font-weight:bold;
+            //font-weight:regular;
+            font-size:17px;
+            margin-top:20px;
+        }
+        .subHeading{
+            clear:both;
+            float:left;
+            margin:0px;
+        }
+        #modalConfirm{
+            clear:left;
+            background-color:@green;
+            border:none;
+            padding:10px;
+            font-family: "futura-pt-1","futura-pt-2", sans-serif;
+            font-weight:bold;
+            font-size:15px;
+            color: @white;
+            float:right;
+            margin-bottom:20px;
+            cursor:pointer;
+            margin-right:0px;
+
+        }
+        #modalDeny{
+            float:right;
+            border: none;
+            background: none;
+            margin-top: 25px;
+            }
+            #modalDeny:hover{
+                cursor:pointer;
+                text-decoration:underline;
+                }
+        .facebookInput{
+                box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+                        max-width:420px;
+                       margin-top:10px;
+                       margin-bottom:10px;
+                       resize:none;
+                        font-family:"futura-pt-1","futura-pt-2", sans-serif;
+                        font-size:14px;
+                        line-height:16px;
+                        color:@black;
+                        float:left;
+                        border:0px;
+                       width:100%;
+                        height:4.5em;                        
+            }
+    }
+}
+     .size52{
+          font-family: "myriad-pro-1","myriad-pro-2",sans-serif;
+             padding-right:30px;
+        background-image:url("../images/lemons/36-end.png");
+            background-repeat: no-repeat;
+            background-position: top right;
+         .begin{
+             background-image:url("../images/lemons/36-begin.png");
+             height: 56px;
+             h2{
+                    font-family: "futura-pt-1","futura-pt-2",sans-serif;
+                 font-size:20px;
+                 margin:0px;
+                 margin-left:20px;
+                 line-height:32px;
+//                 margin-top:5px;
+            }
+         }
+
+    }
+     .size48{
+                  padding-right:30px;
+        background-image:url("../images/lemons/36-end.png");
+            background-repeat: no-repeat;
+            background-position: top right;
+         .begin{
+             background-image:url("../images/lemons/36-begin.png");
+             height: 56px;
+             h2{
+                    font-family: "futura-pt-1","futura-pt-2",sans-serif;
+                 font-size:20px;
+                 margin:0px;
+                 margin-left:20px;
+                 line-height:32px;
+//                 margin-top:5px;
+            }
+         }
+}
+     .size44{  
+                  padding-right:30px;
+        background-image:url("../images/lemons/36-end.png");
+            background-repeat: no-repeat;
+            background-position: top right;
+         .begin{
+             background-image:url("../images/lemons/36-begin.png");
+             height: 56px;
+             h2{
+                    font-family: "futura-pt-1","futura-pt-2",sans-serif;
+                 font-size:20px;
+                 margin:0px;
+                 margin-left:20px;
+                 line-height:32px;
+//                 margin-top:5px;
+            }
+         }
+
+}
+
+    .size40{
+             padding-right:30px;
+        background-image:url("../images/lemons/36-end.png");
+            background-repeat: no-repeat;
+            background-position: top right;
+         .begin{
+             background-image:url("../images/lemons/36-begin.png");
+             height: 56px;
+             h2{
+                    font-family: "futura-pt-1","futura-pt-2",sans-serif;
+                 font-size:20px;
+                 margin:0px;
+                 margin-left:20px;
+                 line-height:32px;
+//                 margin-top:5px;
+            }
+         }
+
+    }
+     .size36{ 
+         padding-right:30px;
+        background-image:url("../images/lemons/36-end.png");
+            background-repeat: no-repeat;
+            background-position: top right;
+         .begin{
+             background-image:url("../images/lemons/36-begin.png");
+             height: 56px;
+             h2{
+                    font-family: "futura-pt-1","futura-pt-2",sans-serif;
+                 font-size:20px;
+                 margin:0px;
+                 margin-left:20px;
+                 line-height:32px;
+//                 margin-top:5px;
+            }
+         }
+
+     }
+     .size32{
+         padding-right:30px;
+        background-image:url("../images/lemons/36-end.png");
+            background-repeat: no-repeat;
+            background-position: top right;
+         .begin{
+             background-image:url("../images/lemons/36-begin.png");
+             height: 56px;
+             h2{
+                    font-family: "futura-pt-1","futura-pt-2",sans-serif;
+                 font-size:20px;
+                 margin:0px;
+                 margin-left:20px;
+                 line-height:32px;
+//                 margin-top:5px;
+            }
+         }
+
+}
+     
      .labels {
-     color: red;
-     font-family: "Lucida Grande", "Arial", sans-serif;
-    // font-size: 10px;
-  //  line-height:48px;
-    //height:50px;
-     font-weight: bold;
+    
+     padding-right:35px;
+    font-weight: bold;
      text-align: center;
      white-space: nowrap;
      z-index:9999;
      h2{
-//         line-height:50px;
+            font-family: "futura-pt-1","futura-pt-2",sans-serif;
          z-index:9999;
          margin:0px;
-//         font-size:48px;
          }
    }
-    .infoBox{
-            float:left;
-            width:300px;
-            list-style:none;
-                        margin-bottom:5px;
-                        .text{
-                            max-height: 200px;
-                            overflow-y: scroll;
-                            word-wrap: break-word;
-                            word-wrap: break-word;
+   .labelRoot{
+       background-color:@yellow !important; 
+       }
+    .infoBox{               
+        float:left;
+                            a{
+                                float:left;
+                                text-decoration:none;
+                                color: @black;
+                                width:310px;
                             }
-                        .image{
-                            float:right;
-                            
-                            width:150px;
-                            height:150px;
-                            }
-
+                                .topDiv{
+                                    float:left;
+                                    font-family: "futura-pt-1","futura-pt-2", sans-serif;
+                                    width:100%;
+                                 padding-bottom:10px;
+                                 border-bottom: 1px solid @black;
+                                    margin-bottom:10px;
+                                    .twitter-follow-button{
+                                        float: right;
+                                        height: 20px;
+                                        margin-top: 20px;
+                                        }
+                                    .names{
+                                        float:left;
+                                        .userNameTag{
+                                            clear:left;
+                                            font-size:12px;
+                                            font-weight:bold;
+                                            margin:0px;
+                                            display:block;
+                                            }
+                                        
+                                        .nameContainer{
+                                            margin-bottom:10px;
+                                            padding-bottom:5px;
+                                            float:left;
+                                            border-bottom:3px solid @black;
+                                        p{
+                                            line-height:12px;
+                                            font-weight:bold;
+                                            font-size:12px;
+                                            margin:0px;
+                                            }
+                                        }
+                                    }
+                                    img{
+                                        float:left;
+                                        border:5px solid @blue;
+                                        margin-right:8px;
+                                        width:48px;
+                                        }
+                                    }
+                                .bottomDiv{
+                                    font-family: "futura-pt-1","futura-pt-2", sans-serif;
+                                    font-size:14px;
+                                    line-height:14px;
+                                    float:left;
+                                    clear:left;
+                                    img{
+                                        float:left;
+                                        width:150px;
+                                        border:5px solid @black;
+                                        }
+                                    .textWithImg{
+                                            font-family: "futura-pt-1","futura-pt-2", sans-serif;
+                                    font-size:14px;
+                                    line-height:14px;
+                                            margin-left: 10px;
+                                            text-overflow: ellipsis;
+                                            width: 140px;
+                                            float: left;
+                                            overflow: hidden;
+                                        }
+                                    .text{
+                                        font-family: "futura-pt-1","futura-pt-2", sans-serif;
+                                    font-size:14px;
+                                    line-height:14px;
+                                        clear:both;
+                                        float:left;}
+                                    
+                                    }
+                
         }
     height: 100%;
       body { 
@@ -42,76 +302,278 @@ html {
           margin: 0; 
           padding: 0; 
             #widget{//twitter widget here!
+            background-color: @black;
+            float:left;
             .btn-o{}
             .btn-o > a {
+                #l{display:none;float:left;}
+                            .intBorder{
+                                height:40px;
+                                width:120px;
+                                background-color: @black;
+                                margin-top:0px;
+                                border-right:1px solid #a5a5a5;
+                                 img{
+                                    display: block;
+                                    margin-left: auto;
+                                    margin-right: auto;
+                                    margin-bottom:5px;
+                                    border: none;
+                                    }
+                                             .contText{
+                                                 font-family: "futura-pt-1","futura-pt-2" , sans-serif;
+                         font-size:10px;
+                         color:@white;
+                             clear:left;
+                             float:left;
+                             margin:0 auto;
+                             width:100%;
+                             text-align:center;
+                             text-decoration:none;
+                             }
+
+                                }
                 }
                 
                 }
-              #map-canvas { width: 100%;height: 100% }
+              #map-canvas { width: 100%;height: 100%; 
+              background-color:#54bec6 !important;
+              .domHasherHash{
+                  float:left;
+                  position:relative;
+                  }
+              }
+              #overlayImage{
+                  position:absolute;
+                  left:20px;
+                  top:20px;
+                  }
+            #overlayAsosImage{
+                position:absolute;
+                bottom:80px;
+                left:60px;
+                }
+              #blackOverlay{
+                  position:absolute;
+                  bottom:0px;
+                  width:100%;
+                  height:60px;
+                  background-color: @black;
+                  #labelText{
+                      font-family:"futura-pt-1","futura-pt-2", sans-serif;
+                      font-weight:bold;
+                      font-size:24px;
+                      color:@white;
+                      margin-top:16px;
+                      margin-left: 20px;
+                      float:left;
+                      }
+                     #socialMedia{
+                         float:right;
+                         font-family: "futura-pt-1","futura-pt-2" , sans-serif;
+                         font-size:10px;
+                         img{
+                              display: block;
+                            margin-left: auto;
+                            margin-right: auto;
+                            margin-bottom:5px;
+                            }
+                        #insta:hover,#faceb:hover{
+                            cursor:pointer;
+                            }
+                         .contText{
+                             clear:left;
+                             float:left;
+                             margin:0 auto;
+                             width:100%;
+                             text-align:center;
+                            text-decoration:none;
+                            color: @white;
+                        }
+                         #twittr,#insta,#faceb{
+                            margin-top:10px; 
+                             margin-bottom:10px; 
+                             height:40px;
+                             width:124px;
+                             float:left; 
+                             color:@white;
+                            .intBorder{
+                                height:40px;
+                                background-color: @black;
+                                margin-top:0px;
+                                border-right:1px solid #a5a5a5;
+                                cursor:pointer;
+                                img{
+                                    border: none;
+                                    }
+                                }
+                         }
+                         #twittr,#insta{
+                             border-right:1px solid #5a5a5a;
+                             }
+                        #twittr{
+                            width:121px;
+                            #twitterButton{
+                                float:left;
+                                clear:left;
+                                width:121px;
+                                height:50px;
+                                overflow:hidden;
+                                border-style:none;
+                            }
+                        }
+                        
+                         }
+                  }
               #map-overlay{                  
                 position: absolute;
-                width: 350px;
+                width: 320px;
                 height:500px;
-                right: 5%;
-                top: 5%;
-               background-color:#FFFFFF;
-               background-color:rgba(255,255,255,0.8);
-                border-radius:20px;
-                border: 10px solid rgb(135, 206, 235);
-                #twitterButton{
-                    float:left;
-                    clear:left;
-                    width:60px;
-                    height:25px;
-                    overflow:hidden;
-                    border-style:none;
-                    }
-                #facebookShare{
-                    float:left;
-                    margin:0px;
-                    }
+                right: 20px;
+                top: 20px;
+                    #search{
+                        height:40px;
+                        width:inherit;
+                        float:left;
+                        margin-bottom:10px;
+                        background-color:@red;
+                        box-shadow: 0px 0px 5px #888888;
                     #searchMe{
                         float:left;
+                        margin-bottom:9px;
+                        margin-top:9px;
+                        margin-left:10px;
+                        width:23px;
+                        height:23px;
+                        background-image:url("../images/mag.png");
                         }
                     #searchField{
+                        font-family:"futura-pt-1","futura-pt-2", sans-serif;
+                        font-size:14px;
+                        color:white;
                         float:left;
+                        border:0px;
+                        width:220px;
+                        height:23px;
+                        margin-bottom:5px;
+                        margin-top:5px;
+                        border-bottom:1px solid white;
+                        margin-left:10px;
+                        background:@red;
+                        background-color:@red;
                         }
                     #searchClear{
+                        background-image:url("../images/close.png");
+                        width:20px;
+                        height:20px;
+                        float:right;
+                        margin:10px;
+                        margin-left:0px;
                         display:none;
                         }
-                #surrounder{
-                    width:350px;
-                    clear:left;
+                    }
+                #SurroundContainer{
                     float:left;
-                    width:inherit;
-                    padding-left:0px;
-                    height:450px;
-                    overflow-y:scroll;
-                    overflow-x:hidden;
-            #content{
-                width:330px;
-                margin:0px;
-                padding-left:0px;
-                float:left;
-                    li{
-                        float:left;
+                    width:310px;
+                        height:400px;
+                        background-color:@yellow;
+                        padding:10px;
+                        padding-right:0px;
+                #header{
+                    font-family:"futura-pt-1","futura-pt-2", sans-serif;
+                    font-weight:bold;
+                    //font-weight:regular;
+                    font-size:17px;
+                    }
+                #surrounder{
+                            width:310px;
+                        height:380px;
                         clear:left;
-                        width:100%;
-                        list-style:none;
-                        margin-bottom:5px;
-                        border-bottom:1px solid rgb(125,125,125);
-                        .text{
-                            max-height: 200px;
-                            overflow-y: scroll;
-                            word-wrap: break-word;
-                            word-wrap: break-word;
+                        float:left;
+                        overflow-y:scroll;
+                        overflow-x:hidden;
+                #content{
+                     width:290px;
+                    margin:0px;
+                    padding-left:0px;
+                    float:left;
+                        li{
+                            width: 100%;
+                             border-top:solid 1px @black;
+                            float:left;
+                            padding-bottom:10px;
+                            padding-top:10px;
+                            a{
+                                float:left;
+                                text-decoration:none;
+                                color:@black;
                             }
-                        img{
-                            float:right;
+                                .topDiv{
+                                    float:left;
+                                    font-family:"futura-pt-1","futura-pt-2", sans-serif;
+                                    margin-bottom:10px;
+                                    //
+                                    .names{
+                                        float:left;
+                                        .userNameTag{
+                                            clear:left;
+                                            font-size:12px;
+                                            font-weight:bold;
+                                            margin:0px;
+                                            display:block;
+                                            }
+                                        
+                                        .nameContainer{
+                                            margin-bottom:10px;
+                                            padding-bottom:5px;
+                                            float:left;
+                                            border-bottom:3px solid @black;
+                                        p{
+                                            line-height:12px;
+                                            font-weight:bold;
+                                            font-size:12px;
+                                            margin:0px;
+                                            }
+                                        }
+                                    }
+                                    img{
+                                        float:left;
+                                        border:5px solid @blue;
+                                        margin-right:8px;
+                                        width:48px;
+                                        }
+                                    }
+                                .bottomDiv{
+                                    font-family: "futura-pt-1","futura-pt-2", sans-serif;
+                                    font-size:14px;
+                                    line-height:14px;
+                                    float:left;
+                                    clear:left;
+                                    img{
+                                        float:left;
+                                        width:140px;
+                                        border:5px solid @black;
+                                        }
+                                    .textWithImg{
+                                        font-family: "futura-pt-1","futura-pt-2", sans-serif;
+                                    font-size:14px;
+                                    line-height:14px;
+                                            margin-left: 10px;
+                                            text-overflow: ellipsis;
+                                            width: 125px;
+                                            float: left;
+                                            overflow: hidden;
+                                        }
+                                    .text{
+                                        font-family: "futura-pt-1","futura-pt-2", sans-serif;
+                                    font-size:14px;
+                                    line-height:14px;
+                                        clear:both;
+                                        float:left;}
+                                    
+                                    }
+                                }
                             
-                            width:150px;
-                            height:150px;
-                            }
                         }
                     }
                 }

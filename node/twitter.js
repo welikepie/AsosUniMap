@@ -48,7 +48,10 @@ function startStream() {
 				//console.log(tweet.bounding_box);
 				send.id = tweet.id_str;
 				send.user = tweet.user.screen_name;
+				send.name = tweet.user.name;
+				send.userIMG = tweet.user.profile_image_url;
 				send.time = db.formatDate(new Date(tweet.created_at));
+				send.link = "https://twitter.com/"+send.user+"/statuses/"+send.id
 				send.text = tweet.text;
 				send.source = "TWTTR";
 				send.hashtag = filterForHash(tweet.text);
@@ -65,7 +68,7 @@ function startStream() {
 				}
 				//console.log(send);
 				if (send.hashtag != "") {
-					db.connection.query('INSERT INTO content SET ? ON DUPLICATE KEY UPDATE hashtag = ?, id = ?, text = ?, user = ?, time = ?, img_large = ?, img_med = ?, img_small = ?, lat = ?, lon = ?', [send, send.hashtag, send.id, send.text, send.user, send.time, send.img_large, send.img_med, send.img_small, send.lat, send.lon], function(err, result) {
+					db.connection.query('INSERT INTO content SET ? ON DUPLICATE KEY UPDATE hashtag = ?, id = ?, text = ?, user = ?,name = ?, userIMG = ?, time = ?, link = ?, img_large = ?, img_med = ?, img_small = ?, lat = ?, lon = ?', [send, send.hashtag, send.id, send.text, send.user, send.name, send.userIMG, send.time, send.link, send.img_large, send.img_med, send.img_small, send.lat, send.lon], function(err, result) {
 						if (err != null) {
 							//					console.log(err);
 							console.log(result);
