@@ -6,14 +6,15 @@ Instagram = require('instagram-node-lib');
 Instagram.set('client_id', conf.credentials.insta_client_id);
 Instagram.set('client_secret', conf.credentials.insta_client_secret);
 db.connection.connect();
-
+starter();
 var arr = [];
-setInterval(function() {
+//setInterval(function() {
+	function starter(){
 	var dataStream = JSON.parse(fs.readFileSync("tags.json")).data;
-	//console.log(dataStream);
-	//-- var tagArr = dataStream.campaign;
 	var tagArr = dataStream.location;
-	for (var i in tagArr) {
+	
+	asyncLoop(tagArr.length, function(loop, i) {
+
 		Instagram.tags.recent({
 			name : tagArr[i].substring(1,tagArr[i].length),
 			complete : function(data, pagination) {
@@ -86,8 +87,16 @@ setInterval(function() {
 				//console.log(arr.length);
 			}
 		})
-	}
-}, 2000);
+	setTimeout(loop.next,10000);
+				}, function() {
+					starter();
+				});
+			}
+				//console.log(dataStream);
+	//-- var tagArr = dataStream.campaign;
+	
+
+//}, 2000);
 
 function filterForHash(input, arr){
 	for(var i in arr){
@@ -101,3 +110,38 @@ function filterForHash(input, arr){
 	}
 	return "";
 }
+
+
+function asyncLoop(iterations, func, callback) {
+		var index = 0;
+		var done = false;
+		var loop = {
+			current : index,
+			next : function() {
+				if (done) {
+					return;
+				}
+				if (index < iterations) {
+					index++;
+					//console.log("INDEX"+index);
+					this.current = index - 1;
+					//console.log("CURRENT"+this.current);
+					func(loop, this.current);
+				} else {
+					done = true;
+					callback();
+				}
+			},
+			iteration : function() {
+				return index - 1;
+				current = index;
+			},
+			broke : function() {
+				done = true;
+				callback();
+
+			}
+		};
+		loop.next();
+		return loop;
+	}
