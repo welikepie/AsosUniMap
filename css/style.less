@@ -7,10 +7,15 @@
 @white : #FFFFFF;
 @red : #ec715f;
 @green : #bdcf23;
+@gray : #888888;
 html { 
     *:focus {
     outline: 0;
 }
+.default {
+    color: grey;
+}
+
 #JS-facebookInput{display:none; width:0px; height:0px;}
 #JS-instaInput{display:none; width:0px; height:0px;}
 #modalDialogue{
@@ -20,12 +25,14 @@ z-index: 9999;
 width: 100%;
 background-color: @yellow;
 border-bottom:1px solid @blue;
-box-shadow: 0px 0px 10px #888888;
+box-shadow: 0px 0px 5px @gray;
 #modalInside{
+        height:205px;
         display:block;
         margin:0 auto;
         max-width:420px;
         font-family:"futura-pt-1","futura-pt-2", sans-serif;
+        padding-bottom:20px;
     .heading{
         float:left;
             font-weight:bold;
@@ -38,32 +45,52 @@ box-shadow: 0px 0px 10px #888888;
             float:left;
             margin:0px;
         }
-        #modalConfirm{
+        #modalDenyButton{
             clear:left;
             background-color:@green;
             border:none;
+            margin:0px;
             padding:10px;
             font-family: "futura-pt-1","futura-pt-2", sans-serif;
             font-weight:bold;
             font-size:15px;
             color: @white;
             float:right;
-            margin-bottom:20px;
+            cursor:pointer;
+            margin-right:0px;
+
+        }
+        #modalConfirm{
+            clear:left;
+            background-color:@green;
+            border:none;
+            margin:0px;
+            padding:10px;
+            font-family: "futura-pt-1","futura-pt-2", sans-serif;
+            font-weight:bold;
+            font-size:15px;
+            color: @white;
+            float:right;
             cursor:pointer;
             margin-right:0px;
 
         }
         #modalDeny{
+            font-family: "futura-pt-1","futura-pt-2", sans-serif;
+            font-weight:bold;
+            font-size:15px;
             float:right;
             border: none;
             background: none;
-            margin-top: 25px;
+            margin-top: 10px;
+            margin-right:10px;
             }
             #modalDeny:hover{
                 cursor:pointer;
                 text-decoration:underline;
                 }
         .facebookInput{
+                padding:6px;
                 box-sizing: border-box;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
@@ -92,6 +119,7 @@ box-shadow: 0px 0px 10px #888888;
              background-image:url("../images/lemons/36-begin.png");
              height: 56px;
              h2{
+                 white-space:nowrap;
                     font-family: "futura-pt-1","futura-pt-2",sans-serif;
                  font-size:20px;
                  margin:0px;
@@ -110,7 +138,7 @@ box-shadow: 0px 0px 10px #888888;
          .begin{
              background-image:url("../images/lemons/36-begin.png");
              height: 56px;
-             h2{
+             h2{white-space:nowrap;
                     font-family: "futura-pt-1","futura-pt-2",sans-serif;
                  font-size:20px;
                  margin:0px;
@@ -129,6 +157,7 @@ box-shadow: 0px 0px 10px #888888;
              background-image:url("../images/lemons/36-begin.png");
              height: 56px;
              h2{
+                 white-space:nowrap;
                     font-family: "futura-pt-1","futura-pt-2",sans-serif;
                  font-size:20px;
                  margin:0px;
@@ -148,7 +177,7 @@ box-shadow: 0px 0px 10px #888888;
          .begin{
              background-image:url("../images/lemons/36-begin.png");
              height: 56px;
-             h2{
+             h2{white-space:nowrap;
                     font-family: "futura-pt-1","futura-pt-2",sans-serif;
                  font-size:20px;
                  margin:0px;
@@ -167,7 +196,7 @@ box-shadow: 0px 0px 10px #888888;
          .begin{
              background-image:url("../images/lemons/36-begin.png");
              height: 56px;
-             h2{
+             h2{white-space:nowrap;
                     font-family: "futura-pt-1","futura-pt-2",sans-serif;
                  font-size:20px;
                  margin:0px;
@@ -186,7 +215,7 @@ box-shadow: 0px 0px 10px #888888;
          .begin{
              background-image:url("../images/lemons/36-begin.png");
              height: 56px;
-             h2{
+             h2{white-space:nowrap;
                     font-family: "futura-pt-1","futura-pt-2",sans-serif;
                  font-size:20px;
                  margin:0px;
@@ -206,6 +235,7 @@ box-shadow: 0px 0px 10px #888888;
      white-space: nowrap;
      z-index:9999;
      h2{
+         white-space:nowrap;
             font-family: "futura-pt-1","futura-pt-2",sans-serif;
          z-index:9999;
          margin:0px;
@@ -281,7 +311,7 @@ box-shadow: 0px 0px 10px #888888;
                                     line-height:14px;
                                             margin-left: 10px;
                                             text-overflow: ellipsis;
-                                            width: 140px;
+                                            width: 130px;
                                             float: left;
                                             overflow: hidden;
                                         }
@@ -299,6 +329,7 @@ box-shadow: 0px 0px 10px #888888;
       body { 
           height: 100%; 
           height: 100%;
+          overflow:hidden;
           margin: 0; 
           padding: 0; 
             #widget{//twitter widget here!
@@ -437,7 +468,7 @@ box-shadow: 0px 0px 10px #888888;
                         float:left;
                         margin-bottom:10px;
                         background-color:@red;
-                        box-shadow: 0px 0px 5px #888888;
+                        box-shadow: 0px 0px 5px @gray;
                     #searchMe{
                         float:left;
                         margin-bottom:9px;
@@ -479,6 +510,7 @@ box-shadow: 0px 0px 10px #888888;
                         background-color:@yellow;
                         padding:10px;
                         padding-right:0px;
+                 box-shadow: 0px 0px 5px @gray;
                 #header{
                     font-family:"futura-pt-1","futura-pt-2", sans-serif;
                     font-weight:bold;

@@ -139,8 +139,8 @@ var tpht = {
 							}));
 							return false;
 						} else {
-							console.log("DONE");
-							console.log(err);
+							//console.log("DONE");
+							//console.log(err);
 							var serverResponse = xhReq.responseText;
 							callback(serverResponse);
 						}

@@ -188,7 +188,7 @@ function writEm() {
 				console.log(results[i]);
 				var prepare = "SELECT id,user,name,userIMG, UNIX_TIMESTAMP(time) as time,lat,lon,text,img_small,img_med,img_large,source,hashtag,link FROM asosUniMap.content WHERE hashtag = '" + results[i] + "'";
 				db.connection.query(prepare, function(err, result) {
-					console.log(result.length);
+					//console.log(result.length);
 					if (err) {
 						console.log("Error occurred pulling " + results[i] + " at " + new Date().getTime());
 						loop.next();

@@ -4,6 +4,7 @@ try {
 	console.log("Your maps, they seem to have failed to load.");
 }
 
+
 var currSel = "";
 var lastMessage = Date.now();
 
@@ -41,13 +42,39 @@ function setSSE() {
 }
 
 window.onload = function() {
+	var totalHeight = document.documentElement.clientHeight;
+	var contHeight = totalHeight - 165;
+	$("#SurroundContainer").css("height",contHeight);
+	$("#surrounder").css("height",contHeight-12);	
+	$('#searchField').focus(function(){
+    if (this.value == this.defaultValue) {
+        this.value = '';
+        $(this).removeClass('default');
+    };
+});
+
+$('#searchField').keypress(function(e) {
+        if(e.which == 13) {
+            jQuery(this).blur();
+            jQuery('#searchMe').focus().click();
+        }
+    });
+    
+$('#searchField').blur(function(){
+    if (this.value == '') {
+        this.value = this.defaultValue;
+        $(this).addClass('default');
+    };
+});
 	tags.retrieve();
 	config.sizesOfLabels();
 	$(document.getElementById("searchClear")).bind('click', function() {
 		document.getElementById("searchField").value = "";
 		document.getElementById("searchClear").style.display = "none";
+		//mmanager.hashContentManager.refresh();
 		tags.filtration = "";
 		elements.fullUpdate();
+		
 	});
 	$(document.getElementById("searchMe")).bind('click', function() {
 		console.log("CALLING");
@@ -63,7 +90,7 @@ window.onload = function() {
 		}
 		elements.fullUpdate();
 	});
-	//		setSSE();
+			setSSE();
 	$(document.getElementById("insta")).bind('click', function() {
 		$("#modalInside").html("");
 		general.customModal({

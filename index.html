@@ -19,26 +19,45 @@
 		<link rel="stylesheet" href="css/style.css"/>
 		<link rel="shortcut icon" href="/favicon.ico" />
 		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-		<script type="text/javascript">var ie = false;</script>
+		<script type="text/javascript">
+			var ie = false;
+		</script>
 		<!--[if lte IE 8]>
 		<script type="text/javascript">var ie = true;</script>
 		<![endif]-->
-		<script type="text/javascript" src="//use.typekit.net/lcq4gph.js"></script>
-		<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+		<script type="text/javascript" src="http://use.typekit.net/lcq4gph.js"></script>
+		<script type="text/javascript">
+			try {
+				Typekit.load();
+			} catch(e) {
+			}
+		</script>
 	</head>
 	<body>
 		<div id="JS-facebookInput">
 			<span class='heading'>WHAT DO YOU WANT TO SAY?</span>
-			<p class="subHeading">Here's your chance to be awesome. Don't be shy!</p>
-			<textarea class='facebookInput'/></textarea>
+			<p class="subHeading">
+				Here's your chance to be awesome. Don't be shy!
+			</p>
+			<textarea class='facebookInput'></textarea>
 		</div>
 		<div id="JS-instaInput">
 			<span class='heading'>HOW TO ADD INSTAGRAM IMAGES</span>
-			<p class="subHeading">Step one; Open Instragram on your mobile device.</p>
-			<p class="subHeading">Step two; Take a picture and apply as many filters as you want.</p>
-			<p class="subHeading">Step three; Tag it with the hashtag for your university.</p>
-			<p class="subHeading">Step four; Add to your Photo Map.</p>
-			<p class="subHeading">Step five; You're good to go! Send it out and wait for it to appear!</p>
+			<p class="subHeading">
+				Step one; Open Instragram on your mobile device.
+			</p>
+			<p class="subHeading">
+				Step two; Take a picture and apply as many filters as you want.
+			</p>
+			<p class="subHeading">
+				Step three; Tag it with the hashtag for your university.
+			</p>
+			<p class="subHeading">
+				Step four; Add to your Photo Map.
+			</p>
+			<p class="subHeading">
+				Step five; You're good to go! Send it out and wait for it to appear!
+			</p>
 		</div>
 		<div id="modalDialogue">
 			<div id="modalInside"></div>
@@ -48,12 +67,12 @@
 			<div id="search">
 				<div id="searchMe" value="search"></div>
 				<!--Image by Javier Cabezas, from The Noun Project-->
-				<input type="text" value="SEARCH UNI" id="searchField"/>
+				<input type="text" class = "default" value="SEARCH UNI" id="searchField"/>
 				<div id="searchClear" value="clear"></div>
 			</div>
 			<div id="SurroundContainer">
 				<div id="header" >
-					HEADING
+					STREAM
 				</div>
 				<div id="surrounder">
 					<ul id="content"></ul>
@@ -68,10 +87,8 @@
 			</div>
 			<div id="socialMedia">
 				<div id="twittr">
-
-					<iframe id="twitterButton"frameBorder="0" src="twitButton.html#type=hashtag&count=none" style="border-style:none;"></iframe>
+					<iframe id="twitterButton" frameBorder="0" src="twitButton.html#type=hashtag&count=none" style="border-style:none;"></iframe>
 					<!-- This be an iFrame. The actual content is in twitButton.html, but the styling is in the same file as for this document. Aww yeah. -->
-
 				</div>
 				<div id="insta">
 					<div class="intBorder">
@@ -79,7 +96,7 @@
 						<div class="contText">
 							INSTAGRAM IT
 						</div>
-					</div> 
+					</div>
 				</div>
 				<div id="faceb">
 					<img src="images/facebook.png"/>
@@ -88,7 +105,6 @@
 					</div>
 				</div>
 			</div>
-
 		</div>
 	</body>
 	<footer>
@@ -96,7 +112,7 @@
 		<script type="text/javascript" src="scripts/utils/JSON2.js"></script>
 		<script type="text/javascript" src="scripts/utils/jQuery1901.js"></script>
 		<script type="text/javascript" src="http://platform.twitter.com/widgets.js" charset="utf-8"></script>
-		<!--<script type="text/javascript" src="scripts/utils/eventsource.js"></script>-->
+		<script type="text/javascript" src="scripts/utils/eventsource.js"></script>
 		<script type="text/javascript" src="scripts/utils/tophat.js"></script>
 		<script type="text/javascript" src="scripts/maps/infobubble.js"></script>
 		<script type="text/javascript" src="scripts/maps/markerlabel.js"></script>
