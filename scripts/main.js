@@ -137,7 +137,10 @@ var mmanager = {
 	"overMark" : new Array(),
 	"addClickToOverHashes" : function(obj) {
 		google.maps.event.addListener(obj, 'click', function() {
-			maps.map.panTo(obj.getPosition());
+			
+//			console.log(split);
+			maps.map.panTo(	new google.maps.LatLng(	obj.location.latitude, obj.location.longitude));
+			
 			maps.map.setZoom(9);
 			var bounds = maps.map.getBounds();
 			maps.oldBounds = bounds;
@@ -209,13 +212,20 @@ var mmanager = {
 				addDiv.appendChild(div);
 				addDiv.appendChild(domDiv);
 				console.log(zed);
+				
+				var toWrite = 32;
+				if(config.bandSizes[config.sizesOfLabels[zed]]!=undefined){
+					toWrite = config.bandSizes[config.sizesOfLabels[zed]] + 16;
+				}
+				console.log();
 				thisMarker = new MarkerWithLabel({
-					position : new google.maps.LatLng(tags.locations[zed].latitude, tags.locations[zed].longitude),
+					position : new google.maps.LatLng(tags.locations[zed].latitude + 1, tags.locations[zed].longitude-0.5),
 					title : "#" + zed,
 					zIndex : config.bandSizes[config.sizesOfLabels[zed]],
 					labelContent : addDiv.innerHTML,
+					location : tags.locations[zed],
 					labelAnchor : new google.maps.Point(0, 0),
-					labelClass : "size" + (config.bandSizes[config.sizesOfLabels[zed]] + 16), // the CSS class for the label
+					labelClass : "size" + toWrite, // the CSS class for the label
 					icon : "images/marker.png"
 				});
 				element++;

@@ -4,7 +4,7 @@ try {
 	console.log("Your maps, they seem to have failed to load.");
 }
 
-var links = ["http://www.asos.com/","http://www.asos.com/","http://www.asos.com/","http://www.asos.com/"];
+var links = ["http://www.asos.com/", "http://www.asos.com/", "http://www.asos.com/", "http://www.asos.com/"];
 var text = ["EXPLORE >", "WATCH >", "SHOP >", "WIN >"];
 
 var currSel = "";
@@ -47,87 +47,87 @@ window.onload = function() {
 	var open = false;
 	var totalHeight = document.documentElement.clientHeight;
 	var contHeight = totalHeight - 165;
-	$("#SurroundContainer").css("height",contHeight);
-	$("#surrounder").css("height",contHeight-12);	
-	$('#searchField').focus(function(){
-    if (this.value == this.defaultValue) {
-        this.value = '';
-        $(this).removeClass('default');
-    };
-});
-var popUp = false;
- $('#map-overlay').click(function(e){
-            if(popUp == false){
-            	popUp = true;
-               console.log(e);
-               e.stopPropagation();
-               e.preventDefault();
-               //rest of your logic will go here
-   $('#map-overlay').attr("class","upWeGo");                
-   $('#map-overlay').css("top",150+"px");
-}
-    });
+	$("#SurroundContainer").css("height", contHeight);
+	$("#surrounder").css("height", contHeight - 12);
+	$('#searchField').focus(function() {
+		if (this.value == this.defaultValue) {
+			this.value = '';
+			$(this).removeClass('default');
+		};
+	});
+	var popUp = false;
 
 
-if (document.documentElement.clientWidth < 480) {
-	$("#map-overlay").first().css("top",(totalHeight-100)+"px");
-		$("#SurroundContainer").css("height",totalHeight-170);
-	$("#surrounder").css("height",totalHeight-182);	
-	// don’t download complicated script
-	// use low-source images instead of full-source ones
-}
-$('#map-canvas').click(function(e){
-	console.log(e);
-	if(popUp == true){
-		popUp = false;
-		    e.stopPropagation();
-               e.preventDefault();
-               //rest of your logic will go here
-   $('#map-overlay').attr("class","upWeGo");                
-   $('#map-overlay').css("top",(totalHeight-100)+"px");
-
-	}
-})
-$('#tapMENU').bind("click",function(){
-	if(open == false){
-		open = true;
-//		<a class="prodLink"><div>YOURMOM ></div></a>
-		var varToAppend = document.getElementById("JS-MBtopMenu");
-		var div = document.createElement("div");
-		div.setAttribute("id","menuHolder");
-		for(var i = 0; i < links.length; i++){
-			var a = document.createElement("a");
-			a.setAttribute("class","prodLink");
-			a.setAttribute("href",links[i]);
-			a.setAttribute("target","_blank");
-			var d = document.createElement("div");
-			dText = document.createTextNode(text[i]);
-			d.appendChild(dText);
-			a.appendChild(d);
-			div.appendChild(a);
+	if (document.documentElement.clientWidth < 480) {
+		$("#map-overlay").first().css("top", (totalHeight - 100) + "px");
+		$("#SurroundContainer").css("height", totalHeight - 170);
+		$("#surrounder").css("height", totalHeight - 182);
+		// don’t download complicated script
+		// use low-source images instead of full-source ones
+			$('#map-overlay').click(function(e) {
+		if (popUp == false) {
+			popUp = true;
+			console.log(e);
+			e.stopPropagation();
+			e.preventDefault();
+			//rest of your logic will go here
+			$('#map-overlay').attr("class", "upWeGo");
+			$('#map-overlay').css("top", 150 + "px");
 		}
-		varToAppend.appendChild(div);
-	}
-	else{
-		open = false;
-		var i = document.getElementById("menuHolder");
-			i.parentNode.removeChild(i);
-	}
-})
+	});
+		
+		$('#map-canvas').click(function(e) {
+			console.log(e);
+			if (popUp == true) {
+				popUp = false;
+				e.stopPropagation();
+				e.preventDefault();
+				//rest of your logic will go here
+				$('#map-overlay').attr("class", "upWeGo");
+				$('#map-overlay').css("top", (totalHeight - 100) + "px");
 
-$('#searchField').keypress(function(e) {
-        if(e.which == 13) {
-            jQuery(this).blur();
-            jQuery('#searchMe').focus().click();
-        }
-    });
-    
-$('#searchField').blur(function(){
-    if (this.value == '') {
-        this.value = this.defaultValue;
-        $(this).addClass('default');
-    };
-});
+			}
+		})
+		$('#tapMENU').bind("click", function() {
+			if (open == false) {
+				open = true;
+				//		<a class="prodLink"><div>YOURMOM ></div></a>
+				var varToAppend = document.getElementById("JS-MBtopMenu");
+				var div = document.createElement("div");
+				div.setAttribute("id", "menuHolder");
+				for (var i = 0; i < links.length; i++) {
+					var a = document.createElement("a");
+					a.setAttribute("class", "prodLink");
+					a.setAttribute("href", links[i]);
+					a.setAttribute("target", "_blank");
+					var d = document.createElement("div");
+					dText = document.createTextNode(text[i]);
+					d.appendChild(dText);
+					a.appendChild(d);
+					div.appendChild(a);
+				}
+				varToAppend.appendChild(div);
+			} else {
+				open = false;
+				var i = document.getElementById("menuHolder");
+				i.parentNode.removeChild(i);
+			}
+		})
+	}
+
+	$('#searchField').keypress(function(e) {
+		if (e.which == 13) {
+			jQuery(this).blur();
+			jQuery('#searchMe').focus().click();
+		}
+	});
+
+	$('#searchField').blur(function() {
+		if (this.value == '') {
+			this.value = this.defaultValue;
+			$(this).addClass('default');
+		};
+	});
 	tags.retrieve();
 	config.sizesOfLabels();
 	$(document.getElementById("searchClear")).bind('click', function() {
@@ -136,7 +136,7 @@ $('#searchField').blur(function(){
 		//mmanager.hashContentManager.refresh();
 		tags.filtration = "";
 		elements.fullUpdate();
-		
+
 	});
 	$(document.getElementById("searchMe")).bind('click', function() {
 		console.log("CALLING");
@@ -152,7 +152,7 @@ $('#searchField').blur(function(){
 		}
 		elements.fullUpdate();
 	});
-			setSSE();
+	setSSE();
 	$(document.getElementById("insta")).bind('click', function() {
 		$("#modalInside").html("");
 		general.customModal({
@@ -195,9 +195,11 @@ $('#searchField').blur(function(){
 									//alert('Error occured');
 									$(".facebookInput").last().val("There was an error: " + response.error.message);
 								} else {
-									document.getElementById("modalInside").innerHTML = "<h3>Thanks for being awesome!</h3>";									
-									$("#modalDialogue").delay(1000).slideUp(400,function(){					document.getElementById("modalInside").innerHTML = "";});
-				
+									document.getElementById("modalInside").innerHTML = "<h3>Thanks for being awesome!</h3>";
+									$("#modalDialogue").delay(1000).slideUp(400, function() {
+										document.getElementById("modalInside").innerHTML = "";
+									});
+
 								}
 							});
 						});
@@ -218,7 +220,7 @@ $('#searchField').blur(function(){
 //array('access_token' => $this->access_token, 'message' => 'Playing around with FB Graph..')
 //          console.log(user);
 //         });
- /*	
+/*
  FB.ui({
  method: 'feed',
  name: 'This is the content of the "name" field.',
