@@ -814,9 +814,18 @@ InfoBubble.prototype.draw = function() {
 	var left = pos.x - arrowPosition;
 	//- (width * arrowPosition);
 	console.log(arrowPosition);
+	if(document.documentElement.clientWidth > 480){
+	
 	this.bubble_.style['top'] = this.px(top);
 	this.bubble_.style['left'] = this.px(left);
+	}else{
+//		console.log(pos.y);
+//		console.log(top);
+		this.bubble_.style['top'] = this.px(pos.y-	this.get('map').getDiv().offsetHeight + 17);
+//		this.bubble_.style['left'] = this.px(pos.x+2);	
+	this.bubble_.style['left'] = this.px(left);
 
+	}
 	var shadowStyle = parseInt(this.get('shadowStyle'), 10);
 
 	switch (shadowStyle) {
@@ -835,8 +844,8 @@ InfoBubble.prototype.draw = function() {
 			} else {
 				this.bubbleShadow_.style['top'] = this.px(pos.y + arrowSize);
 			}
-			this.bubbleShadow_.style['left'] = this.px(pos.x - width * arrowPosition);
-
+	
+			this.bubbleShadow_.style['left'] = this.px(pos.x - width * arrowPosition);			
 			this.bubbleShadow_.style['width'] = this.px(width);
 			this.bubbleShadow_.style['height'] = this.px(2);
 			break;
@@ -1005,7 +1014,6 @@ InfoBubble.prototype.panToView = function() {
 	var map = this.get('map');
 	var mapDiv = map.getDiv();
 	var mapHeight = mapDiv.offsetHeight;
-
 	var latLng = this.getPosition();
 	var centerPos = projection.fromLatLngToContainerPixel(map.getCenter());
 	var pos = projection.fromLatLngToContainerPixel(latLng);
@@ -1027,7 +1035,10 @@ InfoBubble.prototype.panToView = function() {
 	pos.x += 170;
 	}
 	else{
-		pos.x += 80;
+console.log(pos.x);
+console.log(centerPos.x);
+		pos.x+=Math.floor(document.documentElement.clientWidth*(2/7));
+		//pos.x += 140;
 	}
 	pos.y -= deltaY;
 	latLng = projection.fromContainerPixelToLatLng(pos);
@@ -1526,7 +1537,6 @@ InfoBubble.prototype.figureOutSize_ = function() {
 
 	maxWidth = Math.min(mapWidth, maxWidth);
 	maxHeight = Math.min(mapHeight, maxHeight);
-
 	var tabWidth = 0;
 	if (this.tabs_.length) {
 		// If there are tabs then you need to check the size of each tab's content
@@ -1541,7 +1551,7 @@ InfoBubble.prototype.figureOutSize_ = function() {
 			// Add up all the tab widths because they might end up being wider than
 			// the content
 			tabWidth += tabSize.width;
-
+			
 			if (height < tabSize.height) {
 				height = tabSize.height;
 			}
@@ -1565,27 +1575,26 @@ InfoBubble.prototype.figureOutSize_ = function() {
 		}
 		if (content) {
 			var contentSize = this.getElementSize_(content, maxWidth, maxHeight);
-
-			if (width < contentSize.width) {
-				width = contentSize.width;
-			}
-
-			if (height < contentSize.height) {
-				height = contentSize.height;
+			console.log(width+","+contentSize.width);
+			if(document.documentElement.clientWidth > 480){
+				if (width < contentSize.width) {
+					width = contentSize.width;
+				}
+				if (height < contentSize.height) {
+					height = contentSize.height;
+				}
 			}
 		}
 	}
+	console.log(width+","+ maxWidth);
 
 	if (maxWidth) {
 		width = Math.min(width, maxWidth);
 	}
-
 	if (maxHeight) {
 		height = Math.min(height, maxHeight);
 	}
-
 	width = Math.max(width, tabWidth);
-
 	if (width == tabWidth) {
 		width = width + 2 * padding;
 	}
@@ -1595,19 +1604,20 @@ InfoBubble.prototype.figureOutSize_ = function() {
 
 	// Maybe add this as a option so they can go bigger than the map if the user
 	// wants
-	if (width > mapWidth) {
-		width = mapWidth;
-	}
+	
+	//if (width > mapWidth) {
+	//	width = mapWidth;
+	//}
 
-	if (height > mapHeight) {
-		height = mapHeight - tabHeight;
-	}
+	//if (height > mapHeight) {
+	//	height = mapHeight - tabHeight;
+	//}
 
 	if (this.tabsContainer_) {
 		this.tabHeight_ = tabHeight;
 		this.tabsContainer_.style['width'] = this.px(tabWidth);
 	}
-
+console.log(width);
 	this.contentContainer_.style['width'] = this.px(width);
 	this.contentContainer_.style['height'] = this.px(height);
 };

@@ -1,7 +1,7 @@
 try {
 	google.maps.event.addDomListener(window, 'load', maps.initialize);
 } catch(e) {
-	console.log("Your maps, they seem to have failed to load.");
+	//console.log("Your maps, they seem to have failed to load.");
 }
 
 var links = ["http://www.asos.com/", "http://www.asos.com/", "http://www.asos.com/", "http://www.asos.com/"];
@@ -11,7 +11,7 @@ var currSel = "";
 var lastMessage = Date.now();
 
 function checkId() {
-	console.log(lastEventId - messageId);
+	//console.log(lastEventId - messageId);
 	if (lastEventId < messageId) {
 		return true;
 	}
@@ -21,17 +21,17 @@ function checkId() {
 function setSSE() {
 	var es = new EventSource("http://localhost:1337/events");
 	/*es.addEventListener("open", function(e) {
-	 console.log("Connected!");
+	 //console.log("Connected!");
 	 });
 	 es.addEventListener("error", function(e) {
-	 console.log("erroring");
+	 //console.log("erroring");
 	 });
 	 es.addEventListener("info", function(event) {
-	 console.log(event);
+	 //console.log(event);
 	 });*/
 	es.addEventListener("message", function(event) {
-		console.log(event);
-		console.log(Date.now());
+		//console.log(event);
+		//console.log(Date.now());
 		//		event = event.originalEvent;
 		//lastEventId = messageId;
 		if (parseInt(JSON.parse(event.data).timestamp, 10) > lastMessage) {
@@ -48,7 +48,7 @@ window.onload = function() {
 	var totalHeight = document.documentElement.clientHeight;
 	var contHeight = totalHeight - 165;
 	$("#SurroundContainer").css("height", contHeight+6);
-	$("#surrounder").css("height", contHeight - 30);
+	$("#surrounder").css("height", contHeight - 42);
 	var popUp = false;
 	
 
@@ -59,45 +59,82 @@ window.onload = function() {
 		img.setAttribute("id","pinImage");
 		img.setAttribute("src","images/pinInput.png");
 		$("#searchProxy").css("display","none");
-		$("#twitterButton").attr("src","twitMobi.html");
+		$("#twitterButton").prop("src","twitMobi.html");
 		$("#labelText").html("<p>ADD YOUR SPOT TO </p><p>THE MAP TO WIN A PRIZE</p>");
 		$("#socialProxy").append(img);
 		$("#socialProxy").append($("#blackOverlay").html());
 		$("#blackOverlay").html("");
 		
-		$("#map-overlay").first().css("top", (totalHeight - 100) + "px");
-		$("#SurroundContainer").css("height", totalHeight - 140);
-		$("#surrounder").css("height", totalHeight - 182);
+		$("#map-overlay").first().css("top", (totalHeight - 60) + "px");
+		$("#SurroundContainer").css("height", totalHeight - 120);
+		$("#surrounder").css("height", totalHeight - 172);
 		// don’t download complicated script
 		// use low-source images instead of full-source ones
 		$('#pinImage').click(function(){
-			//console.log("clicked");
+			////console.log("clicked");
 			$('#tagI').css("display","block");
 			$('#socialProxy').css("display","none");
 			$('#tagDiv').css("width",'');
 		});
-		$('#tagI').click(function(){
-			$('#tagDiv').css("width","100%");
-			$('#tagI').css("display","none");
-			$('#socialProxy').css("display","block");
-		});
+		
 		$('#map-overlay').click(function(e) {
 		if (popUp == false) {
 			popUp = true;
-			console.log(e);
+			//console.log(e);
 			e.stopPropagation();
 			e.preventDefault();
 			//rest of your logic will go here
 			$('#map-overlay').attr("class", "upWeGo");
-			$('#map-overlay').css("top", 150 + "px");
+			$('#map-overlay').css("top", 120 + "px");
 		}
 	});
+	/*
+	$$("#header").on("swipe", function(e){
+					if (popUp == true) {
+				popUp = false;
+				e.stopPropagation();
+				e.preventDefault();
+				//rest of your logic will go here
+				$('#map-overlay').attr("class", "upWeGo");
+				$('#map-overlay').css("top", (totalHeight - 40) + "px");
+
+			}
+		$('#map-overlay').click();
+		console.log("swiping");
+	});
+	$$("#header").on("drag", function(e){
+					if (popUp == true) {
+				popUp = false;
+				e.stopPropagation();
+				e.preventDefault();
+				//rest of your logic will go here
+				$('#map-overlay').attr("class", "upWeGo");
+				$('#map-overlay').css("top", (totalHeight - 40) + "px");
+
+			}
+		$('#map-overlay').click();
+		console.log("dragging");
+	});*/
 		$('#searchI').click(function(e){
 			$('#searchI').css("display","none");
 			$('#searchProxy').css("display","block");
 			$("#searchDiv").css("width","100%");
+			$('#tagI').css("display","block");
+			$('#socialProxy').css("display","none");
+			$('#tagDiv').css("width",'');			
 
 		})
+		
+		$('#tagI').click(function(){
+			$('#tagDiv').css("width","100%");
+			$('#tagI').css("display","none");
+			$('#socialProxy').css("display","block");
+			$("#searchProxy").css("display","none");
+			$("#searchI").css("display","block");
+			$("#searchDiv").attr("style","");
+		});
+		
+		
 		$('#map-canvas').click(function(e) {
 			$('#tagI').css("display","block");
 			$('#socialProxy').css("display","none");
@@ -105,7 +142,7 @@ window.onload = function() {
 			$("#searchProxy").css("display","none");
 			$("#searchI").css("display","block");
 			$("#searchDiv").attr("style","");
-			console.log(e);
+			//console.log(e);
 			if($("#menuHolder").length > 0){
 								open = false;
 				var i = document.getElementById("menuHolder");
@@ -117,7 +154,7 @@ window.onload = function() {
 				e.preventDefault();
 				//rest of your logic will go here
 				$('#map-overlay').attr("class", "upWeGo");
-				$('#map-overlay').css("top", (totalHeight - 100) + "px");
+				$('#map-overlay').css("top", (totalHeight - 40) + "px");
 
 			}
 		})
@@ -169,6 +206,8 @@ $('#searchField').focus(function() {
 	tags.retrieve();
 	config.sizesOfLabels();
 	$(document.getElementById("searchClear")).bind('click', function() {
+		$("#content").css("display","block");
+		$("#searchError").css("display","none");
 		document.getElementById("searchField").value = "";
 	//	if(document.documentElement.clientWidth > 480){
 			document.getElementById("searchClear").style.display = "none";
@@ -186,9 +225,11 @@ $('#searchField').focus(function() {
 
 	});
 	$(document.getElementById("searchMe")).bind('click', function() {
-		console.log("CALLING");
+		$("#content").css("display","block");
 		var stuff = $("#searchField").val();
-		console.log(stuff);
+		console.log($("#searchField").val().toUpperCase());
+		$("#header").text("SEARCH RESULTS");
+		console.log($("#header"));
 		if (tags.filtration != stuff) {
 			if (stuff == "") {
 				$("#searchClear").css("display", "none");
@@ -196,6 +237,7 @@ $('#searchField').focus(function() {
 				$("#searchClear").css("display", "block");
 			}
 			tags.filtration = stuff;
+			$("#searchContent").text(stuff.toUpperCase());
 		}
 		elements.fullUpdate();
 	});
@@ -209,15 +251,6 @@ $('#searchField').focus(function() {
 
 	});
 	$(document.getElementById("faceb")).bind('click', function() {
-		/*document.getElementById("facebookShare").preventDefault();
-		 FB.ui(
-		 {
-		 method: 'feed',
-		 name: 'This is the content of the "name" field.',
-		 caption: 'This is the content of the "caption" field.',
-		 description: 'This is the content of the "description" field, below the caption.',
-		 message: 'Things Testing'
-		 });*/
 		$("#modalInside").html("");
 		var inputToSend = "";
 		general.customModal({
@@ -265,7 +298,7 @@ $('#searchField').focus(function() {
 //'/me/feed/',
 //'post',
 //array('access_token' => $this->access_token, 'message' => 'Playing around with FB Graph..')
-//          console.log(user);
+//          //console.log(user);
 //         });
 /*
  FB.ui({
@@ -276,6 +309,6 @@ $('#searchField').focus(function() {
  caption: 'This is the content of the "caption" field.',
  description: 'This is the content of the "description" field, below the caption.',
  message: 'Testing Things'
- }, function(response){console.log(response)});
+ }, function(response){//console.log(response)});
  */
 
