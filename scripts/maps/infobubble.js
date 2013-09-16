@@ -1023,7 +1023,12 @@ InfoBubble.prototype.panToView = function() {
 		spaceTop *= -1;
 		deltaY = (spaceTop + spaceBottom) / 2;
 	}
+	if(document.documentElement.clientWidth > 480){
 	pos.x += 170;
+	}
+	else{
+		pos.x += 80;
+	}
 	pos.y -= deltaY;
 	latLng = projection.fromContainerPixelToLatLng(pos);
 

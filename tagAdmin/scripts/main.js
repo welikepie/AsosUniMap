@@ -309,6 +309,39 @@ function renderSingle(ins, appendIndex) {
 			}
 		}
 		input.appendChild(lats);
+		var labels = document.createElement("label");
+		labels.setAttribute("for",ins+"lal");
+		labels.setAttribute("class","lal");
+		labels.appendChild(document.createTextNode("Left Aligned : "));
+		input.appendChild(labels);
+		
+		var checker = document.createElement("input");
+		checker.setAttribute("type","checkbox");
+		checker.setAttribute("id",ins+"lal");
+		checker.setAttribute("class","checking");
+		input.appendChild(checker);
+		if(newCoordinates.hasOwnProperty(ins)){
+			console.log(newCoordinates[ins]);
+			if(newCoordinates[ins].hasOwnProperty("LeftAligned")){
+				
+				checker.setAttribute("checked",newCoordinates[ins]["LeftAligned"]);
+			}
+			else{
+				newCoordinates[ins]["LeftAligned"] = true;
+				checker.setAttribute("checked",true);
+			}
+		}
+		else{
+			newCoordinates[ins]={};
+		}
+
+		checker.onchange = function(){
+			newCoordinates[ins]["LeftAligned"] = document.getElementById(ins+"lal").checked;
+			console.log(newCoordinates);
+			if(document.getElementById("Lsave").style.display !="block"){
+				document.getElementById("Lsave").style.display = "block";
+			}
+		}
 		var lats = document.createElement("label");
 		lats.textContent = "Range (Km): ";
 		lats.setAttribute("class", "hashRangeLabel clearBoth");

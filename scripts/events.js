@@ -47,24 +47,41 @@ window.onload = function() {
 	var open = false;
 	var totalHeight = document.documentElement.clientHeight;
 	var contHeight = totalHeight - 165;
-	$("#SurroundContainer").css("height", contHeight);
-	$("#surrounder").css("height", contHeight - 12);
-	$('#searchField').focus(function() {
-		if (this.value == this.defaultValue) {
-			this.value = '';
-			$(this).removeClass('default');
-		};
-	});
+	$("#SurroundContainer").css("height", contHeight+6);
+	$("#surrounder").css("height", contHeight - 30);
 	var popUp = false;
-
+	
 
 	if (document.documentElement.clientWidth < 480) {
+		$("#searchProxy").append($("#search").html());
+		$("#search").html("");
+		var img = document.createElement("img");
+		img.setAttribute("id","pinImage");
+		img.setAttribute("src","images/pinInput.png");
+		$("#searchProxy").css("display","none");
+		$("#twitterButton").attr("src","twitMobi.html");
+		$("#labelText").html("<p>ADD YOUR SPOT TO </p><p>THE MAP TO WIN A PRIZE</p>");
+		$("#socialProxy").append(img);
+		$("#socialProxy").append($("#blackOverlay").html());
+		$("#blackOverlay").html("");
+		
 		$("#map-overlay").first().css("top", (totalHeight - 100) + "px");
-		$("#SurroundContainer").css("height", totalHeight - 170);
+		$("#SurroundContainer").css("height", totalHeight - 140);
 		$("#surrounder").css("height", totalHeight - 182);
 		// don’t download complicated script
 		// use low-source images instead of full-source ones
-			$('#map-overlay').click(function(e) {
+		$('#pinImage').click(function(){
+			//console.log("clicked");
+			$('#tagI').css("display","block");
+			$('#socialProxy').css("display","none");
+			$('#tagDiv').css("width",'');
+		});
+		$('#tagI').click(function(){
+			$('#tagDiv').css("width","100%");
+			$('#tagI').css("display","none");
+			$('#socialProxy').css("display","block");
+		});
+		$('#map-overlay').click(function(e) {
 		if (popUp == false) {
 			popUp = true;
 			console.log(e);
@@ -75,9 +92,25 @@ window.onload = function() {
 			$('#map-overlay').css("top", 150 + "px");
 		}
 	});
-		
+		$('#searchI').click(function(e){
+			$('#searchI').css("display","none");
+			$('#searchProxy').css("display","block");
+			$("#searchDiv").css("width","100%");
+
+		})
 		$('#map-canvas').click(function(e) {
+			$('#tagI').css("display","block");
+			$('#socialProxy').css("display","none");
+			$('#tagDiv').css("width",'');
+			$("#searchProxy").css("display","none");
+			$("#searchI").css("display","block");
+			$("#searchDiv").attr("style","");
 			console.log(e);
+			if($("#menuHolder").length > 0){
+								open = false;
+				var i = document.getElementById("menuHolder");
+				i.parentNode.removeChild(i);
+			}
 			if (popUp == true) {
 				popUp = false;
 				e.stopPropagation();
@@ -88,7 +121,7 @@ window.onload = function() {
 
 			}
 		})
-		$('#tapMENU').bind("click", function() {
+		/*$('#tapMENU').bind("click", function() {
 			if (open == false) {
 				open = true;
 				//		<a class="prodLink"><div>YOURMOM ></div></a>
@@ -112,9 +145,14 @@ window.onload = function() {
 				var i = document.getElementById("menuHolder");
 				i.parentNode.removeChild(i);
 			}
-		})
+		})*/
 	}
-
+$('#searchField').focus(function() {
+		if (this.value == this.defaultValue) {
+			this.value = '';
+			$(this).removeClass('default');
+		};
+	});
 	$('#searchField').keypress(function(e) {
 		if (e.which == 13) {
 			jQuery(this).blur();
@@ -132,7 +170,16 @@ window.onload = function() {
 	config.sizesOfLabels();
 	$(document.getElementById("searchClear")).bind('click', function() {
 		document.getElementById("searchField").value = "";
-		document.getElementById("searchClear").style.display = "none";
+	//	if(document.documentElement.clientWidth > 480){
+			document.getElementById("searchClear").style.display = "none";
+	//	}
+	//	else{
+//			$("#searchProxy").css("display","none");
+//			$("#searchI").css("display","block");
+//			$("#searchDiv").attr("style","");
+	//	}
+		
+		
 		//mmanager.hashContentManager.refresh();
 		tags.filtration = "";
 		elements.fullUpdate();

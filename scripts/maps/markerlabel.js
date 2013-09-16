@@ -304,13 +304,24 @@ MarkerLabel_.prototype.setAnchor = function () {
  */
 MarkerLabel_.prototype.setPosition = function () {
   var position = this.getProjection().fromLatLngToDivPixel(this.marker_.getPosition());
+  //console.log();
+ //if($(this.labelDiv_).attr("class") == "size-xs")
+  	
   
-  this.labelDiv_.style.left = position.x + "px";
-  this.labelDiv_.style.top = position.y + "px";
+  if(this.marker_.side == false){
+  	this.labelDiv_.style.left = (position.x - Math.floor(($(this.labelDiv_).width()/5)*5))+ "px";  	
+  }
+  else{
+  	this.labelDiv_.style.left = (position.x- Math.floor($(this.labelDiv_).width()/5)) + "px";
+  }
+  
+  //console.log($(this.labelDiv_).width()+","+$(this.labelDiv_).height())
+
+  this.labelDiv_.style.top = position.y - Math.floor((($(this.labelDiv_).height())/3) * 2 ) + "px";
   this.eventDiv_.style.left = this.labelDiv_.style.left;
   this.eventDiv_.style.top = this.labelDiv_.style.top;
-
   this.setZIndex();
+
 };
 
 /**
