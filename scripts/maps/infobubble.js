@@ -813,14 +813,14 @@ InfoBubble.prototype.draw = function() {
 
 	var left = pos.x - arrowPosition;
 	//- (width * arrowPosition);
-	console.log(arrowPosition);
+	//console.log(arrowPosition);
 	if(document.documentElement.clientWidth > 480){
 	
 	this.bubble_.style['top'] = this.px(top);
 	this.bubble_.style['left'] = this.px(left);
 	}else{
-//		console.log(pos.y);
-//		console.log(top);
+//		//console.log(pos.y);
+//		//console.log(top);
 		this.bubble_.style['top'] = this.px(pos.y-	this.get('map').getDiv().offsetHeight + 17);
 //		this.bubble_.style['left'] = this.px(pos.x+2);	
 	this.bubble_.style['left'] = this.px(left);
@@ -952,7 +952,7 @@ InfoBubble.prototype.open_ = function(opt_map, opt_anchor) {
 			that.panToView();
 			twttr.widgets.load();
 			/*    if(that.content.attributes.childNodes().indexOf("data-opened") == -1){
-			 console.log("LOADING");
+			 //console.log("LOADING");
 			 //      	      twttr.widgets.load();
 			 }
 			 var longish = document.getElementsByClassName("openedTweet");*/
@@ -1035,8 +1035,8 @@ InfoBubble.prototype.panToView = function() {
 	pos.x += 170;
 	}
 	else{
-console.log(pos.x);
-console.log(centerPos.x);
+//console.log(pos.x);
+//console.log(centerPos.x);
 		pos.x+=Math.floor(document.documentElement.clientWidth*(2/7));
 		//pos.x += 140;
 	}
@@ -1575,7 +1575,7 @@ InfoBubble.prototype.figureOutSize_ = function() {
 		}
 		if (content) {
 			var contentSize = this.getElementSize_(content, maxWidth, maxHeight);
-			console.log(width+","+contentSize.width);
+			//console.log(width+","+contentSize.width);
 			if(document.documentElement.clientWidth > 480){
 				if (width < contentSize.width) {
 					width = contentSize.width;
@@ -1586,7 +1586,7 @@ InfoBubble.prototype.figureOutSize_ = function() {
 			}
 		}
 	}
-	console.log(width+","+ maxWidth);
+	//console.log(width+","+ maxWidth);
 
 	if (maxWidth) {
 		width = Math.min(width, maxWidth);
@@ -1617,7 +1617,7 @@ InfoBubble.prototype.figureOutSize_ = function() {
 		this.tabHeight_ = tabHeight;
 		this.tabsContainer_.style['width'] = this.px(tabWidth);
 	}
-console.log(width);
+//console.log(width);
 	this.contentContainer_.style['width'] = this.px(width);
 	this.contentContainer_.style['height'] = this.px(height);
 };
