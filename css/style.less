@@ -6,6 +6,7 @@
 @black : #000000;
 @white : #FFFFFF;
 @offwhite : #CCCCCC;
+@offblue : #38a6b0;
 @red : #ec715f;
 @green : #bdcf23;
 @gray : #888888;
@@ -37,6 +38,7 @@ html {
     }
 #JS-facebookInput{display:none; width:0px; height:0px;}
 #JS-instaInput{display:none; width:0px; height:0px;}
+#JS-MoreInfo{display:none; width:0px; height:0px;}
 #modalDialogue{
     display:none;
 position: absolute;
@@ -46,12 +48,12 @@ background-color: @yellow;
 border-bottom:1px solid @blue;
 box-shadow: 0px 0px 5px @gray;
 #modalInside{
-        height:225px;
+//        height:225px;
         display:block;
         margin:0 auto;
         max-width:420px;
        // font-family:"futura-pt-1","futura-pt-2", sans-serif;
-        padding-bottom:20px;
+        padding:0px 8px 20px 8px;
     .relationImage{
         width:40px;
         height:40px;
@@ -69,10 +71,19 @@ box-shadow: 0px 0px 5px @gray;
             margin-top:20px;
         }
         .subHeading{
+            font-size:15px;
             clear:both;
             float:left;
             margin:0px;
         }
+        .subHeadingP{
+            font-size:15px;
+            clear:both;
+            float:left;
+            margin:0px;
+        margin-top:16px;
+        }
+
     .facebookInput{
                 padding:6px;
                 box-sizing: border-box;
@@ -105,21 +116,22 @@ box-shadow: 0px 0px 5px @gray;
             float:right;
             cursor:pointer;
             margin-right:0px;
-
+            margin-bottom:20px;
+            margin-top:8px;
         }
         #modalConfirm{
             clear:left;
             background-color:@green;
             border:none;
-            margin:0px;
             padding:10px;
+            margin-bottom:20px;
+            
         //    font-family: "futura-pt-1","futura-pt-2", sans-serif;
             font-weight:bold;
             font-size:15px;
             color: @white;
             float:right;
             cursor:pointer;
-            margin-right:0px;
 
         }
         #modalDeny{
@@ -131,6 +143,7 @@ box-shadow: 0px 0px 5px @gray;
             background: none;
             margin-top: 10px;
             margin-right:10px;
+            margin-bottom:20px;
             }
             #modalDeny:hover{
                 cursor:pointer;
@@ -421,15 +434,20 @@ box-shadow: 0px 0px 5px @gray;
             background-color: @red;
             float:left;
             .btn-o{}
-                        .count-o{
+            .count-o{
                 display:none;
                 }
 
             .btn-o > a {
                 text-decoration:none;
                 #l{display:none;float:left;}
+                            
                             .intBorder{
-                                height:40px;
+                                background-image:url("../images/twittr.png");
+                            background-repeat:no-repeat;
+                            //
+                            background-position:center top;
+                            height:40px;
                                 width:98px;
                                 background-color: @red;
                                 margin-top:0px;
@@ -440,8 +458,16 @@ box-shadow: 0px 0px 5px @gray;
                                     margin-right: auto;
                                     margin-bottom:5px;
                                     border: none;
+                                    width: 25px;
+                                    height: 25px;
+                                    background-image:url("../images/twittr.png");
+                                    image-decoration:none;
                                     }
                          .contText{
+                             
+                             top: 30px;
+                            position: relative;
+
                       //  font-family: "futura-pt-1","futura-pt-2" , sans-serif;
                          font-size:10px;
                          color:@white;
@@ -471,6 +497,11 @@ box-shadow: 0px 0px 5px @gray;
                 text-decoration:none;
                 #l{display:none;float:left;}
                             .intBorder{
+                            background-image:url("../images/twittr.png");
+                            background-repeat:no-repeat;
+                          background-position:center top;
+
+
                                 height:40px;
                                 width:120px;
                                 background-color: @black;
@@ -482,8 +513,14 @@ box-shadow: 0px 0px 5px @gray;
                                     margin-right: auto;
                                     margin-bottom:5px;
                                     border: none;
+                                    width: 25px;
+                                    height: 25px;
+                                    
                                     }
-                                             .contText{
+                                             
+                                            .contText{
+                                            top: 30px;
+                                            position: relative;
                       //                           font-family: "futura-pt-1","futura-pt-2" , sans-serif;
                                              font-size:10px;
                                              color:@white;
@@ -505,11 +542,31 @@ box-shadow: 0px 0px 5px @gray;
                   top:0px;
                   bottom:30px;
                   background-color:#54bec6 !important;
+                  #sidebarChunk{
+                      width: 35px;
+                        height: 1000px;
+                        background-color: @offblue;
+                        //z-index: 89;
+                        position: absolute;
+                        left: 0px;
+                        a{
+                            width: 35px;
+                            height: 35px;
+                            display: block;
+                            margin-top: 20px;
+                            background-image:url("../images/homeOn.png");
+                            background-repeat:no-repeat;
+                            background-position:center;
+                            }
+                            a:hover{
+                                background-image:url("../images/homeOff.png");
+                                }
+                    }
               }
               #overlayImage{
                   cursor:pointer;
                   position:absolute;
-                  left:20px;
+                  left:60px;
                   top:20px;
                   }
             #overlayAsosImage{
@@ -524,18 +581,32 @@ box-shadow: 0px 0px 5px @gray;
                   height:60px;
                   background-color: @black;
                  overflow:hidden;
+                div{
+                    float:left;
+                    }
                  #labelText{
                      text-transform:uppercase;
                       //font-family:"futura-pt-1","futura-pt-2", sans-serif;
-                      font-weight:bold;
                       font-size:24px;
                       color:@white;
                       margin-top:16px;
                       margin-left: 20px;
                       float:left;
+                     #JS-bbMoreInfo{
+                         cursor:pointer;
+                         margin:8px 0 0 5px;
+                         float:left;
+                         font-size:15px;
+                         text-decoration:underline;
+                         color:@white;
+                         text-transform:none;
+                     }
                       }
                      #socialMedia{
+                         background-color:@black;
                          float:right;
+                         position:absolute;
+                         right:0px;
                     //     font-family: "futura-pt-1","futura-pt-2" , sans-serif;
                          font-size:10px;
                          img{
@@ -564,13 +635,19 @@ box-shadow: 0px 0px 5px @gray;
                              float:left; 
                              color:@white;
                             .intBorder{
+                          //  background-image:url("../images/twittr.png");
+                        //    background-repeat:no-repeat;
+                          //  background-position:center top;
+
                                 height:40px;
+                                width:123px;
                                 background-color: @black;
                                 margin-top:0px;
                                 border-right:1px solid #a5a5a5;
                                 cursor:pointer;
                                 img{
                                     border: none;
+                                    background-image:url("../images/twittr.png");
                                     }
                                 }
                          }
@@ -810,6 +887,13 @@ box-shadow: 0px 0px 5px @gray;
   overflow:hidden;
   
   min-width:200px;
+  
+           #map-canvas { 
+               
+                      #sidebarChunk{
+                      display:none;
+                      }
+               }
         #tagDiv{
 //            width:100%;
             display:block;
@@ -843,6 +927,7 @@ box-shadow: 0px 0px 5px @gray;
                           }
                       }
                      #socialMedia{
+                         background-color:@red;
                          width:320px;
                          margin:0 auto;
                         clear:both;
@@ -868,7 +953,8 @@ box-shadow: 0px 0px 5px @gray;
                             cursor:pointer;
                             }
                          .contText{
-                             clear:left;
+               
+                            clear:left;
                              float:left;
                              margin:0 auto;
                              width:100%;
@@ -883,13 +969,18 @@ box-shadow: 0px 0px 5px @gray;
                              float:left; 
                              color:@white;
                             .intBorder{
-                                height:40px;
+                          //  background-image:url("../images/twittr.png");
+                        //    background-repeat:no-repeat;
+                        //background-position:;
+
+                            height:40px;
                                 background-color: @red;
                                 margin-top:0px;
                                 border-right:1px solid @white;
                                 cursor:pointer;
                                 img{
                                     border: none;
+                                    background-image:url("../images/twittr.png");
                                     }
                                 }
                          }
@@ -921,6 +1012,7 @@ box-shadow: 0px 0px 5px @gray;
         #searchProxy{
             width:100%;
 //                        width:inherit;
+                        overflow:hidden;
                         float:left;
                         margin-bottom:10px;
                         background-color:@red;
@@ -941,7 +1033,6 @@ box-shadow: 0px 0px 5px @gray;
                         color:white;
                         float:left;
                         border:0px;
-                        width:220px;
                         height:23px;
                         margin-bottom:5px;
                         margin-top:5px;

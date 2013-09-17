@@ -102,6 +102,13 @@ var maps = {
 		}
 		maps.map = new google.maps.Map(tpht.getById("map-canvas"), mapOptions);
 
+		
+if(document.documentElement.clientWidth > 480){		
+google.maps.event.addListener(maps.map, 'tilesloaded', function() {
+  // Visible tiles loaded!
+		});
+	
+}
 		var myLatLng = new google.maps.LatLng(49.5, -4.6);
 
 		var beachMarker = new google.maps.Marker({
@@ -112,8 +119,7 @@ var maps = {
 			zIndex : 500
 		});
 		beachMarker.setMap(maps.map);
-		
-		
+
 		google.maps.event.addListener(maps.map, 'zoom_changed', function() {
 			if(maps.map.getZoom() > config.startZoom){
 				$("#overlayImage").attr("src","images/fontSmall.png")
@@ -215,6 +221,19 @@ var maps = {
 			//}
 		});
 		google.maps.event.addListenerOnce(maps.map, 'idle', function() {
+					  if($("#map-canvas > #sidebarChunk").length == 0){
+		  var divToAdd = document.createElement("div");
+				$(divToAdd).attr("id","sidebarChunk");
+				var divAdd = document.createElement("a");
+				$(divAdd).attr("href","http://www.asos.com/130909-Students-Hub/Cat/pgehtml.aspx?cid=18342&full_site=yes");
+				$(divAdd).attr("target","_blank");
+				$(divAdd).attr("id","homeButton");
+				divToAdd.appendChild(divAdd);
+				$("#map-canvas").children().first().append(divToAdd);
+				console.log($("#map-canvas").children().first());	
+				$(".gmnoprint").css("z-index","1");
+		}
+
 			// do something only the first time the map is loaded
 			var bounds = maps.map.getBounds();
 			maps.oldBounds = bounds;
@@ -1505,6 +1524,13 @@ var general = {
 			}
 			content.appendChild(decline);
 		}
+		if(opts.padded == true){
+	$("#modalDialogue").find(".textContainer").first().css("padding-left","50px");
+			}
+			else{
+				$("#modalDialogue").find(".textContainer").first().css("padding","0px");
+			}
+
 		$("#modalDialogue").slideDown();
 	},
 	"updateSinglePoint" : function() {

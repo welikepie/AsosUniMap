@@ -1,8 +1,4 @@
-try {
-	google.maps.event.addDomListener(window, 'load', maps.initialize);
-} catch(e) {
-	//console.log("Your maps, they seem to have failed to load.");
-}
+
 
 var links = ["http://www.asos.com/", "http://www.asos.com/", "http://www.asos.com/", "http://www.asos.com/"];
 var text = ["EXPLORE >", "WATCH >", "SHOP >", "WIN >"];
@@ -54,12 +50,15 @@ window.onload = function() {
 
 	if (document.documentElement.clientWidth < 480) {
 		$("#searchProxy").append($("#search").html());
+
 		$("#search").html("");
 		var img = document.createElement("img");
 		img.setAttribute("id","pinImage");
 		img.setAttribute("src","images/pinInput.png");
 		$("#searchProxy").css("display","none");
 		$("#twitterButton").prop("src","twitMobi.html");
+					document.getElementById("twitterButton").contentWindow.location.reload();
+
 		$("#labelText").html("<p>ADD YOUR SPOT TO </p><p>THE MAP TO WIN A PRIZE</p>");
 		$("#socialProxy").append(img);
 		$("#socialProxy").append($("#blackOverlay").html());
@@ -242,11 +241,21 @@ $('#searchField').focus(function() {
 		elements.fullUpdate();
 	});
 	setSSE();
+		$(document.getElementById("JS-bbMoreInfo")).bind('click', function() {
+		$("#modalInside").html("");
+		general.customModal({
+			"type" : "alert",
+			"message" : document.getElementById("JS-MoreInfo").innerHTML,
+			"padded" : false
+		});
+	});
+	
 	$(document.getElementById("insta")).bind('click', function() {
 		$("#modalInside").html("");
 		general.customModal({
 			"type" : "alert",
-			"message" : document.getElementById("JS-instaInput").innerHTML
+			"message" : document.getElementById("JS-instaInput").innerHTML,
+			"padded" : true
 		});
 
 	});
@@ -256,6 +265,7 @@ $('#searchField').focus(function() {
 		general.customModal({
 			"type" : "dialog",
 			"message" : document.getElementById("JS-facebookInput").innerHTML,
+			"padded" : true,
 			"confirm" : function() {
 				inputToSend = $(".facebookInput").last().val();
 				FB.login(function(response) {
@@ -311,4 +321,9 @@ $('#searchField').focus(function() {
  message: 'Testing Things'
  }, function(response){//console.log(response)});
  */
+try {
+	google.maps.event.addDomListener(window, 'load', maps.initialize);
+} catch(e) {
+	//console.log("Your maps, they seem to have failed to load.");
+}
 
