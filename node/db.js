@@ -1,7 +1,16 @@
 var mysql = require('mysql');
 exports.mysql = mysql;
 exports.connection = mysql.createConnection({
-
+  host     : 'dev.welikepie.com',
+  user     : 'alex',
+  password : 'Sannevanwel1j',
+  database : 'asosUniMap',
+  charset:'UTF8_GENERAL_CI'
+/*host: "localhost",
+user: "root",
+password: "alpine",
+database: "asosUniMap",
+charset: "UTF8_GENERAL_CI"*/
 });
 exports.formatDate = function(date1) {
 var t = new Date(date1);

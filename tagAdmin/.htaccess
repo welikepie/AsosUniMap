@@ -1,5 +1,5 @@
-#AuthUserFile C:\xampp\htdocs\aptana\AsosUniMap\tagAdmin\.htpasswd
-AuthUserFile /srv/Websites/asosUniMap/tagAdmin/.htpasswd
+AuthUserFile C:\xampp\htdocs\aptana\AsosUniMap\tagAdmin\.htpasswd
+#AuthUserFile /srv/Websites/asosUniMap/tagAdmin/.htpasswd
 #AuthGroupFile /dev/null
 AuthName "Admin Area"
 AuthType Basic

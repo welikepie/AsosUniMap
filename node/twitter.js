@@ -8,7 +8,7 @@ db.connection.connect();
 var taggeth = JSON.parse(fs.readFileSync("tags.json"));
 credentials.tags = taggeth.data;
 //console.log(credentials.tags.campaign);
-//console.log("thing");
+console.log("starting");
 //console.log( typeof (t));
 t = new twitter({
 	consumer_key : credentials.credentials.consumer_key,
@@ -20,7 +20,7 @@ t = new twitter({
 startStream();
 function startStream() {
 	console.log("streaming");
-	console.log(credentials.tags.location);
+	console.log(credentials.tags.location.length);
 	t.stream('statuses/filter', {
 		//track : credentials.tags.campaign
 		track : credentials.tags.location

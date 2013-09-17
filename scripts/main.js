@@ -292,19 +292,18 @@ var mmanager = {
 			//			new Marker
 			//console.log(tags.markerTagsNoGeo[zed].length);
 			if (tags.markerTagsNoGeo[zed].length > 0) {
-
-				var marker = new google.maps.Marker({
-					"position" : new google.maps.LatLng(tags.locations[zed].latitude, tags.locations[zed].longitude),
-					"map" : maps.map,
-					"icon" : "",
+var marker = new MarkerWithLabel({
+					position : new google.maps.LatLng(tags.locations[zed].latitude, tags.locations[zed].longitude),
 					"zIndex" : 8999,
-					"disableAutoPan" : true,
+					map: maps.map,
+					labelContent : tags.markerTagsNoGeo[zed].length,
+					labelAnchor : new google.maps.Point(0, 0),
+					labelClass : "counted", // the CSS class for the label
+					icon : "images/homeOn.png"
 				});
 
 				if (tags.markerTagsNoGeo[zed].length == 1) {
-					marker.icon = "images/singleLocation.png";
-				} else {
-					marker.icon = "images/multiLocation.png";
+					marker.labelClass = "singles";
 				}
 				
 				var divCont = document.createElement("div");
