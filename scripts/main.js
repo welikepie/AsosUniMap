@@ -1534,7 +1534,13 @@ var general = {
 		$("#modalDialogue").slideDown();
 	},
 	"updateSinglePoint" : function() {
-		var extraString = "twitButton.html#type=hashtag&count=none";
+		if(document.documentElement.clientWidth < 480){
+			var extraString = "twitMobi.html";
+		}
+		else{
+			var extraString = "twitButton.html";
+		}
+		extraString += "#type=hashtag&count=none";
 		if (tags.inBound.length > 0) {
 			var center = maps.map.getCenter().toString().replace(/[()]/g, "").split(",");
 			////////console.log(center);
