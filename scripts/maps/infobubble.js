@@ -834,8 +834,9 @@ InfoBubble.prototype.draw = function() {
 	}else{
 //		//console.log(pos.y);
 //		//console.log(top);
-		this.bubble_.style['top'] = this.px(pos.y-	this.get('map').getDiv().offsetHeight + 17);
-//		this.bubble_.style['left'] = this.px(pos.x+2);	
+		//this.bubble_.style['top'] = this.px(pos.y-	this.get('map').getDiv().offsetHeight + 17);
+//		this.bubble_.style['left'] = this.px(pos.x+2);
+	this.bubble_.style['top'] = this.px(top);	
 	this.bubble_.style['left'] = this.px(left);
 
 	}
@@ -1589,14 +1590,14 @@ InfoBubble.prototype.figureOutSize_ = function() {
 		if (content) {
 			var contentSize = this.getElementSize_(content, maxWidth, maxHeight);
 			//console.log(width+","+contentSize.width);
-			if(document.documentElement.clientWidth > 480){
+			//if(document.documentElement.clientWidth > 480){
 				if (width < contentSize.width) {
-					width = contentSize.width;
+				//	width = contentSize.width;
 				}
 				if (height < contentSize.height) {
 					height = contentSize.height;
 				}
-			}
+			//}
 		}
 	}
 	//console.log(width+","+ maxWidth);
@@ -1633,6 +1634,9 @@ InfoBubble.prototype.figureOutSize_ = function() {
 //console.log(width);
 	this.contentContainer_.style['width'] = this.px(width);
 	this.contentContainer_.style['height'] = this.px(height);
+	if(this.type!=undefined){
+		$(".lister").css("height",(height-35)+"px")
+	}
 };
 
 /**
