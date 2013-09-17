@@ -9,6 +9,7 @@
 @offblue : #38a6b0;
 @red : #ec715f;
 @green : #bdcf23;
+@grass : #cad555; //the most polite way to name the colour.
 @gray : #888888;
 @offblacktoyellow : #1C1C1B;
 *, *:before, *:after {
@@ -61,7 +62,8 @@ box-shadow: 0px 0px 5px @gray;
         top:20px;
         margin-right:20px;
         }
-    .textContainer{
+    
+    .Container{
         padding-left:50px;
     .heading{
         float:left;
@@ -336,27 +338,64 @@ box-shadow: 0px 0px 5px @gray;
    }
    .labelRoot{
        background-color:@yellow !important; 
-       }
-            .infoBox{               
+    }
+    .noGeoLoc{
+        margin-left: -10px;
+        padding-left: 10px;
+        background-color: green;
+        margin-top: -10px;
+        margin-right: 10px;
+        height: 20px;
+        text-transform: uppercase;
+        font-family: "futura-pt-1","futura-pt-2",sans-serif !important;
+        font-size: 13px;
+        line-height: 20px;
+        background-color:@grass;
+    }
+    .lister{
+        .noGeoHeading{
+                margin:0px;
+                text-transform:uppercase;
+            }
+        width:100%;
+        overflow-y:scroll;
+        float:left;
+        height:200px;
+        }
+            ul{
+                width:100%;
                 float:left;
+                list-style:none;
+                padding-left:0px;
+                li{
+                    width:100%;
+                    float:left;
+                    padding:5px 0px 5px 0px;
+                    border-bottom:1px solid @black;
+                    //border-bottom:1px solid @offblacktoyellow;
+                    
+                    }
+                }
+            .infoBox, li{               
+                            float:left;
                             .socialLinkage{
                                 float:left;
                                 text-decoration:none;
                                 color: @black;
-                                width:290px;
+                                width:100%;
                             }
-                                .topDiv{
+                            .topDiv{
                                     float:left;
                                     font-family: "futura-pt-1","futura-pt-2", sans-serif;
                                     width:100%;
-                                 padding-bottom:10px;
-                                 border-bottom: 1px solid @black;
+                    //                padding-bottom:10px;
+                    //                border-bottom: 1px solid @black;
                                     margin-bottom:10px;
-                                    .twitter-follow-button{
+                                .twitter-follow-button{
                                         float: right;
                                         height: 20px;
                                         margin-top: 20px;
-                                        }
+                                    }
                                     .names{
                                         float:left;
                                         .userNameTag{
@@ -368,7 +407,7 @@ box-shadow: 0px 0px 5px @gray;
                                             }
                                         
                                         .nameContainer{
-                                            margin-bottom:10px;
+                                            //margin-bottom:10px;
                                             padding-bottom:5px;
                                             float:left;
                                             border-bottom:3px solid @black;
@@ -389,6 +428,7 @@ box-shadow: 0px 0px 5px @gray;
                                         }
                                     }
                                 .bottomDiv{
+                                    width:100%;
                                     font-family: "futura-pt-1","futura-pt-2", sans-serif;
                                     font-size:14px;
                                     line-height:14px;
@@ -405,10 +445,11 @@ box-shadow: 0px 0px 5px @gray;
                                             font-family: "futura-pt-1","futura-pt-2", sans-serif;
                                     font-size:14px;
                                     line-height:14px;
-                                            text-overflow: ellipsis;
-                                            width: 130px;
-                                            float: left;
+                                        text-overflow: ellipsis;
                                             overflow: hidden;
+                                        width: 130px;
+                                            float: left;
+                                        
                                         }
                                     .text{
                                         font-family: "futura-pt-1","futura-pt-2", sans-serif;
@@ -416,7 +457,9 @@ box-shadow: 0px 0px 5px @gray;
                                     line-height:14px;
                                         clear:both;
                                         float:left;
-                                        width:280px;}
+                                        text-overflow: ellipsis;
+                                            overflow: hidden;
+                                        width:100%;}
                                     
                                     }
                 
@@ -500,8 +543,6 @@ box-shadow: 0px 0px 5px @gray;
                             background-image:url("../images/twittr.png");
                             background-repeat:no-repeat;
                           background-position:center top;
-
-
                                 height:40px;
                                 width:120px;
                                 background-color: @black;
@@ -796,13 +837,11 @@ box-shadow: 0px 0px 5px @gray;
                                 float:left;
                                 text-decoration:none;
                                 color:@black;
-                                
                             }
                                 .topDiv{
                                     float:left;
-              //                      font-family:"futura-pt-1","futura-pt-2", sans-serif;
+              // font-family:"futura-pt-1","futura-pt-2",sans-serif;
                                     margin-bottom:10px;
-                                    //
                                     .names{
                                         float:left;
                                         .userNameTag{
@@ -812,9 +851,8 @@ box-shadow: 0px 0px 5px @gray;
                                             margin:0px;
                                             display:block;
                                             }
-                                        
                                         .nameContainer{
-                                            margin-bottom:10px;
+                                          //  margin-bottom:10px;
                                             padding-bottom:5px;
                                             float:left;
                                             border-bottom:3px solid @black;
@@ -860,6 +898,8 @@ box-shadow: 0px 0px 5px @gray;
                                     font-size:14px;
                                     line-height:14px;
                                         clear:both;
+                                        text-overflow: ellipsis;
+                                            overflow: hidden;
                                         float:left;}
                                     
                                     }
@@ -874,7 +914,7 @@ box-shadow: 0px 0px 5px @gray;
 @media screen and (max-width: 480px) {
     html{
         overflow:hidden;
-        .infoBox{
+        .infoBox, ul{
             width:100%;
             .socialLinkage{
                 width:100%;
@@ -1172,7 +1212,9 @@ box-shadow: 0px 0px 5px @gray;
                                         width:90% !important;
                                         }
                                     .text{
-                                        width:280px;
+                                        text-overflow: ellipsis;
+                                            overflow: hidden;
+                                        width:100%;
                                         margin-top:10px;
                                         width:90% !important;
                                         }

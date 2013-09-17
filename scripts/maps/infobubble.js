@@ -35,10 +35,14 @@
 function InfoBubble(opt_options) {
 	this.extend(InfoBubble, google.maps.OverlayView);
 	this.tabs_ = [];
+	this.type = null;
+	if(opt_options["type"]!= undefined){
+		this.type = opt_options["type"];
+	}
 	this.activeTab_ = null;
 	this.baseZIndex_ = 100;
 	this.isOpen_ = false;
-
+	
 	var options = opt_options || {};
 
 	if (options['backgroundColor'] == undefined) {
@@ -223,6 +227,15 @@ InfoBubble.prototype.buildDom_ = function() {
 	contentContainer.style['position'] = 'relative';
 
 	var content = this.content_ = document.createElement('DIV');
+	if(this.type!=null){
+			var HeadBar = document.createElement("div");
+			HeadBar.setAttribute("class","noGeoLoc");
+			$(HeadBar).text("no geo location for these spots");
+			contentContainer.appendChild(HeadBar);
+			console.log(HeadBar);
+	}
+	//console.log(content);
+	
 	contentContainer.appendChild(content);
 
 	// Arrow
