@@ -882,7 +882,8 @@ var tags = {
 var elements = {
 	"fullUpdate" : function() {
 		var ins = $(".sideBar");
-		////////console.log(ins);
+		console.log(ins.length);
+		//////console.log(ins);
 		//////console.log(tags.inBound);
 		//////console.log(tags.optionaltags);
 		var comparator;
@@ -948,21 +949,23 @@ if (mmanager.hashContentManager != null && tags.filtration.length > 0) {
 				////////console.log(ins[i]);
 				if (Object.prototype.hasOwnProperty.call(ins, i)) {
 					var content = "";
-					if ($(ins[i]).has(".textWithImg")) {
-						content = $(ins[i]).has(".textWithImg").first().text();
+					if ($(ins[i]).data("textcontent")!="") {
+						//console.log("twit");
+						//console.log();
+						content = $(ins[i]).data("textcontent");//$(ins[i]).(".e-entry-answer").first().text();
 					}
-					if ($(ins[i]).has(".text")) {
-						content = $(ins[i]).has(".text").first().text();
-					} 
-					if ($(ins[i]).has(".e-entry-answer")) {
-						content = $(ins[i]).has(".e-entry-answer").first().text();
+					else{
+						console.log($(ins[i]));
 					}
+					
 					if (tags.filtration != "") {
 						//console.log("filtering");
+						console.log(content);
 						if (tags.inString(content, tags.filtration) == false) {
 							$(ins[i]).css("display", "none");
 						} else {
 							match = 1;
+							disp++;
 							$(ins[i]).css("display", "block");
 						}
 					} else if (tags.inBound.length > 0) {
@@ -982,16 +985,16 @@ if (mmanager.hashContentManager != null && tags.filtration.length > 0) {
 					}
 				}
 			}
-			//////console.log("and out the other side");
-			//////console.log(disp);
+			console.log("and out the other side");
+			console.log(disp);
 			//////console.log(tags.filtration);
 			if (disp < 5) {
-				for (var zeds in tags.DOMrender) {
+				for (var zeds = 0; zeds <= tags.DOMrender.length; zeds++){
 					////////console.log(tags.DOMrender[zeds]);
-					if (disp >= 5) {
-										$("#content").css("display","block");
+					if (disp >= 5 || zeds == tags.DOMrender.length) {
+				$("#content").css("display","block");
 				$("#searchError").css("display","none");
-
+						twttr.widgets.load();
 						return;
 					} else if (tags.filtration.length > 0) {
 						////////console.log("searching");
@@ -1051,6 +1054,7 @@ if (mmanager.hashContentManager != null && tags.filtration.length > 0) {
 			$(insLI).attr("data-rel-hashtag", obj.hashtag.replace(/#/g, ""));
 			$(insLI).attr("data-timestamp", obj.time);
 			$(insLI).attr("data-rel-source", obj.src);
+			$(insLI).attr("data-textContent",obj.text);
 			if (hidden == true) {
 				$(insLI).css("display", "none");
 			}
@@ -1086,6 +1090,7 @@ if (mmanager.hashContentManager != null && tags.filtration.length > 0) {
 			$(li).attr("data-rel-hashtag", obj.hashtag.replace(/#/g, ""));
 			$(li).attr("data-timestamp", obj.time);
 			$(li).attr("data-rel-source", obj.src);
+			$(li).attr("data-textContent",obj.text);
 			var topDiv = document.createElement("div");
 			topDiv.setAttribute("class", "topDiv");
 			if (obj.imgURL != "") {
