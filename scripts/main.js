@@ -224,12 +224,8 @@ google.maps.event.addListener(maps.map, 'tilesloaded', function() {
 			//}
 		});
 		google.maps.event.addListenerOnce(maps.map, 'idle', function() {
-			google.maps.event.addListener(maps.map, "rightclick", function(event) {
-    // populate yor box/field with lat, lng
-    alert(maps.map.getCenter());
-});
 
-					  if($("#map-canvas > #sidebarChunk").length == 0){
+		if($("#map-canvas > #sidebarChunk").length == 0){
 		  var divToAdd = document.createElement("div");
 				$(divToAdd).attr("id","sidebarChunk");
 				var divAdd = document.createElement("a");
@@ -387,7 +383,10 @@ var mmanager = {
 		});
 			
 		//		tags.labelRefresh();
-		////////////console.log(("refreshed");
+		console.log("refreshed");
+		setTimeout(function(){
+			$("#spinney").css("display","none");
+		},3000);
 	}
 }
 var tags = {
