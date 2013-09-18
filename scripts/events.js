@@ -90,14 +90,15 @@ window.onload = function() {
 	$('#header').click(function(e){
 			if (popUp == true) {
 				popUp = false;
-				e.stopPropagation();
-				e.preventDefault();
 				//rest of your logic will go here
 				$('#map-overlay').attr("class", "upWeGo");
 				$('#map-overlay').css("top", (totalHeight - 40) + "px");
+					e.stopPropagation();
+					e.preventDefault();
+
 
 			}
-
+	
 	});
 	/*
 	$$("#header").on("swipe", function(e){
