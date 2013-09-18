@@ -1017,7 +1017,7 @@ if (mmanager.hashContentManager != null && tags.filtration.length > 0) {
 			////console.log((disp);
 			//////////console.log((tags.filtration);
 			if (disp < 5) {
-				for (var zeds = 0; zeds <= tags.DOMrender.length; zeds++){
+				for (var zeds = 0; zeds < tags.DOMrender.length; zeds++){
 					////////////console.log((tags.DOMrender[zeds]);
 					if (disp >= 5 || zeds == tags.DOMrender.length) {
 				$("#content").css("display","block");
@@ -1043,6 +1043,7 @@ if (mmanager.hashContentManager != null && tags.filtration.length > 0) {
 					}
 				}
 			}
+			console.log(match);
 			if(match == -1){
 				//////console.log(("MATCHEM UP DIGGA" + match);
 				if(tags.filtration != ""){
@@ -1583,8 +1584,8 @@ var general = {
 		 extraString+=tags.inBound[0];
 		 }*/
 		var tweet = document.getElementById("twitterButton");
-		extraString = extraString + "&hashtags=" + tags.singleTag.replace(/#/g, "");
-		$(tweet).attr("src", extraString+"&text="+"My fave student hotspot is ...");
+		//extraString = extraString + "&hashtags=" + tags.singleTag.replace(/#/g, "");
+		$(tweet).attr("src", extraString+"&text="+"My fave student hotspot is #ASOS[Insert Uni Here]");
 		tweet.contentWindow.location.reload();
 	}
 }

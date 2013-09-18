@@ -91,6 +91,9 @@ window.onload = function() {
 	$(document.getElementById("searchGO")).bind('click', function() {
 		$("#content").css("display","block");
 		var stuff = $("#searchField").val();
+		if(stuff == "SEARCH UNI"){
+		stuff = "";	
+		}
 		console.log($("#searchField").val().toUpperCase());
 		$("#header").text("SEARCH RESULTS");
 		if (tags.filtration != stuff) {
@@ -225,6 +228,9 @@ $('#searchField').focus(function() {
 	$(document.getElementById("searchMe")).bind('click', function() {
 		$("#content").css("display","block");
 		var stuff = $("#searchField").val();
+		if(stuff == "SEARCH UNI"){
+		stuff = "";	
+		}
 		console.log($("#searchField").val().toUpperCase());
 		$("#header").text("SEARCH RESULTS");
 		if (tags.filtration != stuff) {
@@ -238,6 +244,7 @@ $('#searchField').focus(function() {
 			tags.filtration = stuff;
 			$("#searchContent").text(stuff.toUpperCase());
 		}
+		console.log("getting here!");
 		elements.fullUpdate();
 	});
 	}
@@ -302,7 +309,7 @@ $('#searchField').focus(function() {
 				});
 			}
 		});
-		$(".facebookInput").last().val(tags.singleTag);
+		//$(".facebookInput").last().val(tags.singleTag);
 	});
 }
 //FB.api('/me/feed/','post',{"access_token":"","message":"First P0st!"},function(user) {
