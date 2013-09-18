@@ -75,30 +75,27 @@ window.onload = function() {
 			$('#socialProxy').css("display","none");
 			$('#tagDiv').css("width",'');
 		});
-		
+
 		$('#map-overlay').click(function(e) {
-		if (popUp == false) {
+			console.log(e);
+			if (popUp == false) {
 			popUp = true;
 			//console.log(e);
-			e.stopPropagation();
-			e.preventDefault();
 			//rest of your logic will go here
 			$('#map-overlay').attr("class", "upWeGo");
 			$('#map-overlay').css("top", 120 + "px");
 		}
-	});
-	$('#header').click(function(e){
+		
+		});
+	$('#header').click(function(e){	
 			if (popUp == true) {
 				popUp = false;
 				//rest of your logic will go here
 				$('#map-overlay').attr("class", "upWeGo");
-				$('#map-overlay').css("top", (totalHeight - 40) + "px");
+				$('#map-overlay').css("top", (totalHeight - 60) + "px");
 					e.stopPropagation();
 					e.preventDefault();
-
-
-			}
-	
+				}
 	});
 	/*
 	$$("#header").on("swipe", function(e){
