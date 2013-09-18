@@ -1041,10 +1041,6 @@ if (mmanager.hashContentManager != null && tags.filtration.length > 0) {
 						tags.DOMrender.splice(zeds, 1);
 						disp++;
 					}
-
-					//					//////////console.log((tags.DOMrender[zeds]);
-					//				if(tags.DOMrender[zeds].//tags.renderToList(tags.DOMrender[zed], false);
-					//tags.DOMrenderOnPage.push(obj.id);
 				}
 			}
 			if(match == -1){
@@ -1074,7 +1070,7 @@ if (mmanager.hashContentManager != null && tags.filtration.length > 0) {
 	},
 	"list" : function(obj, hidden, notLazyLoad) {
 		notLazyLoad = true;
-		if (obj.source == "TWTTR") {
+		if (obj.source == "TWTTR" && document.documentElement.clientWidth > 480) {
 
 			var insLI = document.createElement("li");
 			$(insLI).attr("id", "sideBar" + obj.id);
@@ -1108,7 +1104,7 @@ if (mmanager.hashContentManager != null && tags.filtration.length > 0) {
 			link.appendChild(lText);
 			insLI.appendChild(li);
 			return insLI;
-		} else if (obj.source != "TWITTR") {
+		} else if (obj.source != "TWTTR" || document.documentElement.clientWidth < 480) {
 			var li = document.createElement("li");
 			$(li).attr("id", "sideBar" + obj.id);
 			if (hidden == true) {
