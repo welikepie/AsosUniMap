@@ -710,7 +710,7 @@ box-shadow: 0px 0px 5px @gray;
                         background:@red;
                         background-color:@red;
                         }
-                    #searchClear{
+                    #searchClear, #searchGO{
                         cursor:pointer;
                         background-image:url("../images/close.png");
                         background-repeat:no-repeat;
@@ -721,6 +721,11 @@ box-shadow: 0px 0px 5px @gray;
                         margin-left:0px;
                         display:none;
                         }
+                        #searchGO{
+//                            display:block;
+                            background-image:url("../images/searchgo.png");
+                        }
+
                     }
                 #SurroundContainer{
             /* Let's get this party started */
@@ -1014,7 +1019,7 @@ box-shadow: 0px 0px 5px @gray;
                         background-color:@red;
                         box-shadow: 0px 0px 5px @gray;
                     #searchMe{
-                        cursor:pointer;
+                        //cursor:pointer;
                         float:left;
                         margin-bottom:9px;
                         margin-top:9px;
@@ -1038,8 +1043,8 @@ box-shadow: 0px 0px 5px @gray;
                         background:@red;
                         background-color:@red;
                         }
-                    #searchClear{
-                        display:none
+                    #searchClear, #searchGO{
+                        display:none;
                         cursor:pointer;
                         background-image:url("../images/close.png");
                         background-repeat:no-repeat;
@@ -1049,6 +1054,10 @@ box-shadow: 0px 0px 5px @gray;
                         margin:10px;
 //                        margin-left:0px;
                         }
+                        #searchGO{
+                            display:block;
+                            background-image:url("../images/searchgo.png");
+                            }
         }
         }
         #overlayImage{display:none;}

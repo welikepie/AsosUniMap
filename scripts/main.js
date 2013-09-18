@@ -1584,7 +1584,7 @@ var general = {
 		 }*/
 		var tweet = document.getElementById("twitterButton");
 		extraString = extraString + "&hashtags=" + tags.singleTag.replace(/#/g, "");
-		$(tweet).attr("src", extraString+"&text="+"My fave student hotspot is ......");
+		$(tweet).attr("src", extraString+"&text="+"My fave student hotspot is ...");
 		tweet.contentWindow.location.reload();
 	}
 }
