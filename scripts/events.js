@@ -65,8 +65,8 @@ window.onload = function() {
 		$("#blackOverlay").html("");
 		
 		$("#map-overlay").first().css("top", (totalHeight - 60) + "px");
-		$("#SurroundContainer").css("height", totalHeight - 120);
-		$("#surrounder").css("height", totalHeight - 172);
+		$("#SurroundContainer").css("height", totalHeight - 105);
+		$("#surrounder").css("height", totalHeight - 170);
 		// don’t download complicated script
 		// use low-source images instead of full-source ones
 		$('#pinImage').click(function(){
@@ -77,7 +77,7 @@ window.onload = function() {
 		});
 
 		$('#map-overlay').click(function(e) {
-			console.log(e);
+			//console.log(e);
 			if (popUp == false) {
 			popUp = true;
 			//console.log(e);
@@ -94,7 +94,7 @@ window.onload = function() {
 		if(stuff == "SEARCH UNI"){
 		stuff = "";	
 		}
-		console.log($("#searchField").val().toUpperCase());
+		//console.log($("#searchField").val().toUpperCase());
 		$("#header").text("SEARCH RESULTS");
 		if (tags.filtration != stuff) {
 			tags.filtration = stuff;
@@ -231,7 +231,7 @@ $('#searchField').focus(function() {
 		if(stuff == "SEARCH UNI"){
 		stuff = "";	
 		}
-		console.log($("#searchField").val().toUpperCase());
+	//	console.log($("#searchField").val().toUpperCase());
 		$("#header").text("SEARCH RESULTS");
 		if (tags.filtration != stuff) {
 			if (stuff == "") {
@@ -244,7 +244,7 @@ $('#searchField').focus(function() {
 			tags.filtration = stuff;
 			$("#searchContent").text(stuff.toUpperCase());
 		}
-		console.log("getting here!");
+		//console.log("getting here!");
 		elements.fullUpdate();
 	});
 	}

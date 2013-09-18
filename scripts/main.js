@@ -383,7 +383,7 @@ var mmanager = {
 		});
 			
 		//		tags.labelRefresh();
-		console.log("refreshed");
+	//	console.log("refreshed");
 		setTimeout(function(){
 			$("#spinney").css("display","none");
 		},3000);
