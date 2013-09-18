@@ -65,8 +65,8 @@ var maps = {
 	oldInfoBox : null,
 	oldBounds : null,
 	map : "",
-	mblLatLng: [53.489470,-1.7842773],
-	stLatLng : [54.249593, -0.95556640625],
+	mblLatLng: [54.76772102,-2.66318],
+	stLatLng : [54.549593, 1.05556640625],
 	setDefault : function(){
 	},
 	boundingBox : new Array(),
@@ -119,7 +119,10 @@ google.maps.event.addListener(maps.map, 'tilesloaded', function() {
 			zIndex : 500
 		});
 		beachMarker.setMap(maps.map);
-
+	google.maps.event.addListener(maps.map, 'dblclick', function() {
+		console.log(maps.map.getCenter());
+	});
+	
 		google.maps.event.addListener(maps.map, 'zoom_changed', function() {
 			if(maps.map.getZoom() > config.startZoom){
 				$("#overlayImage").attr("src","images/fontSmall.png")
@@ -221,6 +224,11 @@ google.maps.event.addListener(maps.map, 'tilesloaded', function() {
 			//}
 		});
 		google.maps.event.addListenerOnce(maps.map, 'idle', function() {
+			google.maps.event.addListener(maps.map, "rightclick", function(event) {
+    // populate yor box/field with lat, lng
+    alert(maps.map.getCenter());
+});
+
 					  if($("#map-canvas > #sidebarChunk").length == 0){
 		  var divToAdd = document.createElement("div");
 				$(divToAdd).attr("id","sidebarChunk");
@@ -508,8 +516,9 @@ var tags = {
 			//		////////console.log("node/jsons/"+tags.inBound[t]+".json");
 			////////console.log(tags.inBound);
 			tpht.easyXHR("get", config.baseURL + "node/jsons/" + arr[i] + ".json", "", function(response) {
-				//////////console.log(response);
+				console.log(JSON.parse(response));
 				////////console.log(response.length);
+				
 				if (!JSON.parse(response).hasOwnProperty("error")) {
 					////////console.log("GETTING");
 					tags.tagData[JSON.parse(response).tag] = JSON.parse(response);
