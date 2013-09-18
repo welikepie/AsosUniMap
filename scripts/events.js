@@ -250,14 +250,14 @@ $('#searchField').focus(function() {
 				}
 			}
 			tags.filtration = stuff;
-			$("#searchContent").text(stuff.toUpperCase());
+			$("#searchContent").text(stuff);
 		}
 		//console.log("getting here!");
 		elements.fullUpdate();
 	});
 	}
 	setSSE();
-		$("#JS-bbMoreInfo, #infolink").bind('click', function() {
+		$("#JS-bbMoreInfo, #infolink, #moreInfoLink").bind('click', function() {
 		$("#modalInside").html("");
 		general.customModal({
 			"type" : "alert",

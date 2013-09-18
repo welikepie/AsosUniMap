@@ -12,6 +12,7 @@
 @green : #bdcf23;
 @gray : #888888;
 @offblacktoyellow : #1C1C1B;
+@mustard : #dbb900;
 *, *:before, *:after {
   -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
  }
@@ -83,6 +84,7 @@ box-shadow: 0px 0px 5px @gray;
         }
 
     .facebookInput{
+        font-family:inherit;
                 padding:6px;
                 box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -573,9 +575,11 @@ box-shadow: 0px 0px 5px @gray;
                   background-color:#54bec6 !important;
                   #sidebarChunk{
                       width: 35px;
-                        height: 1000px;
+                        height: 100%;
                         background-color: @offblue;
                         background-color: @offbluewithopacity;
+                        -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=80)"; // first!
+	                    filter: alpha(opacity=80);
                         //z-index: 89;
                         position: absolute;
                         left: 0px;
@@ -707,9 +711,15 @@ box-shadow: 0px 0px 5px @gray;
                 top: 20px;
                 #searchError{
                     display:none;
-                text-align:center;
+                text-align:left;
                 p{//font-size:12px;
-                line-height:16px;}
+                line-height:16px;
+                    
+                    #moreInfoLink{
+                        text-decoration:underline;
+                        cursor:pointer;
+                    }
+                }
               ///  font-family:"futura-pt-1","futura-pt-2", sans-serif;
                 }
                     #search{
@@ -731,6 +741,7 @@ box-shadow: 0px 0px 5px @gray;
                         background-repeat:no-repeat;
                         }
                     #searchField{
+                        font-family: inherit;
                         -webkit-appearance: none;
                         border-radius: 0;
               //          font-family:"futura-pt-1","futura-pt-2", sans-serif;
@@ -767,21 +778,25 @@ box-shadow: 0px 0px 5px @gray;
                 #SurroundContainer{
             /* Let's get this party started */
             ::-webkit-scrollbar {
-                width: 12px;
+                width: 8px;
             }
             /* Track */
             ::-webkit-scrollbar-track {
 //                -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
            //     -webkit-border-radius: 10px;
             //    border-radius: 10px;
+                            margin-right:4px;
+
                 background-color:@yellow;
             }
              
             /* Handle */
             ::-webkit-scrollbar-thumb {
-            //    -webkit-border-radius: 10px;
-             //   border-radius: 10px;
-                background: rgba(220,220,220,0.8); 
+                -webkit-border-radius: 6px;
+                border-radius: 6px;
+                background: @mustard; 
+                                margin-right:4px;
+
                 //-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
                 
             }
@@ -806,7 +821,7 @@ box-shadow: 0px 0px 5px @gray;
                     border-bottom:1px solid @black;
                     }
                 #surrounder{       
-                            width:300px;
+                            width:296px;
                         height:370px;
                         clear:left;
                         float:left;
@@ -1073,6 +1088,7 @@ box-shadow: 0px 0px 5px @gray;
                         background-repeat:no-repeat;
                         }
                     #searchField{
+                        font-family: inherit;
                         -webkit-appearance: none;
                         border-radius: 0;
              //           font-family:"futur\a-pt-1","futura-pt-2", sans-serif;
@@ -1197,6 +1213,7 @@ box-shadow: 0px 0px 5px @gray;
   transform: translate3d(0,0,0);
   }
         #map-overlay{
+      
             position:fixed;
             z-index:900;
 //            position:absolute;
@@ -1210,6 +1227,7 @@ box-shadow: 0px 0px 5px @gray;
             width:100% !important;
             
             #SurroundContainer{
+            background-color:@yellow;          
                 width:100% !important;
             /* Let's get this party started */
             ::-webkit-scrollbar {

@@ -1204,7 +1204,7 @@ if (mmanager.hashContentManager != null && tags.filtration.length > 0) {
 				a.appendChild(topDiv);
 				a.appendChild(bottomDiv);
 				li.appendChild(a);
-			} else if (obj.source = "INSTA") {
+			} else if (obj.source == "INSTA") {
 				var a = document.createElement("a");
 				a.setAttribute("class", "socialLinkage");
 				var splitId = obj.id.split("_");
