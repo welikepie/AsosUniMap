@@ -1162,6 +1162,18 @@ if (mmanager.hashContentManager != null && tags.filtration.length > 0) {
 			}
 			topDiv.appendChild(namesDiv);
 
+			var icon = document.createElement("div");
+			if(obj.source == "TWTTR"){
+				icon.setAttribute("class","twttrImage");
+			}
+			if(obj.source == "INSTA"){
+				icon.setAttribute("class","instaImage");
+			}
+			if(obj.source == "FACEB"){
+				icon.setAttribute("class","facebImage");
+			}
+			topDiv.appendChild(icon);
+
 			var bottomDiv = document.createElement("div");
 			bottomDiv.setAttribute("class", "bottomDiv");
 
