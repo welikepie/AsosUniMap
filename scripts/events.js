@@ -87,6 +87,18 @@ window.onload = function() {
 			$('#map-overlay').css("top", 120 + "px");
 		}
 	});
+	$('#header').click(function(e){
+			if (popUp == true) {
+				popUp = false;
+				e.stopPropagation();
+				e.preventDefault();
+				//rest of your logic will go here
+				$('#map-overlay').attr("class", "upWeGo");
+				$('#map-overlay').css("top", (totalHeight - 40) + "px");
+
+			}
+
+	});
 	/*
 	$$("#header").on("swipe", function(e){
 					if (popUp == true) {
