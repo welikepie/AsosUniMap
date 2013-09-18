@@ -241,7 +241,7 @@ $('#searchField').focus(function() {
 		elements.fullUpdate();
 	});
 	setSSE();
-		$(document.getElementById("JS-bbMoreInfo")).bind('click', function() {
+		$("#JS-bbMoreInfo, #infolink").bind('click', function() {
 		$("#modalInside").html("");
 		general.customModal({
 			"type" : "alert",
