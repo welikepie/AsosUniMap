@@ -20,7 +20,7 @@ function setSSE() {
 	 //console.log("Connected!");
 	 });
 	 es.addEventListener("error", function(e) {
-	 //console.log("erroring");
+	 //.log("erroring");
 	 });
 	 es.addEventListener("info", function(event) {
 	 //console.log(event);
@@ -66,7 +66,7 @@ window.onload = function() {
 		
 		$("#map-overlay").first().css("top", (totalHeight - 60) + "px");
 		$("#SurroundContainer").css("height", totalHeight - 105);
-		$("#surrounder").css("height", totalHeight - 170);
+		$("#surrounder").css("height", totalHeight - 160);
 		// don’t download complicated script
 		// use low-source images instead of full-source ones
 		$('#pinImage').click(function(){
@@ -89,6 +89,7 @@ window.onload = function() {
 		});
 	
 	$(document.getElementById("searchGO")).bind('click', function() {
+			
 		$("#content").css("display","block");
 		var stuff = $("#searchField").val();
 		if(stuff == "SEARCH UNI"){
@@ -99,6 +100,13 @@ window.onload = function() {
 		if (tags.filtration != stuff) {
 			tags.filtration = stuff;
 			$("#searchContent").text(stuff.toUpperCase());
+		}
+		if (popUp == false) {
+			popUp = true;
+			//console.log(e);
+			//rest of your logic will go here
+			$('#map-overlay').attr("class", "upWeGo");
+			$('#map-overlay').css("top", 120 + "px");
 		}
 		elements.fullUpdate();
 	});
