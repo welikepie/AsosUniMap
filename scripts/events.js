@@ -40,6 +40,10 @@ function setSSE() {
 }
 
 window.onload = function() {
+	console.log("adding listeners");
+	$('#twitterButton').load(function(){
+		$(this).show();
+	});
 	var open = false;
 	var totalHeight = document.documentElement.clientHeight;
 	var contHeight = totalHeight - 165;
@@ -49,21 +53,29 @@ window.onload = function() {
 	
 
 	if (document.documentElement.clientWidth < 480) {
-		$("#searchField").css("width",document.documentElement.clientWidth - 123);
-		$("#searchProxy").append($("#search").html());
 		$("#searchGO").css("display","block");
 		$("#search").html("");
+		$("#searchProxy").css("display","none");
+
+		$("#search").html("");
+		$("#blackOverlay").html("");
+		$("#searchField").css("width",document.documentElement.clientWidth - 123);
+		//$("#searchProxy").append($("#search").html());
+
+	
+
+
+/*		
 		var img = document.createElement("img");
 		img.setAttribute("id","pinImage");
 		img.setAttribute("src","images/pinInput.png");
-		$("#searchProxy").css("display","none");
 		$("#twitterButton").prop("src","twitMobi.html");
-					document.getElementById("twitterButton").contentWindow.location.reload();
-
+		document.getElementById("twitterButton").contentWindow.location.reload();
 		$("#labelText").html("<p>ADD YOUR SPOT TO </p><p>THE MAP TO WIN A PRIZE</p>");
 		$("#socialProxy").append(img);
 		$("#socialProxy").append($("#blackOverlay").html());
-		$("#blackOverlay").html("");
+*/
+
 		
 		$("#map-overlay").first().css("top", (totalHeight - 60) + "px");
 		$("#SurroundContainer").css("height", totalHeight - 105);
@@ -192,6 +204,8 @@ window.onload = function() {
 				i.parentNode.removeChild(i);
 			}
 		})*/
+	} else{
+			$("#searchProxy, #searchDiv").html("");
 	}
 $('#searchField').focus(function() {
 		if (this.value == this.defaultValue) {

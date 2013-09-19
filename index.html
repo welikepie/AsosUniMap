@@ -40,48 +40,50 @@
 		<div id="spinney">
 			<div id="spinContainer">
 				<img src="images/loading.gif" id="spinImage"></img>
-				<div id="spinText">Loading</div>
+				<div id="spinText">
+					Loading
+				</div>
 			</div>
 		</div>
 		<div id="JS-MoreInfo">
 			<div class="textContainer">
 				<span class="heading">We’re looking for the coolest uni hangouts in the country. </span>
-				<p class="subHeadingP">We want to know the best student hotspots in your uni city. Add your favourite hangouts to the map and explore your city to find out where fellow classmates spend their time away from the lecture hall.
+				<p class="subHeadingP">
+					We want to know the best student hotspots in your uni city. Add your favourite hangouts to the map and explore your city to find out where fellow classmates spend their time away from the lecture hall.
 				</p>
 				<p class="subHeadingP">
-				To submit a hotspot via Twitter, Facebook or Instagram, simply upload using #ASOS[insert uni here] to drop it on the map. Remember to turn on location services or your spot will remain a secret!
+					To submit a hotspot via Twitter, Facebook or Instagram, simply upload using #ASOS[insert uni here] to drop it on the map. Remember to turn on location services or your spot will remain a secret!
 				</p>
 			</div>
 		</div>
 		<div id="JS-facebookInput">
 			<img src="images/facebook_sign.png" class="relationImage">
 			<div class="textContainer">
-				
-				
+
 				<span class='heading'>facebook it:</span>
 				<p class="subHeading">
-				Add your fave hotspot to the ASOS Lowdown map by telling us below - make sure you include #ASOS[Insert Uni Here]!
+					Add your fave hotspot to the ASOS Lowdown map by telling us below - make sure you include #ASOS[Insert Uni Here]!
 				</p>
 				<textarea class='facebookInput'>My fave student hotspot is #ASOS[Insert Uni Here]</textarea>
 			</div>
 		</div>
 		<div id="JS-instaInput">
-		<img src="images/insta_sign.png" class="relationImage">
-		<div class = "textContainer">
-			<span class="heading">Instagram it:</span>
-			<p class="subHeading">
-			1) Take/choose photo of your fave student hangout
-			</p>
-			<p class="subHeading">
-			2) Upload to Instagram using the #ASOS[Insert Uni Here] hashtag
-			</p>
-			<p class="subHeading">
- 			3) Choose to add to photo map/choose location before posting
- 			</p>
-			<p class="subHeading">
-			4) You’re good to go: watch your photo appear on the map
-			</p>
-		</div>
+			<img src="images/insta_sign.png" class="relationImage">
+			<div class = "textContainer">
+				<span class="heading">Instagram it:</span>
+				<p class="subHeading">
+					1) Take/choose photo of your fave student hangout
+				</p>
+				<p class="subHeading">
+					2) Upload to Instagram using the #ASOS[Insert Uni Here] hashtag
+				</p>
+				<p class="subHeading">
+					3) Choose to add to photo map/choose location before posting
+				</p>
+				<p class="subHeading">
+					4) You’re good to go: watch your photo appear on the map
+				</p>
+			</div>
 		</div>
 		<div id="modalDialogue">
 			<div id="modalInside"></div>
@@ -91,8 +93,7 @@
 				<img id="studentImage" src="images/studentPic.png"/>
 				<div id="tapMENU">
 					<a id = "homelink" href="http://www.asos.com/130909-Students-Hub/Cat/pgehtml.aspx?cid=18342&full_site=yes" target="_blank"></a>
-					<div id="infolink" >		
-					</div>
+					<div id="infolink" ></div>
 					<!--MENU-->
 				</div>
 			</div>
@@ -113,8 +114,9 @@
 				</div>
 				<div id="surrounder">
 					<div id="searchError">
-						<p>There are no search results for  
-							<span id="searchContent"></span>.</p>
+						<p>
+							There are no search results for <span id="searchContent"></span>.
+						</p>
 						<p>
 							Get your uni on the map now by <span id="moreInfoLink">adding a spot.</span>
 						</p>
@@ -125,21 +127,61 @@
 		</div>
 		<img id="overlayImage" src="images/fonts.png"/>
 		<img id="overlayAsosImage" src="images/asos.png"/>
-		<div id="searchDiv">
+		<div id="searchDiv" style="width: 100%;">
 			<img id="searchI" src="images/searchSide.png">
-			<div id="searchProxy"></div>
+			<div id="searchProxy">
+				<div id="searchMe" value="search"></div>
+				<!--Image by Javier Cabezas, from The Noun Project-->
+				<input type="text" class="default" value="SEARCH UNI" id="searchField" style="width: 113px;">
+				<div id="searchGO"></div>
+				<div id="searchClear" value="clear"></div>
+			</div>
 		</div>
-		<div id="tagDiv">
-			<img id="tagI" src="images/pins.png">
-			<div id="socialProxy"></div>
-		</div>
+			<div id="tagDiv">
+				<img id="tagI" src="images/pins.png">
+				<div id="socialProxy"><img id="pinImage" src="images/pinInput.png">
+					<div id="labelText">
+						<p>
+							ADD YOUR SPOT TO
+						</p>
+						<p>
+							THE MAP TO WIN A PRIZE
+						</p>
+					</div>
+					<div id="socialMedia">
+						<div id="twittr">
+							<iframe allowtransparency="true" visibility="hidden" id="twitterButton" frameborder="0" src="twitMobi.html#type=hashtag&amp;count=none&amp;text=My fave student hotspot is #ASOS[Insert Uni Here]" style="display: none;"></iframe>
+							<!-- This be an iFrame. The actual content is in twitButton.html, but the styling is in the same file as for this document. Aww yeah. -->
+						</div>
+						<div id="insta">
+							<div class="intBorder">
+								<img src="images/insta.png">
+								<div class="contText">
+									INSTAGRAM IT
+								</div>
+							</div>
+						</div>
+						<div id="faceb">
+							<img src="images/facebook.png">
+							<div class="contText">
+								FACEBOOK IT
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		<div id="blackOverlay">
-			<div id="labelText"> 
-				<div>Get your uni on the map for the ultimate asos kudos.</div><div id="JS-bbMoreInfo">Find out more</div>
+			<div id="labelText">
+				<div>
+					Get your uni on the map for the ultimate asos kudos.
+				</div>
+				<div id="JS-bbMoreInfo">
+					Find out more
+				</div>
 			</div>
 			<div id="socialMedia">
 				<div id="twittr">
-					<iframe id="twitterButton" frameBorder="0" src="twitButton.html#type=hashtag&count=none" style="border-style:none;"></iframe>
+					<iframe allowtransparency="true" visibility="hidden" id="twitterButton" frameBorder="0" src="twitButton.html#type=hashtag&count=none"></iframe>
 					<!-- This be an iFrame. The actual content is in twitButton.html, but the styling is in the same file as for this document. Aww yeah. -->
 				</div>
 				<div id="insta">

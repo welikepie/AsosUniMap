@@ -372,7 +372,7 @@ box-shadow: 0px 0px 5px @gray;
 
                                     .twitter-follow-button{
                                         position: absolute;
-                                        right: 30px;
+                                        right: 20px;
                                         float: right;
                                         height: 20px;
                                         margin-top: 5px;
@@ -439,7 +439,8 @@ box-shadow: 0px 0px 5px @gray;
                                     line-height:14px;
                                         clear:both;
                                         float:left;
-                                        width:280px;}
+                                        //width:280px;
+                                        }
                                     
                                     }
                 
@@ -711,10 +712,15 @@ box-shadow: 0px 0px 5px @gray;
                          #twittr,#insta{
                              border-right:1px solid #5a5a5a;
                              }
+                            #insta{
+                                //width:125px;
+                                //margin-right:1px solid #a5a5a5;
+                                }
                         #twittr{
                             width:121px;
                             background-image:url("../images/twitterBacking.png");
                             #twitterButton{
+                                background-color:@black;
                                 float:left;
                                 clear:left;
                                 width:121px;
@@ -764,6 +770,7 @@ box-shadow: 0px 0px 5px @gray;
                         background-repeat:no-repeat;
                         }
                     #searchField{
+                        font-weight:regular;
                         font-family: inherit;
                         -webkit-appearance: none;
                         border-radius: 0;
@@ -883,6 +890,7 @@ box-shadow: 0px 0px 5px @gray;
                                         height:24px;
                                         float:right;
                                         margin-top:0px;
+                                        margin-right:10px;
                                         }
                                         .twttrImage{
                                             background-image:url("../images/twitMini.png");
@@ -970,11 +978,21 @@ box-shadow: 0px 0px 5px @gray;
         overflow:hidden;
         .infoBox{
             width:100%;
-            .socialLinkage{
-                width:100%;
+            //.socialLinkage{
+            //    width:100%;
                     .bottomDiv{ 
+                        width:100%;
+                        .textWithImg{
+                            width:48%;
+                            }
+                        .image{
+                            width:48%;
+                            }
+                        .text{
+                            width:100%;
+                            }
                     }
-                }
+              //  }
             }
     body{
         
@@ -1092,7 +1110,9 @@ box-shadow: 0px 0px 5px @gray;
                              }
                         #twittr{
                             width:98px;
+                            background-image:url("../images/redTwitterBacking.png");
                             #twitterButton{
+                                background-color:@black;
                                 float:left;
                                 clear:left;
                                 width:98px;
@@ -1132,6 +1152,7 @@ box-shadow: 0px 0px 5px @gray;
                         background-repeat:no-repeat;
                         }
                     #searchField{
+                    font-weight:regular;
                         font-family: inherit;
                         -webkit-appearance: none;
                         border-radius: 0;
@@ -1208,9 +1229,11 @@ box-shadow: 0px 0px 5px @gray;
                     margin-left:10px;
                     }
                 #tapMENU{
-                    float:right;
-                    cursor:pointer;
-                    margin-right:10px;
+                    position: absolute;
+                    right: 0px;
+                    cursor: pointer;
+                    margin-right: 10px;
+                    width: 90px;
 /*                   float:right;
                     padding:15px 20px;
              //         font-family:"futura-pt-1","futura-pt-2", sans-serif;

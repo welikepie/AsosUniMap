@@ -1607,7 +1607,9 @@ var general = {
 		 }*/
 		var tweet = document.getElementById("twitterButton");
 		//extraString = extraString + "&hashtags=" + tags.singleTag.replace(/#/g, "");
+		$('#twitterButton').hide();
 		$(tweet).attr("src", extraString+"&text="+"My fave student hotspot is #ASOS[Insert Uni Here]");
+		console.log("reloading");
 		tweet.contentWindow.location.reload();
 	}
 }
