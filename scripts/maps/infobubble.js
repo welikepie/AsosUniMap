@@ -805,7 +805,7 @@ InfoBubble.prototype.draw = function() {
 
 	// Adjust for the height of the info bubble
 	var top = pos.y - (height + arrowSize);
-
+	console.log("top:"+top);
 	if (anchorHeight) {
 		// If there is an anchor then include the height
 		top -= anchorHeight;
@@ -814,18 +814,19 @@ InfoBubble.prototype.draw = function() {
 	var left = pos.x - arrowPosition;
 	//- (width * arrowPosition);
 	//console.log(arrowPosition);
-	if(document.documentElement.clientWidth > 480){
+	/*if(document.documentElement.clientWidth > 480){
 	
 	this.bubble_.style['top'] = this.px(top);
 	this.bubble_.style['left'] = this.px(left);
-	}else{
+	}else{*/
 //		//console.log(pos.y);
 //		//console.log(top);
-		this.bubble_.style['top'] = this.px(pos.y-	this.get('map').getDiv().offsetHeight + 17);
-//		this.bubble_.style['left'] = this.px(pos.x+2);	
-	this.bubble_.style['left'] = this.px(left);
+// console.log(pos.y);
+// console.log(this.get('map').getDiv().offsetHeight);
+		this.bubble_.style['top'] = this.px(top); // +this.get('map').getDiv().offsetHeight + 17;
+		this.bubble_.style['left'] = this.px(left);
 
-	}
+	//}
 	var shadowStyle = parseInt(this.get('shadowStyle'), 10);
 
 	switch (shadowStyle) {

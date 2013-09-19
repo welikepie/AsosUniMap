@@ -654,8 +654,8 @@ var tags = {
 			};
 			if(document.documentElement.clientWidth < 480){
 	
-				markerObj.maxWidth = Math.floor(document.documentElement.clientWidth*0.8);
-				markerObj.minWidth = Math.floor(document.documentElement.clientWidth*0.8);
+				markerObj.maxWidth = Math.floor(document.documentElement.clientWidth*0.9);
+				markerObj.minWidth = Math.floor(document.documentElement.clientWidth*0.9);
 				//////console.log(("----------------------------");
 				//////console.log((markerObj.minWidth);
 			}
@@ -805,8 +805,8 @@ var tags = {
 						backgroundColor : '#ffdf24'
 					};
 			if(document.documentElement.clientWidth < 480){
-				markerObj.maxWidth = Math.floor(document.documentElement.clientWidth*0.8);
-				markerObj.minWidth = Math.floor(document.documentElement.clientWidth*0.8);
+				markerObj.maxWidth = Math.floor(document.documentElement.clientWidth*0.9);
+				markerObj.minWidth = Math.floor(document.documentElement.clientWidth*0.9);
 						//////console.log(("----------------------------");
 				//////console.log((markerObj.minWidth);
 			
