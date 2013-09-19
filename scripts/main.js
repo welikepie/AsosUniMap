@@ -386,7 +386,7 @@ var mmanager = {
 	//	console.log("refreshed");
 		setTimeout(function(){
 			$("#spinney").css("display","none");
-		},3000);
+		},4000);
 	}
 }
 var tags = {
@@ -1315,7 +1315,18 @@ if (mmanager.hashContentManager != null && tags.filtration.length > 0) {
 		var namesDiv = document.createElement("div");
 		namesDiv.setAttribute("class", "names");
 		namesDiv.appendChild(domDiv);
-
+		/*var icon = document.createElement("div");
+			if(obj.source == "TWTTR"){
+				icon.setAttribute("class","twttrImage");
+			}
+			if(obj.source == "INSTA"){
+				icon.setAttribute("class","instaImage");
+			}
+			if(obj.source == "FACEB"){
+				icon.setAttribute("class","facebImage");
+			}
+			topDiv.appendChild(icon);
+			*/
 		if (obj.source != "FACEB") {
 			var userDiv = document.createElement("p");
 			userDiv.setAttribute("class", "userNameTag");

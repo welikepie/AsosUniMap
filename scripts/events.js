@@ -49,6 +49,7 @@ window.onload = function() {
 	
 
 	if (document.documentElement.clientWidth < 480) {
+		$("#searchField").css("width",document.documentElement.clientWidth - 123);
 		$("#searchProxy").append($("#search").html());
 		$("#searchGO").css("display","block");
 		$("#search").html("");

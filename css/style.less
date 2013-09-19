@@ -347,16 +347,38 @@ box-shadow: 0px 0px 5px @gray;
                             }
                                 .topDiv{
                                     float:left;
-                 
                                     width:100%;
                                  padding-bottom:10px;
                                  border-bottom: 1px solid @black;
                                     margin-bottom:10px;
+                                        .twttrImage, .facebImage, .instaImage{
+                                            width:24px;
+                                            height:24px;
+                                            float:right;
+                                            margin-top:0px;
+                                        }
+                                        .twttrImage{
+                                            background-image:url("../images/twitMini.png");
+                                            background-repeat:no-repeat;
+                                            }
+                                        .facebImage{
+                                            background-image:url("../images/faceMini.png");
+                                            background-repeat:no-repeat;
+                                            }
+                                        .instaImage{
+                                            background-image:url("../images/instaMini.png");
+                                            background-repeat:no-repeat;
+                                        }
+
                                     .twitter-follow-button{
+                                        position: absolute;
+                                        right: 30px;
                                         float: right;
                                         height: 20px;
-                                        margin-top: 20px;
-                                        }
+                                        margin-top: 5px;
+                                        clear: right;
+                                        top: 35px;
+                                    }
                                     .names{
                                         float:left;
                                         .userNameTag{
@@ -368,7 +390,7 @@ box-shadow: 0px 0px 5px @gray;
                                             }
                                         
                                         .nameContainer{
-                                            margin-bottom:10px;
+                                          //  margin-bottom:10px;
                                             padding-bottom:5px;
                                             float:left;
                                             border-bottom:3px solid @black;
@@ -390,6 +412,7 @@ box-shadow: 0px 0px 5px @gray;
                                     }
                                 .bottomDiv{
                         
+                    
                                     font-size:14px;
                                     line-height:14px;
                                     float:left;
@@ -850,6 +873,7 @@ box-shadow: 0px 0px 5px @gray;
                                 
                             }
                                 .topDiv{
+                                    width:100%;
                                     float:left;
               //                      font-family:"futura-pt-1","futura-pt-2", sans-serif;
                                     margin-bottom:10px;
@@ -883,7 +907,7 @@ box-shadow: 0px 0px 5px @gray;
                                             }
                                         
                                         .nameContainer{
-                                            margin-bottom:10px;
+                                           // margin-bottom:10px;
                                             padding-bottom:5px;
                                             float:left;
                                             border-bottom:3px solid @black;
@@ -905,6 +929,7 @@ box-shadow: 0px 0px 5px @gray;
                                     }
                                 .bottomDiv{
               //                      font-family: "futura-pt-1","futura-pt-2", sans-serif;
+                                    margin-bottom: 10px;
                                     font-size:14px;
                                     line-height:14px;
                                     float:left;
@@ -1282,6 +1307,7 @@ box-shadow: 0px 0px 5px @gray;
                 #surrounder{
                     width:97% !important; 
                     #content{
+                        width: 100%;
 //                        padding-top:10px;
                         overflow:hidden;
                         margin:0px;
@@ -1293,6 +1319,7 @@ box-shadow: 0px 0px 5px @gray;
                             a{
                                 width:100%;
                                 .bottomDiv{
+                                    margin-bottom: 10px;
                                     width:100%;
                                     img{
                                         max-width:460px !important;
@@ -1307,7 +1334,7 @@ box-shadow: 0px 0px 5px @gray;
                                         width:90% !important;
                                         }
                                     .text{
-                                        width:280px;
+//                                        width:280px;
                                         margin-top:10px;
                                         width:90% !important;
                                         }
