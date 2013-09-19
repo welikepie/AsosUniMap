@@ -13,6 +13,10 @@
 @gray : #888888;
 @offblacktoyellow : #1C1C1B;
 @mustard : #dbb900;
+
+
+ #map_geolocation img { max-height: none; max-width: none; }
+
 *, *:before, *:after {
   -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
  }
@@ -720,6 +724,7 @@ box-shadow: 0px 0px 5px @gray;
                             width:121px;
                             background-image:url("../images/twitterBacking.png");
                             #twitterButton{
+                                cursor:pointer;
                                 background-color:@black;
                                 float:left;
                                 clear:left;
@@ -739,6 +744,7 @@ box-shadow: 0px 0px 5px @gray;
                 right: 20px;
                 top: 20px;
                 #searchError{
+                    font-family:inherit;
                     display:none;
                 text-align:left;
                 p{//font-size:12px;
@@ -1010,7 +1016,9 @@ box-shadow: 0px 0px 5px @gray;
     background-color: pink;
 }*/
            #map-canvas { 
-               
+                #map_geolocation label { width: auto; display:inline; }
+                #map_geolocation img { max-height: none; max-width: none; }
+
                       #sidebarChunk{
                       display:none;
                       }
@@ -1112,6 +1120,7 @@ box-shadow: 0px 0px 5px @gray;
                             width:98px;
                             background-image:url("../images/redTwitterBacking.png");
                             #twitterButton{
+                                cursor:pointer;
                                 background-color:@black;
                                 float:left;
                                 clear:left;
@@ -1133,6 +1142,7 @@ box-shadow: 0px 0px 5px @gray;
                   cursor:pointer;
             }
         #searchProxy{
+            display:none;
             width:100%;
 //                        width:inherit;
                         overflow:hidden;
@@ -1151,8 +1161,12 @@ box-shadow: 0px 0px 5px @gray;
                         background-image:url("../images/mag.png");
                         background-repeat:no-repeat;
                         }
+                    
+                span{display: block;
+                overflow: hidden;
+                margin-right:40px;
                     #searchField{
-                    font-weight:regular;
+                      font-weight:regular;
                         font-family: inherit;
                         -webkit-appearance: none;
                         border-radius: 0;
@@ -1162,6 +1176,7 @@ box-shadow: 0px 0px 5px @gray;
                         float:left;
                         border:0px;
                         height:23px;
+                        width:100%;
                         margin-bottom:5px;
                         margin-top:7px;
                         border-bottom:1px solid white;
@@ -1169,6 +1184,7 @@ box-shadow: 0px 0px 5px @gray;
                         background:@red;
                         background-color:@red;
                         }
+                }
                     #searchClear, #searchGO{
                         display:none;
                         cursor:pointer;
@@ -1183,6 +1199,15 @@ box-shadow: 0px 0px 5px @gray;
                         #searchGO{
                             display:block;
                             background-image:url("../images/searchgo.png");
+                            //display: none;
+                            cursor: pointer;
+                            background-repeat: no-repeat;
+                            width: 20px;
+                            height: 20px;
+                            margin: 10px;
+                            position: absolute;
+                            right: 0px;
+                            top: 0px;
                             }
         }
         }
@@ -1220,9 +1245,11 @@ box-shadow: 0px 0px 5px @gray;
                     }
                 }
             #blackBit{
+                overflow: hidden;
                 height:45px;
                 background-color:@black;
                 #studentImage{
+                    padding-right: 100%;
                     cursor:pointer;
                     float:left;
                     margin:8px;

@@ -23,6 +23,7 @@ var config = {
 		}		
 		return false;
 	},
+	"previousZoom" : 5,
 	"minTime" : 0, //usually looks like 1376501470
 	"minZoom" : 5, //minimum zoom to have.
 	"startZoom" : 5, //starting zoom to have. Is 5 in on bigger screens and changed to 6 otherwise.
@@ -73,7 +74,9 @@ var maps = {
 	"initialize" : function() {
 				if(document.documentElement.clientHeight > 700){
 					config.startZoom = 6;
+					config.previousZoom = 6;
 				}
+				
 
 		var styles = [{
 			featureType : "all",
@@ -118,12 +121,19 @@ google.maps.event.addListener(maps.map, 'tilesloaded', function() {
 			pane : "mapPane",
 			zIndex : 500
 		});
+		
 		beachMarker.setMap(maps.map);
 	google.maps.event.addListener(maps.map, 'dblclick', function() {
 		////console.log((maps.map.getCenter());
 	});
 	
 		google.maps.event.addListener(maps.map, 'zoom_changed', function() {
+			if(config.previousZoom > maps.map.getZoom() && document.documentElement.clientWidth < 480){
+				if(tags.filtration!=""){
+					tags.filtration = "";
+					elements.fullUpdate();
+				}
+			}
 			if(maps.map.getZoom() > config.startZoom){
 				$("#overlayImage").attr("src","images/fontSmall.png")
 				$("#overlayAsosImage").css("display","none");
@@ -171,13 +181,17 @@ google.maps.event.addListener(maps.map, 'tilesloaded', function() {
 			var bArr = bounds.toString().replace(/[()]/g, "").split(",");
 			maps.boundingBox = [parseFloat(bArr[1]), parseFloat(bArr[0]), parseFloat(bArr[3]), parseFloat(bArr[2])];
 			tags.filterBasedOnBound("doNothing");
+			config.previousZoom = maps.map.getZoom();
 		});
 			google.maps.event.addListener(beachMarker, 'dblclick', function(event) {
 			maps.map.setZoom(maps.map.getZoom() + 1);
 			tags.filterBasedOnBound("doNothing");
 		});
 		$("#studentImage, #overlayImage").click(function(){
-
+			if(tags.filtration!=""){
+					tags.filtration = "";
+					elements.fullUpdate();
+				}
 			if(maps.map.getZoom()!= config.startZoom){
 			maps.map.setZoom(config.startZoom);
 			}
@@ -514,18 +528,26 @@ var tags = {
 		tpht.asyncLoop(arr.length, function(loop, i) {
 			//		////////////console.log(("node/jsons/"+tags.inBound[t]+".json");
 			////////////console.log((tags.inBound);
+			console.log(arr[i]);
+			
 			tpht.easyXHR("get", config.baseURL + "node/jsons/" + arr[i] + ".json", "", function(response) {
 				////console.log((JSON.parse(response));
 				////////////console.log((response.length);
-				
-				if (!JSON.parse(response).hasOwnProperty("error")) {
+				//console.log(response);
+				try{
+				var jsonP = JSON.parse(response);
+				if (jsonP.hasOwnProperty("error") == false) {
 					////////////console.log(("GETTING");
 					tags.tagData[JSON.parse(response).tag] = JSON.parse(response);
 				}
 				////////////console.log((tags.tagData[JSON.parse(response).tag].answers.length);
-				//////////////console.log((tags.tagData[JSON.parse(response).tag]);
+				////////////console.log((tags.tagData[JSON.parse(response).tag]);
 				loop.next();
+					}catch(e){
+						loop.next();
+					}
 			});
+	
 		}, function() {
 			//////////////console.log((tags.tagData);
 			////////////console.log(("STUFFANDTHINGS");
@@ -625,14 +647,14 @@ var tags = {
 				minHeight: 250,
 				//maxHeight: 400,
 				minWidth : 320,
-//				maxWidth : 320,
+				maxWidth : 320,
 				arrowPosition : 30,
 				borderColor : "#22b9c8",
 				backgroundColor : '#ffdf24'
 			};
 			if(document.documentElement.clientWidth < 480){
 	
-	//			markerObj.maxWidth = Math.floor(document.documentElement.clientWidth*0.9);
+				markerObj.maxWidth = Math.floor(document.documentElement.clientWidth*0.8);
 				markerObj.minWidth = Math.floor(document.documentElement.clientWidth*0.8);
 				//////console.log(("----------------------------");
 				//////console.log((markerObj.minWidth);
@@ -774,7 +796,7 @@ var tags = {
 						borderWidth : 2,
 						borderRadius : 0,
 						arrowSize : 70,
-			//			maxWidth : 320,
+						maxWidth : 320,
 						minWidth : 320,
 						//maxHeight: 400,
 						minHeight: 250,
@@ -783,7 +805,7 @@ var tags = {
 						backgroundColor : '#ffdf24'
 					};
 			if(document.documentElement.clientWidth < 480){
-		//		markerObj.maxWidth = Math.floor(document.documentElement.clientWidth*0.9);
+				markerObj.maxWidth = Math.floor(document.documentElement.clientWidth*0.8);
 				markerObj.minWidth = Math.floor(document.documentElement.clientWidth*0.8);
 						//////console.log(("----------------------------");
 				//////console.log((markerObj.minWidth);

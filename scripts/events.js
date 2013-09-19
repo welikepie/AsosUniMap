@@ -1,5 +1,3 @@
-
-
 var links = ["http://www.asos.com/", "http://www.asos.com/", "http://www.asos.com/", "http://www.asos.com/"];
 var text = ["EXPLORE >", "WATCH >", "SHOP >", "WIN >"];
 
@@ -40,183 +38,211 @@ function setSSE() {
 }
 
 window.onload = function() {
+
 	console.log("adding listeners");
-	$('#twitterButton').load(function(){
+	$('#twitterButton').load(function() {
 		$(this).show();
 	});
 	var open = false;
 	var totalHeight = document.documentElement.clientHeight;
 	var contHeight = totalHeight - 165;
-	$("#SurroundContainer").css("height", contHeight+6);
+	$("#SurroundContainer").css("height", contHeight + 6);
 	$("#surrounder").css("height", contHeight - 42);
 	var popUp = false;
-	
 
 	if (document.documentElement.clientWidth < 480) {
-		$("#searchGO").css("display","block");
+		/*$("#JS-MBtopMenu").click(function(e){
+		 console.log(e);
+		 //e.preventDefault();
+		 //e.stopPropagation();
+		 console.log("CLICKING")
+		 }
+		 );*/
+		$("#searchGO").css("display", "block");
+		console.log("displaying!");
 		$("#search").html("");
-		$("#searchProxy").css("display","none");
-
+		$("#searchProxy").css("display", "none");
+	
 		$("#search").html("");
 		$("#blackOverlay").html("");
-		$("#searchField").css("width",document.documentElement.clientWidth - 123);
+	//	$("#searchField").css("width", document.documentElement.clientWidth - 83);
 		//$("#searchProxy").append($("#search").html());
 
-	
+		/*
+		 var img = document.createElement("img");
+		 img.setAttribute("id","pinImage");
+		 img.setAttribute("src","images/pinInput.png");
+		 $("#twitterButton").prop("src","twitMobi.html");
+		 document.getElementById("twitterButton").contentWindow.location.reload();
+		 $("#labelText").html("<p>ADD YOUR SPOT TO </p><p>THE MAP TO WIN A PRIZE</p>");
+		 $("#socialProxy").append(img);
+		 $("#socialProxy").append($("#blackOverlay").html());
+		 */
 
-
-/*		
-		var img = document.createElement("img");
-		img.setAttribute("id","pinImage");
-		img.setAttribute("src","images/pinInput.png");
-		$("#twitterButton").prop("src","twitMobi.html");
-		document.getElementById("twitterButton").contentWindow.location.reload();
-		$("#labelText").html("<p>ADD YOUR SPOT TO </p><p>THE MAP TO WIN A PRIZE</p>");
-		$("#socialProxy").append(img);
-		$("#socialProxy").append($("#blackOverlay").html());
-*/
-
-		
 		$("#map-overlay").first().css("top", (totalHeight - 60) + "px");
 		$("#SurroundContainer").css("height", totalHeight - 105);
 		$("#surrounder").css("height", totalHeight - 160);
 		// don’t download complicated script
 		// use low-source images instead of full-source ones
-		$('#pinImage').click(function(){
+		$('#pinImage').click(function() {
 			////console.log("clicked");
-			$('#tagI').css("display","block");
-			$('#socialProxy').css("display","none");
-			$('#tagDiv').css("width",'');
+			$('#tagI').css("display", "block");
+			$('#socialProxy').css("display", "none");
+			$('#tagDiv').css("width", '');
 		});
-
-		$('#map-overlay').click(function(e) {
-			//console.log(e);
-			if (popUp == false) {
-			popUp = true;
-			//console.log(e);
-			//rest of your logic will go here
-			$('#map-overlay').attr("class", "upWeGo");
-			$('#map-overlay').css("top", 120 + "px");
-		}
-		
-		});
-	
-	$(document.getElementById("searchGO")).bind('click', function() {
-			
-		$("#content").css("display","block");
-		var stuff = $("#searchField").val();
-		if(stuff == "SEARCH UNI"){
-		stuff = "";	
-		}
-		//console.log($("#searchField").val().toUpperCase());
-		$("#header").text("SEARCH RESULTS");
-		if (tags.filtration != stuff) {
-			tags.filtration = stuff;
-			$("#searchContent").text(stuff.toUpperCase());
-		}
-		if (popUp == false) {
-			popUp = true;
-			//console.log(e);
-			//rest of your logic will go here
-			$('#map-overlay').attr("class", "upWeGo");
-			$('#map-overlay').css("top", 120 + "px");
-		}
-		elements.fullUpdate();
-	});
-	
-	$('#header').click(function(e){	
+		$('#studentImage').click(function(e) {
+			tags.filtration = "";
+			elements.fullUpdate();
+			$("#searchProxy").css("display", "none");
+			$("#searchI").css("display", "block");
+			$("#searchDiv").attr("style", "");
 			if (popUp == true) {
 				popUp = false;
 				//rest of your logic will go here
 				$('#map-overlay').attr("class", "upWeGo");
 				$('#map-overlay').css("top", (totalHeight - 60) + "px");
-					e.stopPropagation();
-					e.preventDefault();
-				}
-	});
-		$('#searchI').click(function(e){
-			$('#searchI').css("display","none");
-			$('#searchProxy').css("display","block");
-			$("#searchDiv").css("width","100%");
-			$('#tagI').css("display","block");
-			$('#socialProxy').css("display","none");
-			$('#tagDiv').css("width",'');			
+				e.stopPropagation();
+				e.preventDefault();
+			}
+
+		});
+		$('#map-overlay').click(function(e) {
+			//console.log(e);
+			if (popUp == false) {
+				popUp = true;
+				//console.log(e);
+				//rest of your logic will go here
+				$('#map-overlay').attr("class", "upWeGo");
+				$('#map-overlay').css("top", 120 + "px");
+			}
+		});
+
+		$(document.getElementById("searchGO")).bind('click', function() {
+
+			$("#content").css("display", "block");
+			var stuff = $("#searchField").val();
+			if (stuff == "SEARCH UNI") {
+				stuff = "";
+			}
+			//console.log($("#searchField").val().toUpperCase());
+			$("#header").text("SEARCH RESULTS");
+			if (tags.filtration != stuff) {
+				tags.filtration = stuff;
+				$("#searchContent").text(stuff.toUpperCase());
+			}
+			if (popUp == false) {
+				popUp = true;
+				$('#map-overlay').attr("class", "upWeGo");
+				$('#map-overlay').css("top", 120 + "px");
+			}
+			elements.fullUpdate();
+		});
+
+		$('#header').click(function(e) {
+			if (popUp == true) {
+				popUp = false;
+				//rest of your logic will go here
+				$('#map-overlay').attr("class", "upWeGo");
+				$('#map-overlay').css("top", (totalHeight - 60) + "px");
+				e.stopPropagation();
+				e.preventDefault();
+			}
+		});
+		$('#searchI').click(function(e) {
+			$('#searchI').css("display", "none");
+			$('#searchProxy').css("display", "block");
+			$("#searchDiv").css("width", "100%");
+			$('#tagI').css("display", "block");
+			$('#socialProxy').css("display", "none");
+			$('#tagDiv').css("width", '');
 			e.stopPropagation();
 			e.preventDefault();
 		})
-		
-		
-		$('#tagI').click(function(){
-			$('#tagDiv').css("width","100%");
-			$('#tagI').css("display","none");
-			$('#socialProxy').css("display","block");
-			$("#searchProxy").css("display","none");
-			$("#searchI").css("display","block");
-			$("#searchDiv").attr("style","");
+
+		$('#tagI').click(function() {
+			$('#tagDiv').css("width", "100%");
+			$('#tagI').css("display", "none");
+			$('#socialProxy').css("display", "block");
+			$("#searchProxy").css("display", "none");
+			$("#searchI").css("display", "block");
+			$("#searchDiv").attr("style", "");
 		});
-		
-		
+
 		$('#map-canvas').click(function(e) {
-			$('#tagI').css("display","block");
-			$('#socialProxy').css("display","none");
-			$('#tagDiv').css("width",'');
-			$("#searchProxy").css("display","none");
-			$("#searchI").css("display","block");
-			$("#searchDiv").attr("style","");
+			$('#tagI').css("display", "block");
+			$('#socialProxy').css("display", "none");
+			$('#tagDiv').css("width", '');
+
+			$("#searchProxy").css("display", "none");
+			$("#searchI").css("display", "block");
+			$("#searchDiv").attr("style", "");
 			//console.log(e);
-			if($("#menuHolder").length > 0){
-								open = false;
+			if ($("#menuHolder").length > 0) {
+				open = false;
 				var i = document.getElementById("menuHolder");
 				i.parentNode.removeChild(i);
 			}
 			if (popUp == true) {
+				tags.filtration = "";
+				elements.fullUpdate();
 				popUp = false;
 				e.stopPropagation();
 				e.preventDefault();
 				//rest of your logic will go here
 				$('#map-overlay').attr("class", "upWeGo");
-				$('#map-overlay').css("top", (totalHeight - 40) + "px");
+				$('#map-overlay').css("top", (totalHeight - 60) + "px");
 
 			}
 		})
+		
 		/*$('#tapMENU').bind("click", function() {
-			if (open == false) {
-				open = true;
-				//		<a class="prodLink"><div>YOURMOM ></div></a>
-				var varToAppend = document.getElementById("JS-MBtopMenu");
-				var div = document.createElement("div");
-				div.setAttribute("id", "menuHolder");
-				for (var i = 0; i < links.length; i++) {
-					var a = document.createElement("a");
-					a.setAttribute("class", "prodLink");
-					a.setAttribute("href", links[i]);
-					a.setAttribute("target", "_blank");
-					var d = document.createElement("div");
-					dText = document.createTextNode(text[i]);
-					d.appendChild(dText);
-					a.appendChild(d);
-					div.appendChild(a);
-				}
-				varToAppend.appendChild(div);
-			} else {
-				open = false;
-				var i = document.getElementById("menuHolder");
-				i.parentNode.removeChild(i);
-			}
-		})*/
-	} else{
-			$("#searchProxy, #searchDiv").html("");
+		 if (open == false) {
+		 open = true;
+		 //		<a class="prodLink"><div>YOURMOM ></div></a>
+		 var varToAppend = document.getElementById("JS-MBtopMenu");
+		 var div = document.createElement("div");
+		 div.setAttribute("id", "menuHolder");
+		 for (var i = 0; i < links.length; i++) {
+		 var a = document.createElement("a");
+		 a.setAttribute("class", "prodLink");
+		 a.setAttribute("href", links[i]);
+		 a.setAttribute("target", "_blank");
+		 var d = document.createElement("div");
+		 dText = document.createTextNode(text[i]);
+		 d.appendChild(dText);
+		 a.appendChild(d);
+		 div.appendChild(a);
+		 }
+		 varToAppend.appendChild(div);
+		 } else {
+		 open = false;
+		 var i = document.getElementById("menuHolder");
+		 i.parentNode.removeChild(i);
+		 }
+		 })*/
+	} else {
+		$("#searchProxy").html("");
+		$("#socialProxy").html("");
+		$('#twitterButton').load(function() {
+			$(this).show();
+		});
+		
 	}
-$('#searchField').focus(function() {
+
+	$('#searchField').focus(function() {
 		if (this.value == this.defaultValue) {
 			this.value = '';
-			$(this).removeClass('default');
-		};
+			$(this).removeClass('default');	
+		}
 	});
 	$('#searchField').keypress(function(e) {
 		if (e.which == 13) {
 			jQuery(this).blur();
-			jQuery('#searchMe').focus().click();
+			if(document.documentElement.clientWidth < 480){
+				$("#searchGO").focus().click();
+			}else{
+				$('#searchMe').focus().click();
+			}
 		}
 	});
 
@@ -229,50 +255,49 @@ $('#searchField').focus(function() {
 	tags.retrieve();
 	config.sizesOfLabels();
 	$(document.getElementById("searchClear")).bind('click', function() {
-		$("#content").css("display","block");
-		$("#searchError").css("display","none");
+		$("#content").css("display", "block");
+		$("#searchError").css("display", "none");
 		document.getElementById("searchField").value = "";
-	//	if(document.documentElement.clientWidth > 480){
-			document.getElementById("searchClear").style.display = "none";
-	//	}
-	//	else{
-//			$("#searchProxy").css("display","none");
-//			$("#searchI").css("display","block");
-//			$("#searchDiv").attr("style","");
-	//	}
-		
-		
+		//	if(document.documentElement.clientWidth > 480){
+		document.getElementById("searchClear").style.display = "none";
+		//	}
+		//	else{
+		//			$("#searchProxy").css("display","none");
+		//			$("#searchI").css("display","block");
+		//			$("#searchDiv").attr("style","");
+		//	}
+
 		//mmanager.hashContentManager.refresh();
 		tags.filtration = "";
 		elements.fullUpdate();
 
 	});
-	if(document.documentElement.clientWidth > 480){
-	$(document.getElementById("searchMe")).bind('click', function() {
-		$("#content").css("display","block");
-		var stuff = $("#searchField").val();
-		if(stuff == "SEARCH UNI"){
-		stuff = "";	
-		}
-	//	console.log($("#searchField").val().toUpperCase());
-		$("#header").text("SEARCH RESULTS");
-		if (tags.filtration != stuff) {
-			if (stuff == "") {
-				$("#searchClear").css("display", "none");
-			} else {
-				if(document.documentElement.clientWidth > 480){
-					$("#searchClear").css("display", "block");
-				}
+	if (document.documentElement.clientWidth > 480) {
+		$(document.getElementById("searchMe")).bind('click', function() {
+			$("#content").css("display", "block");
+			var stuff = $("#searchField").val();
+			if (stuff == "SEARCH UNI") {
+				stuff = "";
 			}
-			tags.filtration = stuff;
-			$("#searchContent").text(stuff);
-		}
-		//console.log("getting here!");
-		elements.fullUpdate();
-	});
+			//	console.log($("#searchField").val().toUpperCase());
+			$("#header").text("SEARCH RESULTS");
+			if (tags.filtration != stuff) {
+				if (stuff == "") {
+					$("#searchClear").css("display", "none");
+				} else {
+					if (document.documentElement.clientWidth > 480) {
+						$("#searchClear").css("display", "block");
+					}
+				}
+				tags.filtration = stuff;
+				$("#searchContent").text(stuff);
+			}
+			//console.log("getting here!");
+			elements.fullUpdate();
+		});
 	}
 	setSSE();
-		$("#JS-bbMoreInfo, #infolink, #moreInfoLink").bind('click', function() {
+	$("#JS-bbMoreInfo, #infolink, #moreInfoLink").bind('click', function() {
 		$("#modalInside").html("");
 		general.customModal({
 			"type" : "alert",
@@ -280,7 +305,7 @@ $('#searchField').focus(function() {
 			"padded" : false
 		});
 	});
-	
+
 	$(document.getElementById("insta")).bind('click', function() {
 		$("#modalInside").html("");
 		general.customModal({
