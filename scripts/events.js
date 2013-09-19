@@ -5,7 +5,7 @@ var currSel = "";
 var lastMessage = Date.now();
 
 function checkId() {
-	//console.log(lastEventId - messageId);
+	////console.log(lastEventId - messageId);
 	if (lastEventId < messageId) {
 		return true;
 	}
@@ -15,17 +15,17 @@ function checkId() {
 function setSSE() {
 	var es = new EventSource("http://localhost:1337/events");
 	/*es.addEventListener("open", function(e) {
-	 //console.log("Connected!");
+	 ////console.log("Connected!");
 	 });
 	 es.addEventListener("error", function(e) {
 	 //.log("erroring");
 	 });
 	 es.addEventListener("info", function(event) {
-	 //console.log(event);
+	 ////console.log(event);
 	 });*/
 	es.addEventListener("message", function(event) {
-		//console.log(event);
-		//console.log(Date.now());
+		////console.log(event);
+		////console.log(Date.now());
 		//		event = event.originalEvent;
 		//lastEventId = messageId;
 		if (parseInt(JSON.parse(event.data).timestamp, 10) > lastMessage) {
@@ -39,7 +39,7 @@ function setSSE() {
 
 window.onload = function() {
 
-	console.log("adding listeners");
+	////console.log("adding listeners");
 	$('#twitterButton').load(function() {
 		$(this).show();
 	});
@@ -52,14 +52,14 @@ window.onload = function() {
 
 	if (document.documentElement.clientWidth < 480) {
 		/*$("#JS-MBtopMenu").click(function(e){
-		 console.log(e);
+		 //console.log(e);
 		 //e.preventDefault();
 		 //e.stopPropagation();
-		 console.log("CLICKING")
+		 //console.log("CLICKING")
 		 }
 		 );*/
 		$("#searchGO").css("display", "block");
-		console.log("displaying!");
+	//	//console.log("displaying!");
 		$("#search").html("");
 		$("#searchProxy").css("display", "none");
 	
@@ -85,7 +85,7 @@ window.onload = function() {
 		// don’t download complicated script
 		// use low-source images instead of full-source ones
 		$('#pinImage').click(function() {
-			////console.log("clicked");
+			//////console.log("clicked");
 			$('#tagI').css("display", "block");
 			$('#socialProxy').css("display", "none");
 			$('#tagDiv').css("width", '');
@@ -107,10 +107,10 @@ window.onload = function() {
 
 		});
 		$('#map-overlay').click(function(e) {
-			//console.log(e);
+			////console.log(e);
 			if (popUp == false) {
 				popUp = true;
-				//console.log(e);
+				////console.log(e);
 				//rest of your logic will go here
 				$('#map-overlay').attr("class", "upWeGo");
 				$('#map-overlay').css("top", 120 + "px");
@@ -124,7 +124,7 @@ window.onload = function() {
 			if (stuff == "SEARCH UNI") {
 				stuff = "";
 			}
-			//console.log($("#searchField").val().toUpperCase());
+			////console.log($("#searchField").val().toUpperCase());
 			$("#header").text("SEARCH RESULTS");
 			if (tags.filtration != stuff) {
 				tags.filtration = stuff;
@@ -176,7 +176,7 @@ window.onload = function() {
 			$("#searchProxy").css("display", "none");
 			$("#searchI").css("display", "block");
 			$("#searchDiv").attr("style", "");
-			//console.log(e);
+			////console.log(e);
 			if ($("#menuHolder").length > 0) {
 				open = false;
 				var i = document.getElementById("menuHolder");
@@ -279,7 +279,7 @@ window.onload = function() {
 			if (stuff == "SEARCH UNI") {
 				stuff = "";
 			}
-			//	console.log($("#searchField").val().toUpperCase());
+			//	//console.log($("#searchField").val().toUpperCase());
 			$("#header").text("SEARCH RESULTS");
 			if (tags.filtration != stuff) {
 				if (stuff == "") {
@@ -292,7 +292,7 @@ window.onload = function() {
 				tags.filtration = stuff;
 				$("#searchContent").text(stuff);
 			}
-			//console.log("getting here!");
+			////console.log("getting here!");
 			elements.fullUpdate();
 		});
 	}
@@ -364,7 +364,7 @@ window.onload = function() {
 //'/me/feed/',
 //'post',
 //array('access_token' => $this->access_token, 'message' => 'Playing around with FB Graph..')
-//          //console.log(user);
+//          ////console.log(user);
 //         });
 /*
  FB.ui({
@@ -375,11 +375,11 @@ window.onload = function() {
  caption: 'This is the content of the "caption" field.',
  description: 'This is the content of the "description" field, below the caption.',
  message: 'Testing Things'
- }, function(response){//console.log(response)});
+ }, function(response){////console.log(response)});
  */
 try {
 	google.maps.event.addDomListener(window, 'load', maps.initialize);
 } catch(e) {
-	//console.log("Your maps, they seem to have failed to load.");
+	////console.log("Your maps, they seem to have failed to load.");
 }
 

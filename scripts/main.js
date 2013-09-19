@@ -528,7 +528,7 @@ var tags = {
 		tpht.asyncLoop(arr.length, function(loop, i) {
 			//		////////////console.log(("node/jsons/"+tags.inBound[t]+".json");
 			////////////console.log((tags.inBound);
-			console.log(arr[i]);
+		//	console.log(arr[i]);
 			
 			tpht.easyXHR("get", config.baseURL + "node/jsons/" + arr[i] + ".json", "", function(response) {
 				////console.log((JSON.parse(response));
@@ -623,7 +623,7 @@ var tags = {
 			var marker = new google.maps.Marker({
 				"position" : obj.position,
 				"map" : obj.map,
-				"icon" : image,
+				"icon" : new google.maps.MarkerImage(image,new google.maps.Size(34, 47),null,null,new google.maps.Size(34, 47)),
 				"zIndex" : 9000,
 				"disableAutoPan" : true,
 				"text" : obj.text
@@ -644,7 +644,7 @@ var tags = {
 				borderRadius : 0,
 				arrowSize : 65,
 				arrowTopSize : 20,
-				minHeight: 250,
+				//minHeight: 250,
 				//maxHeight: 400,
 				minWidth : 320,
 				maxWidth : 320,
@@ -653,7 +653,6 @@ var tags = {
 				backgroundColor : '#ffdf24'
 			};
 			if(document.documentElement.clientWidth < 480){
-	
 				markerObj.maxWidth = Math.floor(document.documentElement.clientWidth*0.9);
 				markerObj.minWidth = Math.floor(document.documentElement.clientWidth*0.9);
 				//////console.log(("----------------------------");
@@ -776,7 +775,7 @@ var tags = {
 					var marker = new google.maps.Marker({
 						position : new google.maps.LatLng(arr[i].latitude, arr[i].longitude),
 						map : maps.map,
-						icon : image,
+           				"icon" : new google.maps.MarkerImage(image,new google.maps.Size(34, 47),null,null,new google.maps.Size(34, 47)),
 						zIndex : 9000,
 						text : arr[i].text,
 						disableAutoPan : true
@@ -799,14 +798,16 @@ var tags = {
 						maxWidth : 320,
 						minWidth : 320,
 						//maxHeight: 400,
-						minHeight: 250,
+						//minHeight: 250,
 						arrowPosition : 30,
 						borderColor : "#22b9c8",
 						backgroundColor : '#ffdf24'
 					};
 			if(document.documentElement.clientWidth < 480){
+				
 				markerObj.maxWidth = Math.floor(document.documentElement.clientWidth*0.9);
 				markerObj.minWidth = Math.floor(document.documentElement.clientWidth*0.9);
+				
 						//////console.log(("----------------------------");
 				//////console.log((markerObj.minWidth);
 			
@@ -1631,7 +1632,7 @@ var general = {
 		//extraString = extraString + "&hashtags=" + tags.singleTag.replace(/#/g, "");
 		$('#twitterButton').hide();
 		$(tweet).attr("src", extraString+"&text="+"My fave student hotspot is #ASOS[Insert Uni Here]");
-		console.log("reloading");
+		//console.log("reloading");
 		tweet.contentWindow.location.reload();
 	}
 }

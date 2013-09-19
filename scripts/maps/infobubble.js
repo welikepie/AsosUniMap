@@ -223,6 +223,9 @@ InfoBubble.prototype.buildDom_ = function() {
 	contentContainer.style['position'] = 'relative';
 
 	var content = this.content_ = document.createElement('DIV');
+	$(content).css("float","left");
+	$(content).css("text-overflow","ellipsis");
+	$(content).css("overflow","hidden");
 	contentContainer.appendChild(content);
 
 	// Arrow
@@ -1197,7 +1200,7 @@ InfoBubble.prototype.setTabStyle_ = function(tab) {
 		'cursor' : 'pointer',
 		'backgroundColor' : backgroundColor,
 		'border' : this.px(borderWidth) + ' solid ' + borderColor,
-		'padding' : this.px(padding / 2) + ' ' + this.px(padding),
+		'padding' : this.px(padding) + ' ' + this.px(padding),
 		'marginRight' : marginRight,
 		'whiteSpace' : 'nowrap',
 		'borderRadiusTopLeft' : borderRadiusPx,
@@ -1602,25 +1605,25 @@ InfoBubble.prototype.figureOutSize_ = function() {
 
 	arrowSize = arrowSize * 2;
 	width = Math.max(width, arrowSize);
-
 	// Maybe add this as a option so they can go bigger than the map if the user
 	// wants
 	
-	//if (width > mapWidth) {
-	//	width = mapWidth;
-	//}
+	if (width > mapWidth) {
+		width = mapWidth;
+	}
 
-	//if (height > mapHeight) {
-	//	height = mapHeight - tabHeight;
-	//}
+	if (height > mapHeight) {
+		height = mapHeight - tabHeight;
+	}
 
 	if (this.tabsContainer_) {
 		this.tabHeight_ = tabHeight;
 		this.tabsContainer_.style['width'] = this.px(tabWidth);
 	}
 //console.log(width);
+console.log(height+30);
 	this.contentContainer_.style['width'] = this.px(width);
-	this.contentContainer_.style['height'] = this.px(height);
+	this.contentContainer_.style['height'] = this.px(height+30+padding*2);
 };
 
 /**
