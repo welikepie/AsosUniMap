@@ -324,10 +324,12 @@ var mmanager = {
 		general.refreshLabelSize();
 				for (var zed in tags.markerTagsNoGeo) {
 			//			new Marker
-			//console.log(tags.markerTagsNoGeo[zed].length);
-			if (tags.markerTagsNoGeo[zed].length > 0) {
-				if (tags.markerTagsNoGeo[zed].length == 1) {
-					
+			console.log(tags.markerTagsNoGeo[zed].length);
+			console.log(tags.markerTagsNoGeo[zed]);
+			if (tags.markerTagsNoGeo[zed].length-1 > 0) {
+				//console.log(tags.markerTagsNoGeo[zed].length-1);
+				if (tags.markerTagsNoGeo[zed].length-1 == 1) {
+				//	console.log("YEAHYEAHYEAH");
 				var marker = new google.maps.Marker({//WithLabel({
 					"position" : new google.maps.LatLng(tags.locations[zed].latitude, tags.locations[zed].longitude),
 					"map" : maps.map,
@@ -342,12 +344,12 @@ var mmanager = {
 					"icon" : "images/multiLocation.png",
 					"zIndex" : 600,
 					"disableAutoPan" : true,
-					"labelContent": tags.markerTagsNoGeo[zed].length,
-				    "labelAnchor": new google.maps.Point(8, 12),
+					"labelContent": tags.markerTagsNoGeo[zed].length-1,
+				    "labelAnchor": new google.maps.Point(8, 16),
 				    "labelClass": "geoSizing", // the CSS class for the label
 				});	
 					//marker.labelcontent = tags.markerTagsNoGeo.length;
-
+					console.log(tags.markerTagsNoGeo[zed]);
 				}
 				
 				var divCont = document.createElement("div");
