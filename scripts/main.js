@@ -322,6 +322,110 @@ var mmanager = {
 		var element = 3;
 		////////////console.log((tags.optionaltags);
 		general.refreshLabelSize();
+				for (var zed in tags.markerTagsNoGeo) {
+			//			new Marker
+			//console.log(tags.markerTagsNoGeo[zed].length);
+			if (tags.markerTagsNoGeo[zed].length > 0) {
+				if (tags.markerTagsNoGeo[zed].length == 1) {
+					
+				var marker = new google.maps.Marker({//WithLabel({
+					"position" : new google.maps.LatLng(tags.locations[zed].latitude, tags.locations[zed].longitude),
+					"map" : maps.map,
+					"icon" : "images/singleLocation.png",
+					"zIndex" : 600,
+					"disableAutoPan" : true,
+				});	
+				} else {
+					var marker = new MarkerWithLabel({
+					"position" : new google.maps.LatLng(tags.locations[zed].latitude, tags.locations[zed].longitude),
+					"map" : maps.map,
+					"icon" : "images/multiLocation.png",
+					"zIndex" : 600,
+					"disableAutoPan" : true,
+					"labelContent": tags.markerTagsNoGeo[zed].length,
+				    "labelAnchor": new google.maps.Point(8, 12),
+				    "labelClass": "geoSizing", // the CSS class for the label
+				});	
+					//marker.labelcontent = tags.markerTagsNoGeo.length;
+
+				}
+				
+				var divCont = document.createElement("div");
+				divCont.setAttribute("class","lister");
+				divCont.setAttribute("id",zed+"scrollContainer");
+				divCont.setAttribute("data-rel-zed",zed);
+				var appDiv = document.createElement("ul");
+				appDiv.setAttribute("id",zed+"UL");
+				divCont.appendChild(appDiv);
+				if(tags.markerTagsNoGeo[zed].length > 9){
+					for(var i = 0; i < 9; i++){
+						appDiv.appendChild(elements.domListing(tags.markerTagsNoGeo[zed][i],false,false,zed,zed+"LI"));
+						//console.log(elements.domListing(tags.markerTagsNoGeo[zed][i],false,false,zed,zed+"LI"));	
+						tags.markerTagsNoGeo[zed].splice(i,1);
+					}
+				}
+				else{
+					for(var i = 0; i < tags.markerTagsNoGeo[zed].length; i++){
+						appDiv.appendChild(elements.domListing(tags.markerTagsNoGeo[zed][i],false,false,zed,zed+"LI"));
+						//console.log(elements.domListing(tags.markerTagsNoGeo[zed][i],false,false,zed,zed+"LI"));	
+						tags.markerTagsNoGeo[zed].splice(i,1);
+					}
+				}
+				$(divCont).scroll(function(e){
+					var zedder = this.getAttribute("data-rel-zed");
+					console.log(this.scrollTop);
+					
+					console.log( );
+					
+					if (this.scrollTop >= (document.getElementById(zedder+"UL").offsetHeight-278)) {
+						if(tags.markerTagsNoGeo[zedder].length > 9){
+							for(var i = 0; i < 9; i++){
+								document.getElementById(zedder+"UL").appendChild(elements.domListing(tags.markerTagsNoGeo[zedder][i],false,false,zedder,zedder+"LI"));
+								//console.log(elements.domListing(tags.markerTagsNoGeo[zed][i],false,false,zed,zed+"LI"));	
+								tags.markerTagsNoGeo[zedder].splice(i,1);
+							}
+						}
+						else{
+							for(var i = 0; i < tags.markerTagsNoGeo[zedder].length; i++){
+								document.getElementById(zedder+"UL").appendChild(elements.domListing(tags.markerTagsNoGeo[zedder][i],false,false,zedder,zedder+"LI"));
+								//console.log(elements.domListing(tags.markerTagsNoGeo[zed][i],false,false,zed,zed+"LI"));	
+								tags.markerTagsNoGeo[zedder].splice(i,1);
+							}
+						}
+					}
+				});
+//				tags.markerTagsNoGeo[zed];			
+				
+				var markerObj = {
+					content : divCont,
+					data : tags.markerTagsNoGeo[zed],
+					drawnTo : 10,
+					zIndex : 9005,
+					arrowStyle : 2,
+					padding : 10,
+					borderWidth : 2,
+					borderRadius : 0,
+					arrowSize : 65,
+					arrowTopSize : 20,
+					minHeight : 250,
+					maxHeight: 400,
+					maxWidth : 320,
+					minWidth : 320,
+					type : "noGeo",
+					
+					//maxWidth : 320,
+					arrowPosition : 30,
+					borderColor : "#22b9c8",
+					backgroundColor : '#ffdf24'
+				};
+				if (document.documentElement.clientWidth < 480) {
+					markerObj.maxWidth = Math.floor(document.documentElement.clientWidth * 0.8);
+				}
+				//tags with no Geo
+				marker.info = new InfoBubble(markerObj);
+				mmanager.addClickToHashes(marker);
+			}
+		}
 		for (var zed in tags.locations) {
 
 			if (tags.locations[zed].latitude != null && tags.locations[zed].longitude != null) {
@@ -417,6 +521,7 @@ var tags = {
 	"campaign" : new Array(),
 	"MAPrenderOnPage" : new Array(),
 	"DOMrenderOnPage" : new Array(),
+	"markerTagsNoGeo" : {},
 	"markerTags" : {},
 	"datHeight" : function() {
 		//////////console.log(("getting");
@@ -540,6 +645,14 @@ var tags = {
 				if (jsonP.hasOwnProperty("error") == false) {
 					////////////console.log(("GETTING");
 					tags.tagData[JSON.parse(response).tag] = JSON.parse(response);
+					tags.markerTagsNoGeo[JSON.parse(response).tag] = [];
+					var z = JSON.parse(response).answers.length - 1;
+					var iterr = JSON.parse(response);
+					for (var i = 0; i < z; i++) {
+						if (iterr.answers[i].lat == null) {
+							tags.markerTagsNoGeo[iterr.tag].push(iterr.answers[i]);
+						}
+					}
 				}
 				////////////console.log((tags.tagData[JSON.parse(response).tag].answers.length);
 				////////////console.log((tags.tagData[JSON.parse(response).tag]);
@@ -1094,6 +1207,137 @@ if (mmanager.hashContentManager != null && tags.filtration.length > 0) {
 		}
 		return false;
 	},
+	"domListing" : function(obj, hidden, notLazyLoad, Classing,idSuffix) {
+			notLazyLoad = true;
+			var li = document.createElement("li");
+			$(li).attr("id", idSuffix + obj.id);
+			if (hidden == true) {
+				$(li).css("display", "none");
+			}
+			$(li).attr("class", Classing);
+			$(li).attr("data-rel-hashtag", obj.hashtag.replace(/#/g, ""));
+			$(li).attr("data-timestamp", obj.time);
+			$(li).attr("data-rel-source", obj.src);
+			$(li).attr("data-textContent", obj.text);
+			var topDiv = document.createElement("div");
+			topDiv.setAttribute("class", "topDiv");
+			if (obj.imgURL != "") {
+				var profImg = document.createElement("img");
+				profImg.setAttribute("src", obj.userIMG);
+				profImg.setAttribute("class", "profileImages");
+				topDiv.appendChild(profImg);
+				$(profImg).bind("error", function() {
+					////////////console.log("sideBar" + obj.id);
+					$(profImg).css("display", "none");
+				})
+			}
+
+			//////////console.log(JSON.stringify(obj));
+			if (obj.name != null) {
+				var str = obj.name.replace(/(^\s+|\s+$)/g, ' ');
+				;
+			} else {
+				var str = "";
+			}
+			//////////console.log(str);
+			var splitString = [str.substr(0, str.indexOf(" ")), str.substr(str.indexOf(" ") + 1)];
+			// "tocirah sneab"]
+			var classes = ["firstName", "lastName"];
+			var domDiv = document.createElement("div");
+			domDiv.setAttribute("class", "nameContainer");
+			for (var i = 0; i < splitString.length; i++) {
+				var addDiv = document.createElement("p");
+				addDiv.setAttribute("class", classes[i]);
+				var addDivText = document.createTextNode(splitString[i].toUpperCase());
+				addDiv.appendChild(addDivText);
+				domDiv.appendChild(addDiv);
+
+			}
+			var namesDiv = document.createElement("div");
+			namesDiv.setAttribute("class", "names");
+			namesDiv.appendChild(domDiv);
+
+			if (obj.source != "FACEB") {
+				var userDiv = document.createElement("p");
+				userDiv.setAttribute("class", "userNameTag");
+				var userDivText = document.createTextNode("@" + obj.user);
+				userDiv.appendChild(userDivText);
+				namesDiv.appendChild(userDiv);
+			}
+			topDiv.appendChild(namesDiv);
+
+			var icon = document.createElement("div");
+			if(obj.source == "TWTTR"){
+				icon.setAttribute("class","twttrImage");
+			}
+			if(obj.source == "INSTA"){
+				icon.setAttribute("class","instaImage");
+			}
+			if(obj.source == "FACEB"){
+				icon.setAttribute("class","facebImage");
+			}
+			topDiv.appendChild(icon);
+
+			var bottomDiv = document.createElement("div");
+			bottomDiv.setAttribute("class", "bottomDiv");
+
+			if (obj.img_small != undefined && obj.img_small != "") {
+				var div = document.createElement("img");
+				$(div).attr("class", "image");
+				if (notLazyLoad == false) {
+					$(div).attr("data-img-src", obj.img_small);
+				} else {
+					$(div).attr("src", obj.img_small);
+				}
+				//"sideBar" + obj.id
+				//div.attr("onerror",)
+				//			tpht.setAttr(div, "onError", tpht.setAttr(div,"style","display:none;"));
+				$(div).bind("error", function() {
+					////////////console.log("sideBar" + obj.id);
+					$(div).css("display", "none");
+					$("#sideBar" + obj.id).find(".textWithImg").attr("class", "text");
+					////////console.log("ERRORED SORTED");
+				})
+				bottomDiv.appendChild(div);
+
+			}
+
+			if (obj.text != undefined) {
+				var divt = document.createElement("div");
+				$(divt).attr("class", "text");
+				if (obj.img_small != undefined && obj.img_small != "") {
+					$(divt).attr("class", "textWithImg");
+				}
+				$(divt).html(obj.text);
+				bottomDiv.appendChild(divt);
+			}
+			if (obj.source == "FACEB") {
+				var a = document.createElement("a");
+				a.setAttribute("class", "socialLinkage");
+				var splitId = obj.id.split("_");
+				a.setAttribute("href", "https://www.facebook.com/" + splitId[0] + "/posts/" + splitId[1]);
+				a.setAttribute("target", "_blank");
+				a.appendChild(topDiv);
+				a.appendChild(bottomDiv);
+				li.appendChild(a);
+			} else  {
+				var a = document.createElement("a");
+				a.setAttribute("class", "socialLinkage");
+				var splitId = obj.id.split("_");
+				a.setAttribute("href", obj.link);
+				a.setAttribute("target", "_blank");
+				a.appendChild(topDiv);
+				a.appendChild(bottomDiv);
+				li.appendChild(a);
+			} 
+				li.appendChild(topDiv);
+				li.appendChild(bottomDiv);
+			
+			//		//////////console.log($(li).html());
+			return li;
+		
+	},
+
 	"list" : function(obj, hidden, notLazyLoad) {
 		notLazyLoad = true;
 		if (obj.source == "TWTTR" && document.documentElement.clientWidth > 480) {

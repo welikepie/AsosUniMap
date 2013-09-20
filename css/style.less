@@ -9,10 +9,27 @@
 @offblue : #38a6b0;
 @offbluewithopacity : rgba(56,166,176,0.8); 
 @red : #ec715f;
+@grass : #cad555; //the most polite way to name the colour.
 @green : #bdcf23;
 @gray : #888888;
 @offblacktoyellow : #1C1C1B;
 @mustard : #dbb900;
+    
+            ::-webkit-scrollbar {
+                width: 8px;
+            }
+            /* Track */
+            ::-webkit-scrollbar-track {
+                margin-right:4px;
+                background-color:@yellow;
+            }
+            /* Handle */
+            ::-webkit-scrollbar-thumb {
+                -webkit-border-radius: 6px;
+                border-radius: 6px;
+                background: @mustard; 
+                margin-right:4px;                
+            }
 
 img { height: auto !important } 
  #map_geolocation img { max-height: none; max-width: none; }
@@ -341,25 +358,82 @@ box-shadow: 0px 0px 5px @gray;
    .labelRoot{
        background-color:@yellow !important; 
        }
-            .infoBox{               
+       
+.noGeoLoc{
+        margin-left: -10px;
+        padding-left: 10px;
+        background-color: green;
+        margin-top: -10px;
+        margin-right: 10px;
+        height: 20px;
+        text-transform: uppercase;
+        font-family: "futura-pt-1","futura-pt-2",sans-serif !important;
+        font-size: 13px;
+        line-height: 20px;
+        background-color:@grass;
+    }
+    .lister{        
+            ::-webkit-scrollbar {
+                width: 8px;
+            }
+            /* Track */
+            ::-webkit-scrollbar-track {
+                margin-right:4px;
+                background-color:@yellow;
+            }
+            /* Handle */
+            ::-webkit-scrollbar-thumb {
+                -webkit-border-radius: 6px;
+                border-radius: 6px;
+                background: @mustard; 
+                margin-right:4px;                
+            }
+        
+        .noGeoHeading{
+                margin:0px;
+                text-transform:uppercase;
+            }
+        width:100%;
+        overflow-y:scroll;
+        float:left;
+        height:200px;
+        }
+            ul{        
+                width:100%;
+                
                 float:left;
+                list-style:none;
+                padding-left:0px;
+                li{
+                    width:100%;
+                    float:left;
+                    padding:5px 0px 5px 0px;
+                    border-bottom:1px solid @black;
+                    //border-bottom:1px solid @offblacktoyellow;
+                    
+                    }
+                }
+            .infoBox, li{               
+                            float:left;
                             .socialLinkage{
                                 float:left;
                                 text-decoration:none;
                                 color: @black;
                                 width:100%;
                             }
-                                .topDiv{
+                            .topDiv{
                                     float:left;
+                                    font-family: "futura-pt-1","futura-pt-2", sans-serif;
                                     width:100%;
-                                 padding-bottom:10px;
-                                 border-bottom: 1px solid @black;
+                    //                padding-bottom:10px;
+                    //                border-bottom: 1px solid @black;
                                     margin-bottom:10px;
-                                        .twttrImage, .facebImage, .instaImage{
+                                     .twttrImage, .facebImage, .instaImage{
                                             width:24px;
                                             height:24px;
                                             float:right;
                                             margin-top:0px;
+                                            margin-right:10px;
                                         }
                                         .twttrImage{
                                             background-image:url("../images/twitMini.png");
@@ -373,15 +447,10 @@ box-shadow: 0px 0px 5px @gray;
                                             background-image:url("../images/instaMini.png");
                                             background-repeat:no-repeat;
                                         }
-
-                                    .twitter-follow-button{
-                                        position: absolute;
-                                        right: 20px;
+                                .twitter-follow-button{
                                         float: right;
                                         height: 20px;
-                                        margin-top: 5px;
-                                        clear: right;
-                                        top: 35px;
+                                        margin-top: 20px;
                                     }
                                     .names{
                                         float:left;
@@ -394,7 +463,7 @@ box-shadow: 0px 0px 5px @gray;
                                             }
                                         
                                         .nameContainer{
-                                          //  margin-bottom:10px;
+                                            //margin-bottom:10px;
                                             padding-bottom:5px;
                                             float:left;
                                             border-bottom:3px solid @black;
@@ -415,40 +484,44 @@ box-shadow: 0px 0px 5px @gray;
                                         }
                                     }
                                 .bottomDiv{
+                                    width:100%;
+                                    font-family: "futura-pt-1","futura-pt-2", sans-serif;
                                     font-size:14px;
                                     line-height:14px;
                                     float:left;
                                     clear:left;
                                     img{
-                                        display:block;
                                         float:left;
                                         width:140px;
-                                        height:140px;
-                                        margin-right: 5px;
-                                        margin-bottom:5px;
+                                        margin-right: 10px;
+                                        margin-bottom:10px;
                                         border:5px solid @black;
                                         }
                                     .textWithImg{
-                    
+                                            font-family: "futura-pt-1","futura-pt-2", sans-serif;
                                     font-size:14px;
                                     line-height:14px;
-                                            text-overflow: ellipsis;
-                                            width: 130px;
-                                            float: left;
+                                        text-overflow: ellipsis;
                                             overflow: hidden;
+                                        width: 130px;
+                                            float: left;
+                                        
                                         }
                                     .text{
-                                     //margin-bottom:15px;
+                                        font-family: "futura-pt-1","futura-pt-2", sans-serif;
                                     font-size:14px;
                                     line-height:14px;
                                         clear:both;
                                         float:left;
-                                        //width:280px;
-                                        }
+                                        text-overflow: ellipsis;
+                                            overflow: hidden;
+                                        width:100%;}
                                     
                                     }
                 
         }
+
+
     height: 100%;
       body { 
           font-family: futura-pt-1, futura-pt-2,'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -601,6 +674,14 @@ box-shadow: 0px 0px 5px @gray;
                   top:0px;
                   bottom:30px;
                   background-color:#54bec6 !important;
+                  .geoSizing{
+                      width: 25px;
+                        text-align: center;
+                      color:white;
+                      line-height:10px;
+                      font-size:10px;
+                      text-align:vertical;
+                      }
                   #sidebarChunk{
                       width: 35px;
                         height: 100%;
@@ -892,11 +973,11 @@ box-shadow: 0px 0px 5px @gray;
                                     margin-bottom:10px;
                                     //
                                     .twttrImage, .facebImage, .instaImage{
+                                        margin-right:10px;
                                         width:24px;
                                         height:24px;
                                         float:right;
                                         margin-top:0px;
-                                        margin-right:10px;
                                         }
                                         .twttrImage{
                                             background-image:url("../images/twitMini.png");
@@ -980,7 +1061,21 @@ box-shadow: 0px 0px 5px @gray;
       }
 }
 @media screen and (max-width: 480px) {
-    html{
+  ::-webkit-scrollbar {
+                width: 1px;
+            }
+            /* Track */
+            ::-webkit-scrollbar-track {
+                margin-right:4px;
+                background-color:@yellow;
+            }
+            /* Handle */
+            ::-webkit-scrollbar-thumb {
+                -webkit-border-radius: 6px;
+                border-radius: 6px;
+                background: @yellow;                 
+            }
+html{
         overflow:hidden;
         .infoBox{
             width:100%;
@@ -1001,7 +1096,7 @@ box-shadow: 0px 0px 5px @gray;
               //  }
             }
     body{
-        
+                    
           height: 100%;
           overflow:hidden;
 //        display:none;
@@ -1019,6 +1114,7 @@ box-shadow: 0px 0px 5px @gray;
                       #sidebarChunk{
                       display:none;
                       }
+                      
                }
         #tagDiv{
 //            width:100%;

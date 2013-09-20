@@ -35,6 +35,10 @@
 function InfoBubble(opt_options) {
 	this.extend(InfoBubble, google.maps.OverlayView);
 	this.tabs_ = [];
+	this.type = null;
+	if(opt_options["type"]!= undefined){
+		this.type = opt_options["type"];
+	}
 	this.activeTab_ = null;
 	this.baseZIndex_ = 100;
 	this.isOpen_ = false;
@@ -226,6 +230,16 @@ InfoBubble.prototype.buildDom_ = function() {
 	$(content).css("float","left");
 	$(content).css("text-overflow","ellipsis");
 	$(content).css("overflow","hidden");
+	$(content).css("width","100%");
+	if(this.type!=null){
+		var HeadBar = document.createElement("div");
+		HeadBar.setAttribute("class","noGeoLoc");
+		$(HeadBar).text("no geo location for these spots");
+		contentContainer.appendChild(HeadBar);
+		console.log(HeadBar);
+	}
+	//console.log(content);
+	
 	contentContainer.appendChild(content);
 
 	// Arrow
