@@ -801,6 +801,7 @@ InfoBubble.prototype.draw = function() {
 	var pos = projection.fromLatLngToDivPixel(latLng);
 	var width = this.contentContainer_.offsetWidth;
 	var height = this.bubble_.offsetHeight;
+	//alert(height);
 
 	if (!width) {
 		return;
@@ -1023,7 +1024,7 @@ InfoBubble.prototype.panToView = function() {
 	var pos = projection.fromLatLngToContainerPixel(latLng);
 
 	// Find out how much space at the top is free
-	var spaceTop = centerPos.y - height - 100;
+	var spaceTop = -1;
 
 	// Fine out how much space at the bottom is free
 	var spaceBottom = mapHeight - centerPos.y;
@@ -1036,15 +1037,25 @@ InfoBubble.prototype.panToView = function() {
 		deltaY = (spaceTop + spaceBottom) / 2;
 	}
 	if(document.documentElement.clientWidth > 480){
-	pos.x += 170;
+		pos.x += 170;
+		if(document.documentElement.clientWidth < 800){
+			pos.x += Math.floor(document.documentElement.clientWidth/8);
+		}
 	}
 	else{
-//console.log(pos.x);
-//console.log(centerPos.x);
 		pos.x+=Math.floor(document.documentElement.clientWidth*(2/7));
 		//pos.x += 140;
 	}
-	pos.y -= deltaY;
+
+	if(document.documentElement.clientWidth < 480){
+		//alert(this.bubble_.offsetHeight+","+pos.y+","+(pos.y -Math.floor(this.bubble_.offsetHeight)) );
+		//pos.y -= Math.floor(this.bubble_.offsetHeight);
+		pos.y = document.documentElement.clientHeight - (height+100);
+	}
+	else{
+		pos.y -= deltaY;	
+	}
+
 	latLng = projection.fromContainerPixelToLatLng(pos);
 
 	if (map.getCenter() != latLng) {
@@ -1567,7 +1578,7 @@ InfoBubble.prototype.figureOutSize_ = function() {
 			if (width < contentSize.width) {
 				width = contentSize.width;
 			}
-
+				//this is in tabs. Nuh uh.
 			if (height < contentSize.height) {
 				height = contentSize.height;
 			}
@@ -1580,14 +1591,15 @@ InfoBubble.prototype.figureOutSize_ = function() {
 		if (content) {
 			var contentSize = this.getElementSize_(content, maxWidth, maxHeight);
 			//console.log(width+","+contentSize.width);
-			if(document.documentElement.clientWidth > 480){
+			//if(document.documentElement.clientWidth > 480){
 				if (width < contentSize.width) {
 					width = contentSize.width;
 				}
-				if (height < contentSize.height) {
+			//	if (height < contentSize.height) {
 					height = contentSize.height;
-				}
-			}
+			//	alert("high"+contentSize.height);
+				//}
+			//}
 		}
 	}
 	//console.log(width+","+ maxWidth);
@@ -1612,9 +1624,9 @@ InfoBubble.prototype.figureOutSize_ = function() {
 		width = mapWidth;
 	}
 
-	if (height > mapHeight) {
-		height = mapHeight - tabHeight;
-	}
+//	if (height > mapHeight) {
+//		height = mapHeight - tabHeight;
+//	}
 
 	if (this.tabsContainer_) {
 		this.tabHeight_ = tabHeight;
@@ -1622,8 +1634,14 @@ InfoBubble.prototype.figureOutSize_ = function() {
 	}
 //console.log(width);
 console.log(height+30);
+if(document.documentElement.clientWidth < 480){
+	this.contentContainer_.style['width'] = this.px(Math.floor(document.documentElement.clientWidth*0.85));
+}else{
 	this.contentContainer_.style['width'] = this.px(width);
+}
+
 	this.contentContainer_.style['height'] = this.px(height+30+padding*2);
+//this.contentContainer_.style['height'] = this.px(300);
 };
 
 /**

@@ -1065,7 +1065,7 @@ if (mmanager.hashContentManager != null && tags.filtration.length > 0) {
 					}
 				}
 			}
-			console.log(match);
+			//console.log(match);
 			if(match == -1){
 				//////console.log(("MATCHEM UP DIGGA" + match);
 				if(tags.filtration != ""){
