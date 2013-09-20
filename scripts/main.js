@@ -128,6 +128,7 @@ google.maps.event.addListener(maps.map, 'tilesloaded', function() {
 	});
 	
 		google.maps.event.addListener(maps.map, 'zoom_changed', function() {
+			console.log(maps.map.getZoom());
 			if(config.previousZoom > maps.map.getZoom() && document.documentElement.clientWidth < 480){
 				if(tags.filtration!=""){
 					tags.filtration = "";
@@ -140,10 +141,10 @@ google.maps.event.addListener(maps.map, 'tilesloaded', function() {
 			}
 			if(maps.map.getZoom() <= config.startZoom+1 ){
 				$("#overlayImage").attr("src","images/fonts.png")
-			if(document.documentElement.clientWidth > 480)
-				{
-					$("#overlayAsosImage").css("display","block");
-				}
+				if(document.documentElement.clientWidth > 480)
+					{
+						$("#overlayAsosImage").css("display","block");
+					}
 			}
 			if (maps.map.getZoom() > config.minZoom+config.labelArr.length-1) {
 				maps.map.setOptions({
@@ -965,25 +966,27 @@ if (mmanager.hashContentManager != null && tags.filtration.length > 0) {
 ---------------------------------------------------------------------*/
 	
 		if (maps.map.getZoom() >= 9 && tags.singleTag != "" && tags.filtration == "") {
-			if (tags.optionaltags.hasOwnProperty(tags.singleTag)) {
-				if (tags.optionaltags[tags.singleTag] != "") {
-					$("#header").text(tags.optionaltags[tags.singleTag]);
+			var shortSingle = tags.singleTag.substring(1,tags.singleTag.length);
+			if (tags.optionaltags[shortSingle] != undefined) {
+				if (tags.optionaltags[shortSingle] != "") {
+					$("#header").text(tags.optionaltags[shortSingle]);
 				} else {
 					$("#header").text(tags.singleTag);
 				}
 			} else {
-				$("#header").text(tags.singleTag);
+				$("#header").text("headingLabel");
 			}
 
 		} else if (tags.inBound.length == 1 && tags.filtration == "") {
+			console.log(tags.inBound[0]);
 			if (tags.optionaltags.hasOwnProperty(tags.inBound[0])) {
 				if (tags.optionaltags[tags.inBound[0]] != "") {
 					$("#header").text(tags.optionaltags[tags.inBound[0]]);
 				} else {
-					$("#header").text(tags.inBound[0]);
+					$("#header").text("#"+tags.inBound[0]);
 				}
 			} else {
-				$("#header").text(tags.inBound[0]);
+				$("#header").text("#"+tags.inBound[0]);
 			}
 		} else {
 			if(tags.filtration == ""){
