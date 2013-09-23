@@ -366,6 +366,7 @@ MarkerLabel_.prototype.setVisible = function () {
  *  events are derived from the name of the property and are of the form <code>propertyname_changed</code>.
  *  For example, if the content of the label changes, a <code>labelcontent_changed</code> event
  *  is fired.
+ * 
  *  <p>
  * @property {string|Node} [labelContent] The content of the label (plain text or an HTML DOM node).
  * @property {Point} [labelAnchor] By default, a label is drawn with its anchor point at (0,0) so

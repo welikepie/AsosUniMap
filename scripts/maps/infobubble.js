@@ -1061,14 +1061,7 @@ InfoBubble.prototype.panToView = function() {
 		//pos.x += 140;
 	}
 
-	if(document.documentElement.clientWidth < 480){
-		//alert(this.bubble_.offsetHeight+","+pos.y+","+(pos.y -Math.floor(this.bubble_.offsetHeight)) );
-		//pos.y -= Math.floor(this.bubble_.offsetHeight);
-		pos.y = document.documentElement.clientHeight - (height+100);
-	}
-	else{
-		pos.y -= deltaY;	
-	}
+	pos.y -= deltaY;	
 
 	latLng = projection.fromContainerPixelToLatLng(pos);
 
