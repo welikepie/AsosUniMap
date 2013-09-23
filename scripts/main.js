@@ -1,4 +1,3 @@
-"use strict";
 var headingLabel = $("#header").text();
 //////////console.log((headingLabel);
 var config = {
@@ -287,33 +286,20 @@ var mmanager = {
 		});
 	},
 	"addClickToHashes" : function(obj) {
-		//////////////console.log(("added");
 		google.maps.event.addListener(obj, 'click', function() {
-			////////////console.log(("click");
-			//maps.map.panTo(obj.getPosition());
+			console.log(obj.info);
 			if (maps.oldInfoBox != null) {
 				maps.oldInfoBox.close();
 			}
-			obj.info.open(maps.map, obj);
+			console.log();
+			obj.info.open(maps.map,obj);
 			maps.oldInfoBox = obj.info;
-			twttr.widgets.load();
-			////////////console.log(("loading!");
-			//
-			//			$('#infoBoxDisplay').parent().parent().siblings().children().first().children().addClass("labelRoot");
-			$(obj.info).bind("ready", function() {
-				////////////console.log(("WAT");
-			});
-			//			document.getElementById("infoBox"+obj.id).getElementsByTagName("img")[0].attr("src",document.getElementById(obj.id).getElementsByTagName(0).getAttribute("data-img-src"));
-			////////////console.log(($("#infoBoxDisplay").find(".image"));
-			if ($("#infoBoxDisplay").find(".image")) {
 
+		if ($("#infoBoxDisplay").find(".image")) {
 				$("#infoBoxDisplay").find(".image").first().bind("error", function() {
 					$("#infoBoxDisplay").find(".image").css("display", "none");
-					////////////console.log(("ERROR!");
 				});
-				//$(".infoBox").first().find("img").attr("src", $(".infoBox").first().find("img").data("img-src"));
 			}
-			//mmanager.tagManager.refresh();
 		});
 	},
 	"initialise" : function() {
@@ -358,6 +344,7 @@ var mmanager = {
 				divCont.setAttribute("data-rel-zed",zed);
 				var appDiv = document.createElement("ul");
 				appDiv.setAttribute("id",zed+"UL");
+				appDiv.setAttribute("class","listNoGeoTag");
 				divCont.appendChild(appDiv);
 				if(tags.markerTagsNoGeo[zed].length > 9){
 					for(var i = 0; i < 9; i++){
@@ -1587,7 +1574,7 @@ if (mmanager.hashContentManager != null && tags.filtration.length > 0) {
 		var namesDiv = document.createElement("div");
 		namesDiv.setAttribute("class", "names");
 		namesDiv.appendChild(domDiv);
-		/*var icon = document.createElement("div");
+		var icon = document.createElement("div");
 			if(obj.source == "TWTTR"){
 				icon.setAttribute("class","twttrImage");
 			}
@@ -1598,7 +1585,7 @@ if (mmanager.hashContentManager != null && tags.filtration.length > 0) {
 				icon.setAttribute("class","facebImage");
 			}
 			topDiv.appendChild(icon);
-			*/
+			
 		if (obj.source != "FACEB") {
 			var userDiv = document.createElement("p");
 			userDiv.setAttribute("class", "userNameTag");
@@ -1794,18 +1781,18 @@ var general = {
 			$(confirm).attr("id", "modalConfirm");
 			var confText = document.createTextNode("CONFIRM");
 			confirm.appendChild(confText);
-			confirm.onclick = function() {
+			confirm.on("click", function() {
 				opts.confirm();
-			}
+			});
 			var decline = document.createElement("a");
 			$(decline).attr("id", "modalDeny");
 			var inText = document.createTextNode("CLOSE");
 			decline.appendChild(inText);
-			decline.onclick = function() {
+			decline.on("click",function() {
 				$("#modalDialogue").slideUp(400, function() {
 					$("#modalInside").html("")
 				});
-			}
+			}); 
 			content.appendChild(confirm);
 			content.appendChild(decline);
 		}
@@ -1817,11 +1804,11 @@ var general = {
 			$(decline).attr("id", "modalDenyButton");
 			var decText = document.createTextNode("CLOSE");
 			decline.appendChild(decText);
-			decline.onclick = function() {
+			$(decline).on("click", function() {
 				$("#modalDialogue").slideUp(400, function() {
 					$("#modalInside").html("")
 				});
-			}
+			});
 			content.appendChild(decline);
 		}
 		if(opts.padded == true){

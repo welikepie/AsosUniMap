@@ -36,7 +36,7 @@ function InfoBubble(opt_options) {
 	this.extend(InfoBubble, google.maps.OverlayView);
 	this.tabs_ = [];
 	this.type = null;
-	if(opt_options["type"]!= undefined){
+	if (opt_options["type"] != undefined) {
 		this.type = opt_options["type"];
 	}
 	this.activeTab_ = null;
@@ -210,6 +210,8 @@ InfoBubble.prototype.buildDom_ = function() {
 	close.style['border'] = 0;
 	close.style['zIndex'] = this.baseZIndex_ + 1;
 	close.style['cursor'] = 'pointer';
+	close.style['right'] = this.px(1);
+	close.style['top'] = this.px(1);
 	close.src = 'images/closePop.png';
 
 	var that = this;
@@ -227,19 +229,24 @@ InfoBubble.prototype.buildDom_ = function() {
 	contentContainer.style['position'] = 'relative';
 
 	var content = this.content_ = document.createElement('DIV');
-	$(content).css("float","left");
-	$(content).css("text-overflow","ellipsis");
-	$(content).css("overflow","hidden");
-	$(content).css("width","100%");
-	if(this.type!=null){
+	//$(content).css("float","left");
+	//$(content).css("text-overflow","ellipsis");
+	//$(content).css("overflow","hidden");
+	//$(content).css("width","100%");
+	content.style["width"] = "100%";
+	content.style["hidden"] = "hidden";
+	content.style["text-overflow"] = "ellipsis";
+	content.style["float"] = "left";
+
+	if (this.type != null) {
 		var HeadBar = document.createElement("div");
-		HeadBar.setAttribute("class","noGeoLoc");
+		HeadBar.setAttribute("class", "noGeoLoc");
 		$(HeadBar).text("no geo location for these spots");
 		contentContainer.appendChild(HeadBar);
-		console.log(HeadBar);
+		//console.log(HeadBar);
 	}
-	//console.log(content);
-	
+	////console.log(content);
+
 	contentContainer.appendChild(content);
 
 	// Arrow
@@ -814,7 +821,7 @@ InfoBubble.prototype.draw = function() {
 	var arrowPosition = this.getArrowPosition_();
 	var pos = projection.fromLatLngToDivPixel(latLng);
 	var width = this.contentContainer_.offsetWidth;
-	var height = this.bubble_.offsetHeight;
+	var height = $(this.bubble_).height();
 	//alert(height);
 
 	if (!width) {
@@ -822,8 +829,9 @@ InfoBubble.prototype.draw = function() {
 	}
 
 	// Adjust for the height of the info bubble
+	console.log(pos.y+","+height+","+arrowSize);
 	var top = pos.y - (height + arrowSize);
-	console.log("top:"+top);
+	////console.log("top:"+top);
 	if (anchorHeight) {
 		// If there is an anchor then include the height
 		top -= anchorHeight;
@@ -831,18 +839,20 @@ InfoBubble.prototype.draw = function() {
 
 	var left = pos.x - arrowPosition;
 	//- (width * arrowPosition);
-	//console.log(arrowPosition);
+	////console.log(arrowPosition);
 	/*if(document.documentElement.clientWidth > 480){
-	
+
 	this.bubble_.style['top'] = this.px(top);
 	this.bubble_.style['left'] = this.px(left);
 	}else{*/
-//		//console.log(pos.y);
-//		//console.log(top);
-// console.log(pos.y);
-// console.log(this.get('map').getDiv().offsetHeight);
-		this.bubble_.style['top'] = this.px(top); // +this.get('map').getDiv().offsetHeight + 17;
-		this.bubble_.style['left'] = this.px(left);
+	//		////console.log(pos.y);
+	//		////console.log(top);
+	// //console.log(pos.y);
+	// //console.log(this.get('map').getDiv().offsetHeight);
+	console.log(top);
+	this.bubble_.style['top'] = this.px(top);
+	// +this.get('map').getDiv().offsetHeight + 17;
+	this.bubble_.style['left'] = this.px(left);
 
 	//}
 	var shadowStyle = parseInt(this.get('shadowStyle'), 10);
@@ -863,8 +873,8 @@ InfoBubble.prototype.draw = function() {
 			} else {
 				this.bubbleShadow_.style['top'] = this.px(pos.y + arrowSize);
 			}
-	
-			this.bubbleShadow_.style['left'] = this.px(pos.x - width * arrowPosition);			
+
+			this.bubbleShadow_.style['left'] = this.px(pos.x - width * arrowPosition);
 			this.bubbleShadow_.style['width'] = this.px(width);
 			this.bubbleShadow_.style['height'] = this.px(2);
 			break;
@@ -925,6 +935,7 @@ InfoBubble.prototype['close'] = InfoBubble.prototype.close;
  */
 InfoBubble.prototype.open = function(opt_map, opt_anchor) {
 	var that = this;
+	//console.log("function called");
 	window.setTimeout(function() {
 		that.open_(opt_map, opt_anchor);
 	}, 0);
@@ -937,31 +948,39 @@ InfoBubble.prototype.open = function(opt_map, opt_anchor) {
  * @param {google.maps.MVCObject=} opt_anchor Optional anchor to position at.
  */
 InfoBubble.prototype.open_ = function(opt_map, opt_anchor) {
+	//console.log("passed on");
 	this.updateContent_();
-
+	//console.log("updated");
 	if (opt_map) {
 		this.setMap(opt_map);
 	}
-
+	//console.log("map set");
 	if (opt_anchor) {
 		this.set('anchor', opt_anchor);
 		this.bindTo('anchorPoint', opt_anchor);
 		this.bindTo('position', opt_anchor);
 	}
+	//console.log("set position");
 
 	// Show the bubble and the show
-	this.bubble_.style['display'] = this.bubbleShadow_.style['display'] = '';
+	this.bubble_.style['display'] = this.bubbleShadow_.style['display'] = 'block';
 	var animation = !this.get('disableAnimation');
+	//console.log("setAnimation");
 
 	if (animation) {
 		// Add the animation
 		this.bubble_.className += ' ' + this.animationName_;
 		this.bubbleShadow_.className += ' ' + this.animationName_;
 	}
+	//console.log("animated");
 
 	this.redraw_();
+	//return true;
+	//console.log("redrawOne");
 	this.isOpen_ = true;
+	//console.log("re set isOpen");
 	this.redraw_();
+	//console.log("redrawTwo");
 
 	var pan = !this.get('disableAutoPan');
 	if (pan) {
@@ -971,7 +990,7 @@ InfoBubble.prototype.open_ = function(opt_map, opt_anchor) {
 			that.panToView();
 			twttr.widgets.load();
 			/*    if(that.content.attributes.childNodes().indexOf("data-opened") == -1){
-			 //console.log("LOADING");
+			 ////console.log("LOADING");
 			 //      	      twttr.widgets.load();
 			 }
 			 var longish = document.getElementsByClassName("openedTweet");*/
@@ -1029,7 +1048,8 @@ InfoBubble.prototype.panToView = function() {
 	}
 
 	var anchorHeight = this.getAnchorHeight_();
-	var height = this.bubble_.offsetHeight + anchorHeight;
+	var height = $(this.bubble_).height() + anchorHeight;
+	console.log("bighigh:"+($(this.bubble_).height()+anchorHeight));
 	var map = this.get('map');
 	var mapDiv = map.getDiv();
 	var mapHeight = mapDiv.offsetHeight;
@@ -1050,18 +1070,17 @@ InfoBubble.prototype.panToView = function() {
 		spaceTop *= -1;
 		deltaY = (spaceTop + spaceBottom) / 2;
 	}
-	if(document.documentElement.clientWidth > 480){
+	if (document.documentElement.clientWidth > 480) {
 		pos.x += 170;
-		if(document.documentElement.clientWidth < 800){
-			pos.x += Math.floor(document.documentElement.clientWidth/8);
+		if (document.documentElement.clientWidth < 800) {
+			pos.x += Math.floor(document.documentElement.clientWidth / 8);
 		}
-	}
-	else{
-		pos.x+=Math.floor(document.documentElement.clientWidth*(2/7));
+	} else {
+		pos.x += Math.floor(document.documentElement.clientWidth * (2 / 7));
 		//pos.x += 140;
 	}
 
-	pos.y -= deltaY;	
+	pos.y -= deltaY;
 
 	latLng = projection.fromContainerPixelToLatLng(pos);
 
@@ -1492,29 +1511,17 @@ InfoBubble.prototype.getElementSize_ = function(element, opt_maxWidth, opt_maxHe
 	sizer.style['display'] = 'inline';
 	sizer.style['position'] = 'absolute';
 	sizer.style['visibility'] = 'hidden';
-
-	if ( typeof element == 'string') {
-		sizer.innerHTML = element;
-	} else {
-		sizer.appendChild(element.cloneNode(true));
-	}
-
+	sizer.innerHTML = $(element).html();
 	document.body.appendChild(sizer);
 	var size = new google.maps.Size(sizer.offsetWidth, sizer.offsetHeight);
-
-	// If the width is bigger than the max width then set the width and size again
 	if (opt_maxWidth && size.width > opt_maxWidth) {
 		sizer.style['width'] = this.px(opt_maxWidth);
 		size = new google.maps.Size(sizer.offsetWidth, sizer.offsetHeight);
 	}
-
-	// If the height is bigger than the max height then set the height and size
-	// again
 	if (opt_maxHeight && size.height > opt_maxHeight) {
 		sizer.style['height'] = this.px(opt_maxHeight);
 		size = new google.maps.Size(sizer.offsetWidth, sizer.offsetHeight);
 	}
-
 	document.body.removeChild(sizer);
 	delete sizer;
 	return size;
@@ -1525,9 +1532,16 @@ InfoBubble.prototype.getElementSize_ = function(element, opt_maxWidth, opt_maxHe
  * @private
  */
 InfoBubble.prototype.redraw_ = function() {
+	//console.log("CALLING Y'ALL");
+
 	this.figureOutSize_();
+	//console.log("sizing");
+	//return true;
 	this.positionCloseButton_();
+	//console.log("closing");
+
 	this.draw();
+	//console.log("drawing");
 };
 
 /**
@@ -1535,12 +1549,14 @@ InfoBubble.prototype.redraw_ = function() {
  * @private
  */
 InfoBubble.prototype.figureOutSize_ = function() {
+	//console.log("sizing y'all");
 	var map = this.get('map');
+	//console.log("getting");
 
 	if (!map) {
 		return;
 	}
-
+	//console.log("noBreak");
 	var padding = this.getPadding_();
 	var borderWidth = this.getBorderWidth_();
 	var borderRadius = this.getBorderRadius_();
@@ -1556,10 +1572,14 @@ InfoBubble.prototype.figureOutSize_ = function() {
 	var height = /** @type {number} */(this.get('minHeight') || 0);
 	var maxWidth = /** @type {number} */(this.get('maxWidth') || 0);
 	var maxHeight = /** @type {number} */(this.get('maxHeight') || 0);
+	//console.log("done getting");
 
 	maxWidth = Math.min(mapWidth, maxWidth);
 	maxHeight = Math.min(mapHeight, maxHeight);
 	var tabWidth = 0;
+	//console.log("maxWidth");
+	//console.log(this.tabs_.length);
+
 	if (this.tabs_.length) {
 		// If there are tabs then you need to check the size of each tab's content
 		for (var i = 0, tab; tab = this.tabs_[i]; i++) {
@@ -1573,7 +1593,7 @@ InfoBubble.prototype.figureOutSize_ = function() {
 			// Add up all the tab widths because they might end up being wider than
 			// the content
 			tabWidth += tabSize.width;
-			
+
 			if (height < tabSize.height) {
 				height = tabSize.height;
 			}
@@ -1585,31 +1605,38 @@ InfoBubble.prototype.figureOutSize_ = function() {
 			if (width < contentSize.width) {
 				width = contentSize.width;
 			}
-				//this is in tabs. Nuh uh.
+			//this is in tabs. Nuh uh.
 			if (height < contentSize.height) {
 				height = contentSize.height;
 			}
 		}
 	} else {
+		//console.log("started content");
+
 		var content = /** @type {string|Node} */(this.get('content'));
-		if ( typeof content == 'string') {
-			content = this.htmlToDocumentFragment_(content);
+		//console.log(typeof content);
+
+		if ( typeof content == 'string') {			content = this.htmlToDocumentFragment_(content);
+
 		}
 		if (content) {
+			//console.log("contenting");
 			var contentSize = this.getElementSize_(content, maxWidth, maxHeight);
-			//console.log(width+","+contentSize.width);
+			//console.log(contentSize);
+			//return true;
+			////console.log(width+","+contentSize.width);
 			//if(document.documentElement.clientWidth > 480){
-				if (width < contentSize.width) {
-					width = contentSize.width;
-				}
+			if (width < contentSize.width) {
+				width = contentSize.width;
+			}
 			//	if (height < contentSize.height) {
-					height = contentSize.height;
+			height = contentSize.height;
 			//	alert("high"+contentSize.height);
-				//}
+			//}
 			//}
 		}
 	}
-	//console.log(width+","+ maxWidth);
+	////console.log(width+","+ maxWidth);
 
 	if (maxWidth) {
 		width = Math.min(width, maxWidth);
@@ -1626,29 +1653,31 @@ InfoBubble.prototype.figureOutSize_ = function() {
 	width = Math.max(width, arrowSize);
 	// Maybe add this as a option so they can go bigger than the map if the user
 	// wants
-	
+
 	if (width > mapWidth) {
 		width = mapWidth;
 	}
 
-//	if (height > mapHeight) {
-//		height = mapHeight - tabHeight;
-//	}
+	//	if (height > mapHeight) {
+	//		height = mapHeight - tabHeight;
+	//	}
 
 	if (this.tabsContainer_) {
 		this.tabHeight_ = tabHeight;
 		this.tabsContainer_.style['width'] = this.px(tabWidth);
 	}
-//console.log(width);
-console.log(height+30);
-if(document.documentElement.clientWidth < 480){
-	this.contentContainer_.style['width'] = this.px(Math.floor(document.documentElement.clientWidth*0.85));
-}else{
-	this.contentContainer_.style['width'] = this.px(width);
-}
-
-	this.contentContainer_.style['height'] = this.px(height+30+padding*2);
-//this.contentContainer_.style['height'] = this.px(300);
+	////console.log(width);
+	//console.log(height+30);
+	if (document.documentElement.clientWidth < 480) {
+		this.contentContainer_.style['width'] = this.px(Math.floor(document.documentElement.clientWidth * 0.85));
+	} else {
+		this.contentContainer_.style['width'] = this.px(width);
+	}
+	console.log(height+","+padding);
+	//this.contentContainer_.style['height'] = this.px((height+anchorHeight)/2);
+	console.log((height + 60 + padding * 2)/2);
+	//this.px((height + 60 + padding * 2));
+	//this.contentContainer_.style['height'] = this.px(300);
 };
 
 /**
@@ -1703,4 +1732,4 @@ InfoBubble.prototype.positionCloseButton_ = function() {
 
 	this.close_.style['right'] = this.px(right);
 	this.close_.style['top'] = this.px(top);
-}; 
+};

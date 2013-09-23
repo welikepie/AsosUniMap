@@ -296,7 +296,7 @@ window.onload = function() {
 			elements.fullUpdate();
 		});
 	}
-	setSSE();
+	//setSSE();
 	$("#JS-bbMoreInfo, #infolink, #moreInfoLink").bind('click', function() {
 		$("#modalInside").html("");
 		general.customModal({

@@ -397,25 +397,19 @@ box-shadow: 0px 0px 5px @gray;
         overflow-y:scroll;
         float:left;
         height:200px;
-        }
-            ul{        
+            .listNoGeoTag{        
                 width:100%;
-                
                 float:left;
                 list-style:none;
-                padding-left:0px;
+                padding:0px;
                 li{
+                    list-style:none;
                     width:100%;
                     float:left;
                     padding:5px 0px 5px 0px;
                     border-bottom:1px solid @black;
                     //border-bottom:1px solid @offblacktoyellow;
-                    
-                    }
-                }
-            .infoBox, li{               
-                            float:left;
-                            .socialLinkage{
+                             .socialLinkage{
                                 float:left;
                                 text-decoration:none;
                                 color: @black;
@@ -448,9 +442,11 @@ box-shadow: 0px 0px 5px @gray;
                                             background-repeat:no-repeat;
                                         }
                                 .twitter-follow-button{
-                                        float: right;
-                                        height: 20px;
-                                        margin-top: 20px;
+                                    position: absolute;
+                                    float: right;
+                                    clear: both;
+                                    margin-top: 30px;
+                                    right: 20px;
                                     }
                                     .names{
                                         float:left;
@@ -515,7 +511,124 @@ box-shadow: 0px 0px 5px @gray;
                                         float:left;
                                         text-overflow: ellipsis;
                                             overflow: hidden;
-                                        width:100%;}
+                                        width:100%;
+//                                                                    margin-bottom:30px;
+
+                                        }
+                                    
+                                    }
+                    }
+                }
+    }
+            .infoBox{     
+                width:100%;
+                            float:left;
+                            .socialLinkage{
+                                float:left;
+                                text-decoration:none;
+                                color: @black;
+                                width:100%;
+                            }
+                            .topDiv{
+                                    float:left;
+                                    font-family: "futura-pt-1","futura-pt-2", sans-serif;
+                                    width:100%;
+                    //                padding-bottom:10px;
+                    //                border-bottom: 1px solid @black;
+                                    margin-bottom:10px;
+                                     .twttrImage, .facebImage, .instaImage{
+                                            width:24px;
+                                            height:24px;
+                                            float:right;
+                                            margin-top:0px;
+                                            margin-right:10px;
+                                        }
+                                        .twttrImage{
+                                            background-image:url("../images/twitMini.png");
+                                            background-repeat:no-repeat;
+                                            }
+                                        .facebImage{
+                                            background-image:url("../images/faceMini.png");
+                                            background-repeat:no-repeat;
+                                            }
+                                        .instaImage{
+                                            background-image:url("../images/instaMini.png");
+                                            background-repeat:no-repeat;
+                                        }
+                                .twitter-follow-button{
+                                    position: absolute;
+                                    float: right;
+                                    clear: both;
+                                    margin-top: 30px;
+                                    right: 20px;
+                                    }
+                                    .names{
+                                        float:left;
+                                        .userNameTag{
+                                            clear:left;
+                                            font-size:12px;
+                                            font-weight:bold;
+                                            margin:0px;
+                                            display:block;
+                                            }
+                                        
+                                        .nameContainer{
+                                            //margin-bottom:10px;
+                                            padding-bottom:5px;
+                                            float:left;
+                                            border-bottom:3px solid @black;
+                                        p{
+                                            line-height:12px;
+                                            font-weight:bold;
+                                            font-size:12px;
+                                            margin:0px;
+                                            }
+                                        }
+                                    }
+                                    img{
+                                        float:left;
+                                        border:5px solid @blue;
+                                        margin-right:8px;
+                                        width:48px;
+                                        height:48px;
+                                        }
+                                    }
+                                .bottomDiv{
+                                    width:100%;
+                                    font-family: "futura-pt-1","futura-pt-2", sans-serif;
+                                    font-size:14px;
+                                    line-height:14px;
+                                    float:left;
+                                    clear:left;
+                                    img{
+                                        float:left;
+                                        width:140px;
+                                        margin-right: 10px;
+                                        margin-bottom:10px;
+                                        border:5px solid @black;
+                                        }
+                                    .textWithImg{
+                                            font-family: "futura-pt-1","futura-pt-2", sans-serif;
+                                    font-size:14px;
+                                    line-height:14px;
+                                        text-overflow: ellipsis;
+                                            overflow: hidden;
+                                        width: 130px;
+                                            float: left;
+                                        
+                                        }
+                                    .text{
+                                        font-family: "futura-pt-1","futura-pt-2", sans-serif;
+                                    font-size:14px;
+                                    line-height:14px;
+                                        clear:both;
+                                        float:left;
+                                        text-overflow: ellipsis;
+                                            overflow: hidden;
+                                        width:100%;
+//                                                                    margin-bottom:30px;
+
+                                        }
                                     
                                     }
                 
@@ -1083,7 +1196,8 @@ html{
             //    width:100%;
                     .bottomDiv{ 
                         width:100%;
-                        .textWithImg{
+                        
+                        WithImg{
                             width:48%;
                             }
                         .image{
@@ -1091,6 +1205,7 @@ html{
                             }
                         .text{
                             width:100%;
+                         //   margin-bottom:30px;
                             }
                     }
               //  }
@@ -1478,6 +1593,8 @@ html{
                                         }
                                     .text{
 //                                        width:280px;
+                           // margin-bottom:30px;
+
                                         margin-top:10px;
                                         width:90% !important;
                                         }
