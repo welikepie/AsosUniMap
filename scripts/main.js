@@ -1023,7 +1023,6 @@ var elements = {
 		console.log(tags.markerTagsNoGeo);
 
 		for (var i in tags.tagMarkerNoGeo) {
-			console.log(console.log(tags.tagMarkerNoGeo));
 			if (tags.tagMarkerNoGeo.hasOwnProperty(i)) {
 				tags.arrEls[i] = new Array;
 				for (var zeds = 0; zeds < tags.markerTagsNoGeo[i].length; zeds++) {
@@ -1032,15 +1031,30 @@ var elements = {
 					}
 				}
 				//content : elements.info(arr[i]),
-				console.log(tags.tagMarkerNoGeo[i].info.isOpen());
 				tags.tagMarkerNoGeo[i].labelContent = tags.arrEls[i].length;
 
 				if (tags.arrEls[i].length == 1) {
+					if(tags.tagMarkerNoGeo[i].getMap() == null){
+						tags.tagMarkerNoGeo[i].setMap(maps.map);
+					}
 					tags.tagMarkerNoGeo[i].icon = "images/singleLocation.png";
 					//hashhashbang;
-				} else {
+				} else if (tags.arrEls[i].length > 1){
+					if(tags.tagMarkerNoGeo[i].getMap() == null){
+						tags.tagMarkerNoGeo[i].setMap(maps.map);
+					}
 					tags.tagMarkerNoGeo[i].icon = "images/multiLocation.png";
 				}				
+				else if(tags.arrEls[i].length == 0){
+					tags.tagMarkerNoGeo[i].setMap(null);
+					if(tags.tagMarkerNoGeo[i].info.isOpen() == true){
+						tags.tagMarkerNoGeo[i].info.close();
+						//tags.tagMarkerNoGeo[i].info.open();
+					}
+					break;
+//					if(tags.tagMarkerNoGeo[i].setMap(null))
+				}
+				
 				
 				var divCont = document.createElement("div");
 				divCont.setAttribute("class", "lister");
@@ -1085,11 +1099,10 @@ var elements = {
 						}
 					}
 				});
-//leRise
-
-
-
-
+			if(tags.tagMarkerNoGeo[i].info.isOpen() == true){
+				tags.tagMarkerNoGeo[i].info.close();
+				tags.tagMarkerNoGeo[i].info.open();
+			}
 				tags.tagMarkerNoGeo[i].label.setStyles();
 				tags.tagMarkerNoGeo[i].setMap(null);
 				tags.tagMarkerNoGeo[i].setMap(maps.map);
