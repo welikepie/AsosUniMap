@@ -248,7 +248,7 @@ function renderSingle(ins, appendIndex) {
 		}
 		input.appendChild(lats);
 		var lats = document.createElement("label");
-		lats.textContent = "Lat: ";
+		lats.textContent = "Lon: ";
 		lats.setAttribute("class", "hashLabel");
 		lats.setAttribute("for", ins + "lat");
 		input.appendChild(lats);
@@ -277,7 +277,7 @@ function renderSingle(ins, appendIndex) {
 		input.appendChild(lats);
 
 		var lats = document.createElement("label");
-		lats.textContent = "Lon: ";
+		lats.textContent = "Lat: ";
 		lats.setAttribute("class", "hashLabel");
 		lats.setAttribute("for", ins + "lon");
 		input.appendChild(lats);
