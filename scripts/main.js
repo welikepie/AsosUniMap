@@ -1022,26 +1022,16 @@ var tags = {
 
 		if (inb4 == true) {
 			tpht.appendFirst(toAdd, append);
-			////////////console.log(($(toAdd).html());
-			//////////////console.log(("MEFIRST");
 		}
 		else {
 			append.appendChild(toAdd);
-			//////////////console.log(($(toAdd).html());
-			//////////////console.log(("FOUND");
 		}
 	}
 }
 var elements = {
-	"fullUpdate" : function() {
-		var ins = $(".sideBar");
-		////console.log((ins.length);
-		//////////console.log((ins);
-		//////////console.log((tags.inBound);
-		//////////console.log((tags.optionaltags);
-		var comparator;
-/*---------------------------------------------------------------------
-if (mmanager.hashContentManager != null && tags.filtration.length > 0) {
+	"updateMarkerVisibility":function(){
+		console.log("ERROR BEOTCH" + tags.filtration);
+if (mmanager.hashContentManager != null) {
 	var cycleArr = mmanager.hashContentManager.getMarkers();
 		if (ie == true) {
 			for (var el = 0; el < hashContentArr[el].length; el++) {
@@ -1055,6 +1045,8 @@ if (mmanager.hashContentManager != null && tags.filtration.length > 0) {
 		}
 		if (ie == false) {
 			for (var el = 0; el < cycleArr.length; el++) {
+				//console.log(cycleArr[el].text);
+				console.log(tags.inString(cycleArr[el].text, tags.filtration));
 				if (tags.inString(cycleArr[el].text, tags.filtration) == false) {
 					cycleArr[el].setVisible(false);
 				}
@@ -1062,11 +1054,20 @@ if (mmanager.hashContentManager != null && tags.filtration.length > 0) {
 					cycleArr[el].setVisible(true);
 				}
 			}//	mmanager.hashContentManager.removeMarker(mmanager.hashContentArr[el]);
+					mmanager.hashContentManager.setIgnoreHidden(true); 
+					mmanager.hashContentManager.repaint();
 		}
-
 }
+/*---------------------------------------------------------------------
+
 ---------------------------------------------------------------------*/
-	
+
+	},
+	"fullUpdate" : function() {
+		var ins = $(".sideBar");
+		var comparator;
+			elements.updateMarkerVisibility();
+
 		if (maps.map.getZoom() >= 9 && tags.singleTag != "" && tags.filtration == "") {
 			var shortSingle = tags.singleTag.substring(1,tags.singleTag.length);
 			if (tags.optionaltags[shortSingle] != undefined) {
@@ -1178,7 +1179,7 @@ if (mmanager.hashContentManager != null && tags.filtration.length > 0) {
 						$("#searchError").css("display","block");
 					}
 			}else{
-								$("#content").css("display","block");
+				$("#content").css("display","block");
 				$("#searchError").css("display","none");
 
 			}

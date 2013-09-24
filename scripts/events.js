@@ -255,6 +255,7 @@ window.onload = function() {
 	tags.retrieve();
 	config.sizesOfLabels();
 	$(document.getElementById("searchClear")).bind('click', function() {
+		
 		$("#content").css("display", "block");
 		$("#searchError").css("display", "none");
 		document.getElementById("searchField").value = "";
