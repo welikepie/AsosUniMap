@@ -258,7 +258,7 @@ window.onload = function() {
 		
 		$("#content").css("display", "block");
 		$("#searchError").css("display", "none");
-		document.getElementById("searchField").value = "";
+		document.getElementById("searchField").value = "SEARCH UNI";
 		//	if(document.documentElement.clientWidth > 480){
 		document.getElementById("searchClear").style.display = "none";
 		//	}

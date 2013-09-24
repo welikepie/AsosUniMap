@@ -1,25 +1,18 @@
 var headingLabel = $("#header").text();
 //////////console.log((headingLabel);
 var config = {
-	"whitelistNames" : ["Asos",
-						"Asos_HereToHelp",
-						"Asos_Menswear",
-						"ASOS_heretohelp",
-						"ASOS_HilftEuch",
-						"ASOS_ServiceClient",
-						"ASOSMarketplace",
-						"ASOS_ID"],
-	"inArr" : function(name, arr){
-				//////console.log((name+","+arr);
-				//////console.log((name == undefined);
-		if(name == undefined || name == "" ){
+	"whitelistNames" : ["Asos", "Asos_HereToHelp", "Asos_Menswear", "ASOS_heretohelp", "ASOS_HilftEuch", "ASOS_ServiceClient", "ASOSMarketplace", "ASOS_ID"],
+	"inArr" : function(name, arr) {
+		//////console.log((name+","+arr);
+		//////console.log((name == undefined);
+		if (name == undefined || name == "") {
 			return false;
 		}
-		for(var i = 0; i < arr.length; i++){
-			if(arr[i].toLowerCase() == name.toLowerCase()){
+		for (var i = 0; i < arr.length; i++) {
+			if (arr[i].toLowerCase() == name.toLowerCase()) {
 				return true;
 			}
-		}		
+		}
 		return false;
 	},
 	"previousZoom" : 5,
@@ -29,7 +22,7 @@ var config = {
 	"markerMinZoom" : 6,
 	"baseURL" : "",
 	"ulLimit" : 10,
-	"labelArr":["ukMapMobile.png","uk.png"],
+	"labelArr" : ["ukMapMobile.png", "uk.png"],
 	"bandSizes" : {
 		1 : "hidden",
 		4 : "xs",
@@ -38,21 +31,21 @@ var config = {
 		9 : "l",
 		99 : "xl"
 	},
-	"bandOrder":{
-		"hidden":1001,
-		"xs":1002,
-		"s":1003,
-		"m":1004,
-		"l":1005,
-		"xl":1006
+	"bandOrder" : {
+		"hidden" : 1001,
+		"xs" : 1002,
+		"s" : 1003,
+		"m" : 1004,
+		"l" : 1005,
+		"xl" : 1006
 	},
-	"textSize":{
-		"hidden":0,
-		"xs":10, //check this and compensate.
-		"s":15,
-		"m":20,
-		"l":25,
-		"xl":30
+	"textSize" : {
+		"hidden" : 0,
+		"xs" : 10, //check this and compensate.
+		"s" : 15,
+		"m" : 20,
+		"l" : 25,
+		"xl" : 30
 	},
 	"sizesOfLabels" : function() {
 		tpht.easyXHR("get", "node/jsons/TAGSSIZES.json", "", function(response) {
@@ -65,17 +58,16 @@ var maps = {
 	oldInfoBox : null,
 	oldBounds : null,
 	map : "",
-	mblLatLng: [54.76772102,-2.66318],
+	mblLatLng : [54.76772102, -2.66318],
 	stLatLng : [54.549593, 1.05556640625],
-	setDefault : function(){
+	setDefault : function() {
 	},
 	boundingBox : new Array(),
 	"initialize" : function() {
-				if(document.documentElement.clientHeight > 700){
-					config.startZoom = 6;
-					config.previousZoom = 6;
-				}
-				
+		if (document.documentElement.clientHeight > 700) {
+			config.startZoom = 6;
+			config.previousZoom = 6;
+		}
 
 		var styles = [{
 			featureType : "all",
@@ -90,62 +82,60 @@ var maps = {
 			zoomControlOptions : {
 				position : google.maps.ControlPosition.LEFT_BOTTOM
 			},
-			center : new google.maps.LatLng(maps.stLatLng[0],maps.stLatLng[1]),
+			center : new google.maps.LatLng(maps.stLatLng[0], maps.stLatLng[1]),
 			zoom : config.startZoom,
 			styles : styles,
 			mapTypeId : google.maps.MapTypeId.SATELITE,
 			minZoom : config.minZoom
 		};
-		if(document.documentElement.clientHeight < 490){
+		if (document.documentElement.clientHeight < 490) {
 			mapOptions.zoomControlOptions.style = google.maps.ZoomControlStyle.SMALL;
 		}
-		if(document.documentElement.clientWidth < 480 || document.documentElement.clientHeight < 700){
-			mapOptions.center = new google.maps.LatLng(maps.mblLatLng[0],maps.mblLatLng[1]);
+		if (document.documentElement.clientWidth < 480 || document.documentElement.clientHeight < 700) {
+			mapOptions.center = new google.maps.LatLng(maps.mblLatLng[0], maps.mblLatLng[1]);
 		}
 		maps.map = new google.maps.Map(tpht.getById("map-canvas"), mapOptions);
 
-		
-if(document.documentElement.clientWidth > 480){		
-google.maps.event.addListener(maps.map, 'tilesloaded', function() {
-  // Visible tiles loaded!
-		});
-	
-}
+		if (document.documentElement.clientWidth > 480) {
+			google.maps.event.addListener(maps.map, 'tilesloaded', function() {
+				// Visible tiles loaded!
+			});
+
+		}
 		var myLatLng = new google.maps.LatLng(49.5, -4.6);
 
 		var beachMarker = new google.maps.Marker({
 			position : myLatLng,
-//			icon : 'images/uk.png',
-			icon : "images/"+config.labelArr[maps.map.getZoom() - config.minZoom],
+			//			icon : 'images/uk.png',
+			icon : "images/" + config.labelArr[maps.map.getZoom() - config.minZoom],
 			pane : "mapPane",
 			zIndex : 500
 		});
-		
+
 		beachMarker.setMap(maps.map);
-	google.maps.event.addListener(maps.map, 'dblclick', function() {
-		////console.log((maps.map.getCenter());
-	});
-	
+		google.maps.event.addListener(maps.map, 'dblclick', function() {
+			////console.log((maps.map.getCenter());
+		});
+
 		google.maps.event.addListener(maps.map, 'zoom_changed', function() {
 			console.log(maps.map.getZoom());
-			if(config.previousZoom > maps.map.getZoom() && document.documentElement.clientWidth < 480){
-				if(tags.filtration!=""){
+			if (config.previousZoom > maps.map.getZoom() && document.documentElement.clientWidth < 480) {
+				if (tags.filtration != "") {
 					tags.filtration = "";
 					elements.fullUpdate();
 				}
 			}
-			if(maps.map.getZoom() > config.startZoom){
-				$("#overlayImage").attr("src","images/fontSmall.png")
-				$("#overlayAsosImage").css("display","none");
+			if (maps.map.getZoom() > config.startZoom) {
+				$("#overlayImage").attr("src", "images/fontSmall.png")
+				$("#overlayAsosImage").css("display", "none");
 			}
-			if(maps.map.getZoom() <= config.startZoom+1 ){
-				$("#overlayImage").attr("src","images/fonts.png")
-				if(document.documentElement.clientWidth > 480)
-					{
-						$("#overlayAsosImage").css("display","block");
-					}
+			if (maps.map.getZoom() <= config.startZoom + 1) {
+				$("#overlayImage").attr("src", "images/fonts.png")
+				if (document.documentElement.clientWidth > 480) {
+					$("#overlayAsosImage").css("display", "block");
+				}
 			}
-			if (maps.map.getZoom() > config.minZoom+config.labelArr.length-1) {
+			if (maps.map.getZoom() > config.minZoom + config.labelArr.length - 1) {
 				maps.map.setOptions({
 					"styles" : [{
 						"featureType" : "water",
@@ -154,7 +144,7 @@ google.maps.event.addListener(maps.map, 'tilesloaded', function() {
 						}]
 					}]
 				});
-				if(mmanager.tagManager!=null){
+				if (mmanager.tagManager != null) {
 					if (maps.map.getZoom() > config.minZoom + config.labelArr.length) {
 						mmanager.tagManager.hide();
 					} else {
@@ -173,7 +163,7 @@ google.maps.event.addListener(maps.map, 'tilesloaded', function() {
 				});
 				beachMarker.setVisible(true);
 				//////console.log((config.labelArr[maps.map.getZoom() - config.minZoom]);
-				beachMarker.setIcon("images/"+config.labelArr[maps.map.getZoom() - config.minZoom]);
+				beachMarker.setIcon("images/" + config.labelArr[maps.map.getZoom() - config.minZoom]);
 			}
 			//////////console.log((maps.map.getZoom());
 			var bounds = maps.map.getBounds();
@@ -183,47 +173,45 @@ google.maps.event.addListener(maps.map, 'tilesloaded', function() {
 			tags.filterBasedOnBound("doNothing");
 			config.previousZoom = maps.map.getZoom();
 		});
-			google.maps.event.addListener(beachMarker, 'dblclick', function(event) {
+		google.maps.event.addListener(beachMarker, 'dblclick', function(event) {
 			maps.map.setZoom(maps.map.getZoom() + 1);
 			tags.filterBasedOnBound("doNothing");
 		});
-		$("#studentImage, #overlayImage").click(function(){
-			if(tags.filtration!=""){
-					tags.filtration = "";
-					elements.fullUpdate();
-				}
-			if(maps.map.getZoom()!= config.startZoom){
-			maps.map.setZoom(config.startZoom);
+		$("#studentImage, #overlayImage").click(function() {
+			if (tags.filtration != "") {
+				tags.filtration = "";
+				elements.fullUpdate();
 			}
-		
-		if(document.documentElement.clientWidth < 480){
-			maps.map.setCenter(new google.maps.LatLng(maps.mblLatLng[0],maps.mblLatLng[1]));
-		}	
-		else{
-				if(document.documentElement.clientHeight > 700){
-					maps.map.setCenter(new google.maps.LatLng(maps.mblLatLng[0],maps.mblLatLng[1]));
-				}
-				else{
+			if (maps.map.getZoom() != config.startZoom) {
+				maps.map.setZoom(config.startZoom);
+			}
+
+			if (document.documentElement.clientWidth < 480) {
+				maps.map.setCenter(new google.maps.LatLng(maps.mblLatLng[0], maps.mblLatLng[1]));
+			} else {
+				if (document.documentElement.clientHeight > 700) {
+					maps.map.setCenter(new google.maps.LatLng(maps.mblLatLng[0], maps.mblLatLng[1]));
+				} else {
 					maps.map.setCenter(new google.maps.LatLng(maps.stLatLng[0], maps.stLatLng[1]));
 				}
 			}
-			
-//			tags.filtration = "";
+
+			//			tags.filtration = "";
 
 			var bounds = maps.map.getBounds();
 			var bArr = bounds.toString().replace(/[()]/g, "").split(",");
 			maps.boundingBox = [parseFloat(bArr[1]), parseFloat(bArr[0]), parseFloat(bArr[3]), parseFloat(bArr[2])];
 
 			tags.filterBasedOnBound("doNothing");
-				maps.map.setOptions({
-					"styles" : [{
-						featureType : "all",
-						stylers : [{
-							visibility : "off"
-						}]
+			maps.map.setOptions({
+				"styles" : [{
+					featureType : "all",
+					stylers : [{
+						visibility : "off"
 					}]
-				});
-				beachMarker.setVisible(true);
+				}]
+			});
+			beachMarker.setVisible(true);
 
 		});
 		google.maps.event.addListener(maps.map, 'dragend', function() {
@@ -239,18 +227,18 @@ google.maps.event.addListener(maps.map, 'tilesloaded', function() {
 		});
 		google.maps.event.addListenerOnce(maps.map, 'idle', function() {
 
-		if($("#map-canvas > #sidebarChunk").length == 0){
-		  var divToAdd = document.createElement("div");
-				$(divToAdd).attr("id","sidebarChunk");
+			if ($("#map-canvas > #sidebarChunk").length == 0) {
+				var divToAdd = document.createElement("div");
+				$(divToAdd).attr("id", "sidebarChunk");
 				var divAdd = document.createElement("a");
-				$(divAdd).attr("href","http://www.asos.com/130909-Students-Hub/Cat/pgehtml.aspx?cid=18342&full_site=yes");
-				$(divAdd).attr("target","_blank");
-				$(divAdd).attr("id","homeButton");
+				$(divAdd).attr("href", "http://www.asos.com/130909-Students-Hub/Cat/pgehtml.aspx?cid=18342&full_site=yes");
+				$(divAdd).attr("target", "_blank");
+				$(divAdd).attr("id", "homeButton");
 				divToAdd.appendChild(divAdd);
 				$("#map-canvas").children().first().append(divToAdd);
-				////console.log(($("#map-canvas").children().first());	
-				$(".gmnoprint").css("z-index","1");
-		}
+				////console.log(($("#map-canvas").children().first());
+				$(".gmnoprint").css("z-index", "1");
+			}
 
 			// do something only the first time the map is loaded
 			var bounds = maps.map.getBounds();
@@ -271,10 +259,10 @@ var mmanager = {
 	"overMark" : new Array(),
 	"addClickToOverHashes" : function(obj) {
 		google.maps.event.addListener(obj, 'click', function() {
-			
-//			//////////console.log((split);
-			maps.map.panTo(	new google.maps.LatLng(	obj.location.latitude, obj.location.longitude));
-			
+
+			//			//////////console.log((split);
+			maps.map.panTo(new google.maps.LatLng(obj.location.latitude, obj.location.longitude));
+
 			maps.map.setZoom(9);
 			var bounds = maps.map.getBounds();
 			maps.oldBounds = bounds;
@@ -285,6 +273,22 @@ var mmanager = {
 			//	////////////console.log(("calling");
 		});
 	},
+	"addClickToHashesAutoHide" : function(obj) {
+		google.maps.event.addListener(obj, 'click', function(e) {
+			if (maps.oldInfoBox != null) {
+				maps.oldInfoBox.close();
+			}
+			console.log();
+			obj.info.open(maps.map, obj);
+			maps.oldInfoBox = obj.info;
+			console.log($(".listNoGeoTag"));
+			if ($("#infoBoxDisplay").find(".image")) {
+				$("#infoBoxDisplay").find(".image").first().bind("error", function() {
+					$("#infoBoxDisplay").find(".image").css("display", "none");
+				});
+			}
+		});
+	},
 	"addClickToHashes" : function(obj) {
 		google.maps.event.addListener(obj, 'click', function() {
 			console.log(obj.info);
@@ -292,10 +296,10 @@ var mmanager = {
 				maps.oldInfoBox.close();
 			}
 			console.log();
-			obj.info.open(maps.map,obj);
+			obj.info.open(maps.map, obj);
 			maps.oldInfoBox = obj.info;
 
-		if ($("#infoBoxDisplay").find(".image")) {
+			if ($("#infoBoxDisplay").find(".image")) {
 				$("#infoBoxDisplay").find(".image").first().bind("error", function() {
 					$("#infoBoxDisplay").find(".image").css("display", "none");
 				});
@@ -308,83 +312,80 @@ var mmanager = {
 		var element = 3;
 		////////////console.log((tags.optionaltags);
 		general.refreshLabelSize();
-				for (var zed in tags.markerTagsNoGeo) {
+		for (var zed in tags.markerTagsNoGeo) {
 			//			new Marker
 			console.log(tags.markerTagsNoGeo[zed].length);
 			console.log(tags.markerTagsNoGeo[zed]);
-			if (tags.markerTagsNoGeo[zed].length-1 > 0) {
+			if (tags.markerTagsNoGeo[zed].length - 1 > 0) {
 				//console.log(tags.markerTagsNoGeo[zed].length-1);
-				if (tags.markerTagsNoGeo[zed].length-1 == 1) {
-				//	console.log("YEAHYEAHYEAH");
-				var marker = new google.maps.Marker({//WithLabel({
-					"position" : new google.maps.LatLng(tags.locations[zed].latitude, tags.locations[zed].longitude),
-					"map" : maps.map,
-					"icon" : "images/singleLocation.png",
-					"zIndex" : 600,
-					"disableAutoPan" : true,
-				});	
+				if (tags.markerTagsNoGeo[zed].length - 1 == 1) {
+					//	console.log("YEAHYEAHYEAH");
+					var marker = new google.maps.Marker({//WithLabel({
+						"position" : new google.maps.LatLng(tags.locations[zed].latitude, tags.locations[zed].longitude),
+						"map" : maps.map,
+						"icon" : "images/singleLocation.png",
+						"zIndex" : 600,
+						"disableAutoPan" : true,
+					});
 				} else {
 					var marker = new MarkerWithLabel({
-					"position" : new google.maps.LatLng(tags.locations[zed].latitude, tags.locations[zed].longitude),
-					"map" : maps.map,
-					"icon" : "images/multiLocation.png",
-					"zIndex" : 600,
-					"disableAutoPan" : true,
-					"labelContent": tags.markerTagsNoGeo[zed].length-1,
-				    "labelAnchor": new google.maps.Point(8, 16),
-				    "labelClass": "geoSizing", // the CSS class for the label
-				});	
+						"position" : new google.maps.LatLng(tags.locations[zed].latitude, tags.locations[zed].longitude),
+						"map" : maps.map,
+						"icon" : "images/multiLocation.png",
+						"zIndex" : 600,
+						"disableAutoPan" : true,
+						"labelContent" : tags.markerTagsNoGeo[zed].length - 1,
+						"labelAnchor" : new google.maps.Point(8, 16),
+						"labelClass" : "geoSizing", // the CSS class for the label
+					});
 					//marker.labelcontent = tags.markerTagsNoGeo.length;
 					console.log(tags.markerTagsNoGeo[zed]);
 				}
-				
+
 				var divCont = document.createElement("div");
-				divCont.setAttribute("class","lister");
-				divCont.setAttribute("id",zed+"scrollContainer");
-				divCont.setAttribute("data-rel-zed",zed);
+				divCont.setAttribute("class", "lister");
+				divCont.setAttribute("id", zed + "scrollContainer");
+				divCont.setAttribute("data-rel-zed", zed);
 				var appDiv = document.createElement("ul");
-				appDiv.setAttribute("id",zed+"UL");
-				appDiv.setAttribute("class","listNoGeoTag");
+				appDiv.setAttribute("id", zed + "UL");
+				appDiv.setAttribute("class", "listNoGeoTag");
 				divCont.appendChild(appDiv);
-				if(tags.markerTagsNoGeo[zed].length > 9){
-					for(var i = 0; i < 9; i++){
-						appDiv.appendChild(elements.domListing(tags.markerTagsNoGeo[zed][i],false,false,zed,zed+"LI"));
-						//console.log(elements.domListing(tags.markerTagsNoGeo[zed][i],false,false,zed,zed+"LI"));	
-						tags.markerTagsNoGeo[zed].splice(i,1);
+				if (tags.markerTagsNoGeo[zed].length > 9) {
+					for (var i = 0; i < 9; i++) {
+						appDiv.appendChild(elements.domListing(tags.markerTagsNoGeo[zed][i], false, false, zed, zed + "LI"));
+						//console.log(elements.domListing(tags.markerTagsNoGeo[zed][i],false,false,zed,zed+"LI"));
+						tags.markerTagsNoGeo[zed].splice(i, 1);
+					}
+				} else {
+					for (var i = 0; i < tags.markerTagsNoGeo[zed].length; i++) {
+						appDiv.appendChild(elements.domListing(tags.markerTagsNoGeo[zed][i], false, false, zed, zed + "LI"));
+						//console.log(elements.domListing(tags.markerTagsNoGeo[zed][i],false,false,zed,zed+"LI"));
+						tags.markerTagsNoGeo[zed].splice(i, 1);
 					}
 				}
-				else{
-					for(var i = 0; i < tags.markerTagsNoGeo[zed].length; i++){
-						appDiv.appendChild(elements.domListing(tags.markerTagsNoGeo[zed][i],false,false,zed,zed+"LI"));
-						//console.log(elements.domListing(tags.markerTagsNoGeo[zed][i],false,false,zed,zed+"LI"));	
-						tags.markerTagsNoGeo[zed].splice(i,1);
-					}
-				}
-				$(divCont).scroll(function(e){
+				//				$( 'li' ).off( 'scroll' );
+				$(divCont).scroll(function(e) {
 					var zedder = this.getAttribute("data-rel-zed");
 					console.log(this.scrollTop);
-					
-					console.log( );
-					
-					if (this.scrollTop >= (document.getElementById(zedder+"UL").offsetHeight-278)) {
-						if(tags.markerTagsNoGeo[zedder].length > 9){
-							for(var i = 0; i < 9; i++){
-								document.getElementById(zedder+"UL").appendChild(elements.domListing(tags.markerTagsNoGeo[zedder][i],false,false,zedder,zedder+"LI"));
-								//console.log(elements.domListing(tags.markerTagsNoGeo[zed][i],false,false,zed,zed+"LI"));	
-								tags.markerTagsNoGeo[zedder].splice(i,1);
+					if (this.scrollTop >= (document.getElementById(zedder + "UL").offsetHeight - 278)) {
+						if (tags.markerTagsNoGeo[zedder].length > 9) {
+							for (var i = 0; i < 9; i++) {
+								document.getElementById(zedder + "UL").appendChild(elements.domListing(tags.markerTagsNoGeo[zedder][i], false, false, zedder, zedder + "LI"));
+								//console.log(elements.domListing(tags.markerTagsNoGeo[zed][i],false,false,zed,zed+"LI"));
+								tags.markerTagsNoGeo[zedder].splice(i, 1);
 							}
-						}
-						else{
-							for(var i = 0; i < tags.markerTagsNoGeo[zedder].length; i++){
-								document.getElementById(zedder+"UL").appendChild(elements.domListing(tags.markerTagsNoGeo[zedder][i],false,false,zedder,zedder+"LI"));
-								//console.log(elements.domListing(tags.markerTagsNoGeo[zed][i],false,false,zed,zed+"LI"));	
-								tags.markerTagsNoGeo[zedder].splice(i,1);
+						} else {
+							for (var i = 0; i < tags.markerTagsNoGeo[zedder].length; i++) {
+								document.getElementById(zedder + "UL").appendChild(elements.domListing(tags.markerTagsNoGeo[zedder][i], false, false, zedder, zedder + "LI"));
+								//console.log(elements.domListing(tags.markerTagsNoGeo[zed][i],false,false,zed,zed+"LI"));
+								tags.markerTagsNoGeo[zedder].splice(i, 1);
 							}
 						}
 					}
 				});
-//				tags.markerTagsNoGeo[zed];			
-				
+				//				tags.markerTagsNoGeo[zed];
+				console.log(zed);
+				console.log(tags.markerTagsNoGeo);
 				var markerObj = {
 					content : divCont,
 					data : tags.markerTagsNoGeo[zed],
@@ -397,11 +398,11 @@ var mmanager = {
 					arrowSize : 65,
 					arrowTopSize : 20,
 					minHeight : 250,
-					maxHeight: 400,
+					maxHeight : 400,
 					maxWidth : 320,
 					minWidth : 320,
 					type : "noGeo",
-					
+
 					//maxWidth : 320,
 					arrowPosition : 30,
 					borderColor : "#22b9c8",
@@ -412,7 +413,9 @@ var mmanager = {
 				}
 				//tags with no Geo
 				marker.info = new InfoBubble(markerObj);
-				mmanager.addClickToHashes(marker);
+				//mmanager.addClickToHashes(marker);
+				mmanager.addClickToHashesAutoHide(marker);
+				tags.tagMarkerNoGeo[zed] = marker;
 			}
 		}
 		for (var zed in tags.locations) {
@@ -434,11 +437,10 @@ var mmanager = {
 				var h2 = document.createElement("h2");
 				h2.innerHTML = toInsert.toUpperCase();
 				//////////console.log((tags.locations[zed].LeftAligned);
-				if(tags.locations[zed].LeftAligned){
-					h2.setAttribute("class","left");
-				}
-				else{
-					h2.setAttribute("class","right");
+				if (tags.locations[zed].LeftAligned) {
+					h2.setAttribute("class", "left");
+				} else {
+					h2.setAttribute("class", "right");
 				}
 				div.appendChild(h2);
 				div.setAttribute("class", "begin");
@@ -448,14 +450,14 @@ var mmanager = {
 				addDiv.appendChild(div);
 				addDiv.appendChild(domDiv);
 				//////////console.log((zed);
-				
+
 				var toWrite = "hidden";
-				if(config.bandSizes[config.sizesOfLabels[zed]]!=undefined){
+				if (config.bandSizes[config.sizesOfLabels[zed]] != undefined) {
 					toWrite = config.bandSizes[config.sizesOfLabels[zed]];
 				}
 				//////////console.log((toWrite);
 				//////////console.log((config.sizesOfLabels[zed]);
-//////////console.log(();
+				//////////console.log(();
 				thisMarker = new MarkerWithLabel({
 					position : new google.maps.LatLng(tags.locations[zed].latitude, tags.locations[zed].longitude),
 					title : "#" + zed.toUpperCase(),
@@ -486,19 +488,20 @@ var mmanager = {
 			mmanager.tagManager.show();
 			tags.datHeight();
 			////////////console.log((document.getElementsByClassName("size-xs"));
-	
+
 			//tags.labelRefresh();
 		});
-			
+
 		//		tags.labelRefresh();
-	//	console.log("refreshed");
-		setTimeout(function(){
-			$("#spinney").css("display","none");
-		},4000);
+		//	console.log("refreshed");
+		setTimeout(function() {
+			$("#spinney").css("display", "none");
+		}, 4000);
 	}
 }
 var tags = {
 	"filtration" : "",
+	"arrEls" : {},
 	"singleTag" : "", //this is the tag closest to the center which is pulled and used for FB and tweets.
 	"contentInnerHeight" : 0,
 	"locations" : {},
@@ -510,23 +513,28 @@ var tags = {
 	"campaign" : new Array(),
 	"MAPrenderOnPage" : new Array(),
 	"DOMrenderOnPage" : new Array(),
-	"markerTagsNoGeo" : {},
+	"markerTagsNoGeo" : {}, //list of elements with no geo tagging in each tag
+	"tagMarkerNoGeo" : {}, //reference to markers for each hashtag, JSON object with key being hashtag without #
 	"markerTags" : {},
 	"datHeight" : function() {
 		//////////console.log(("getting");
 		//////////console.log(($(".size-xs"));
-		$(".size-xs").each(function(index,value){
+		$(".size-xs").each(function(index, value) {
 			//////////console.log((index);
 			//////////console.log((value);
 		});
-		$(".size-s").each(function(index,value){});
-		$(".size-m").each(function(index,value){});
-		$(".size-l").each(function(index,value){});
-		$(".size-xl").each(function(index,value){});
+		$(".size-s").each(function(index, value) {
+		});
+		$(".size-m").each(function(index, value) {
+		});
+		$(".size-l").each(function(index, value) {
+		});
+		$(".size-xl").each(function(index, value) {
+		});
 	},
 	"inString" : function(haystack, needle) {
-//		//////////console.log((needle.toLowerCase()).test(haystack.toLowerCase());
-		if (needle.replace(/\s+/g,"") == "") {
+		//		//////////console.log((needle.toLowerCase()).test(haystack.toLowerCase());
+		if (needle.replace(/\s+/g, "") == "") {
 			return true;
 		} else if (haystack == null) {
 			return false;
@@ -608,8 +616,8 @@ var tags = {
 
 		if (carryOn == true || carryOn == "update") {
 			var zedsArr = [];
-			for(var i in tags.locations){
-				if(tags.locations.hasOwnProperty(i)){
+			for (var i in tags.locations) {
+				if (tags.locations.hasOwnProperty(i)) {
 					zedsArr.push(i);
 				}
 			}
@@ -623,59 +631,46 @@ var tags = {
 		tpht.asyncLoop(arr.length, function(loop, i) {
 			//		////////////console.log(("node/jsons/"+tags.inBound[t]+".json");
 			////////////console.log((tags.inBound);
-		//	console.log(arr[i]);
-			
+			//	console.log(arr[i]);
+
 			tpht.easyXHR("get", config.baseURL + "node/jsons/" + arr[i] + ".json", "", function(response) {
 				////console.log((JSON.parse(response));
 				////////////console.log((response.length);
 				//console.log(response);
-				try{
-				var jsonP = JSON.parse(response);
-				if (jsonP.hasOwnProperty("error") == false) {
-					////////////console.log(("GETTING");
-					tags.tagData[JSON.parse(response).tag] = JSON.parse(response);
-					tags.markerTagsNoGeo[JSON.parse(response).tag] = [];
-					var z = JSON.parse(response).answers.length - 1;
-					var iterr = JSON.parse(response);
-					for (var i = 0; i < z; i++) {
-						if (iterr.answers[i].lat == null) {
-							tags.markerTagsNoGeo[iterr.tag].push(iterr.answers[i]);
+				try
+				{
+					var jsonP = JSON.parse(response);
+					if (jsonP.hasOwnProperty("error") == false) {
+						////////////console.log(("GETTING");
+						tags.tagData[JSON.parse(response).tag] = JSON.parse(response);
+						tags.markerTagsNoGeo[JSON.parse(response).tag] = [];
+						var z = JSON.parse(response).answers.length - 1;
+						var iterr = JSON.parse(response);
+						for (var i = 0; i < z; i++) {
+							if (iterr.answers[i].lat == null) {
+								tags.markerTagsNoGeo[iterr.tag].push(iterr.answers[i]);
+							}
 						}
 					}
+					////////////console.log((tags.tagData[JSON.parse(response).tag].answers.length);
+					////////////console.log((tags.tagData[JSON.parse(response).tag]);
+					loop.next();
+				} catch(e) {
+					loop.next();
 				}
-				////////////console.log((tags.tagData[JSON.parse(response).tag].answers.length);
-				////////////console.log((tags.tagData[JSON.parse(response).tag]);
-				loop.next();
-					}catch(e){
-						loop.next();
-					}
 			});
-	
+
 		}, function() {
-			//////////////console.log((tags.tagData);
-			////////////console.log(("STUFFANDTHINGS");
 			tags.gather();
 		});
 	},
 	"gather" : function() {
-		//		////////////console.log((tags.tagData);
 		for (var i in tags.tagData) {
-			////////////console.log(("++++++++++++++++++++++++++++++++++++");
-			////////////console.log((i);
-
-			//////////////console.log((tags.tagData[i]);
 			var arrMake = tags.tagData[i];
 			var arrTags = arrMake.tag;
 			var arrAns = arrMake.answers;
 			var arrTime = arrMake.time;
-
 			for (var t in arrAns) {
-				//////////////console.log((JSON.stringify(arrAns[t]));
-				//		////////////console.log((new Date(arrAns[t].time).getTime()/1000);
-				//////////////console.log((new Date());
-				//////////////console.log(((new Date(arrAns[t].time).getTime() / 1000));
-				//				////////////console.log((arrAns[t].time);
-				//				////////////console.log((new Date(arrAns[t].time).getTime());
 				if (parseInt(arrAns[t].time, 10) * 1000 >= config.minTime) {
 					if (arrAns[t].lat != null) {
 						//					////////////console.log((arrAns[t]);
@@ -720,13 +715,13 @@ var tags = {
 			//	////////////console.log((obj);
 			//////////////console.log((obj.position);
 			var image = "images/mapMarker.png"
-				if(config.inArr(tags.MAPrender[zed].user,config.whitelistNames)){
-					image = "images/asosMarker.png"
-				}
+			if (config.inArr(tags.MAPrender[zed].user, config.whitelistNames)) {
+				image = "images/asosMarker.png"
+			}
 			var marker = new google.maps.Marker({
 				"position" : obj.position,
 				"map" : obj.map,
-				"icon" : new google.maps.MarkerImage(image,new google.maps.Size(34, 47),null,null,new google.maps.Size(34, 47)),
+				"icon" : new google.maps.MarkerImage(image, new google.maps.Size(34, 47), null, null, new google.maps.Size(34, 47)),
 				"zIndex" : 9000,
 				"disableAutoPan" : true,
 				"text" : obj.text
@@ -738,6 +733,7 @@ var tags = {
 			"zIndex" : 9005
 			});*/
 			//			var t = new In
+			//console.log(obj);
 			var markerObj = {
 				content : elements.info(obj),
 				zIndex : 9001,
@@ -755,9 +751,9 @@ var tags = {
 				borderColor : "#22b9c8",
 				backgroundColor : '#ffdf24'
 			};
-			if(document.documentElement.clientWidth < 480){
-				markerObj.maxWidth = Math.floor(document.documentElement.clientWidth*0.9);
-				markerObj.minWidth = Math.floor(document.documentElement.clientWidth*0.9);
+			if (document.documentElement.clientWidth < 480) {
+				markerObj.maxWidth = Math.floor(document.documentElement.clientWidth * 0.9);
+				markerObj.minWidth = Math.floor(document.documentElement.clientWidth * 0.9);
 				//////console.log(("----------------------------");
 				//////console.log((markerObj.minWidth);
 			}
@@ -767,32 +763,23 @@ var tags = {
 			mmanager.hashContentArr.push(marker);
 		}
 		tags.renderToMap(mmanager.hashContentArr);
-		////////////console.log(("finishing");
-		////////////console.log((tags.DOMrender.length);
-		////////////console.log((tags.MAPrender.length);
 		for (var zed in tags.DOMrender) {
 			if (zed < config.ulLimit) {
 				tags.renderToList(tags.DOMrender[zed], false);
 				tags.DOMrenderOnPage.push(tags.DOMrender[zed].id);
-				tags.DOMrender.splice(zed,1);
+				tags.DOMrender.splice(zed, 1);
 			}
 			if (zed == config.ulLimit) {
 				twttr.widgets.load();
 			}
 		}
-		////////console.log((tags.DOMrender);
-		//////////////console.log(("rendered");
+
 		var iterate = document.getElementsByTagName("li");
 		var carried = false;
-		document.getElementById("surrounder").onscroll = function() {
-			//////////////console.log(((document.getElementById("content").offsetHeight-document.getElementById("surrounder").offsetHeight) - 100);
-			////////////console.log((document.getElementById("surrounder").scrollTop);
-			if (document.getElementById("surrounder").scrollTop >= (document.getElementById("content").offsetHeight - document.getElementById("surrounder").offsetHeight) - 100) {
-				////////////console.log(("trigger");
-				if (carried == false) {
 
-					//-----------------------------------------------------------------------
-					////////////console.log(("doing");
+		document.getElementById("surrounder").onscroll = function() {
+			if (document.getElementById("surrounder").scrollTop >= (document.getElementById("content").offsetHeight - document.getElementById("surrounder").offsetHeight) - 100) {
+				if (carried == false) {
 					carried = true;
 					//config.U
 					var pp = 0;
@@ -869,16 +856,16 @@ var tags = {
 					tags.MAPrender.push(arr[i]);
 					//////////////console.log((arr[i]);
 					//shove in to thing here.
-				// config.whitelistNames
-				var image = "images/mapMarker.png"
-				if(config.inArr(arr[i].user,config.whitelistNames)){
-					image = "images/asosMarker.png"
-				}
+					// config.whitelistNames
+					var image = "images/mapMarker.png"
+					if (config.inArr(arr[i].user, config.whitelistNames)) {
+						image = "images/asosMarker.png"
+					}
 					var obj = arr[i];
 					var marker = new google.maps.Marker({
 						position : new google.maps.LatLng(arr[i].latitude, arr[i].longitude),
 						map : maps.map,
-           				"icon" : new google.maps.MarkerImage(image,new google.maps.Size(34, 47),null,null,new google.maps.Size(34, 47)),
+						"icon" : new google.maps.MarkerImage(image, new google.maps.Size(34, 47), null, null, new google.maps.Size(34, 47)),
 						zIndex : 9000,
 						text : arr[i].text,
 						disableAutoPan : true
@@ -889,6 +876,7 @@ var tags = {
 					zIndex : 9001
 					});*/
 					//map marker styling
+					console.log(arr[i]);
 					var markerObj = {
 						content : elements.info(arr[i]),
 						zIndex : 9001,
@@ -906,15 +894,15 @@ var tags = {
 						borderColor : "#22b9c8",
 						backgroundColor : '#ffdf24'
 					};
-			if(document.documentElement.clientWidth < 480){
-				
-				markerObj.maxWidth = Math.floor(document.documentElement.clientWidth*0.9);
-				markerObj.minWidth = Math.floor(document.documentElement.clientWidth*0.9);
-				
+					if (document.documentElement.clientWidth < 480) {
+
+						markerObj.maxWidth = Math.floor(document.documentElement.clientWidth * 0.9);
+						markerObj.minWidth = Math.floor(document.documentElement.clientWidth * 0.9);
+
 						//////console.log(("----------------------------");
-				//////console.log((markerObj.minWidth);
-			
-			}
+						//////console.log((markerObj.minWidth);
+
+					}
 
 					marker.info = new InfoBubble(markerObj)
 					mmanager.addClickToHashes(marker);
@@ -971,7 +959,8 @@ var tags = {
 			"maxZoom" : 18,
 		};
 		////////////console.log(("instantiationg");
-		try {
+		try
+		{
 			if (ie == false) {
 				mmanager.hashContentManager = new MarkerClusterer(maps.map, obj, mcOptions);
 			}
@@ -1022,54 +1011,126 @@ var tags = {
 
 		if (inb4 == true) {
 			tpht.appendFirst(toAdd, append);
-		}
-		else {
+		} else {
 			append.appendChild(toAdd);
 		}
 	}
 }
 var elements = {
-	"updateMarkerVisibility":function(){
-		console.log("ERROR BEOTCH" + tags.filtration);
-if (mmanager.hashContentManager != null) {
-	var cycleArr = mmanager.hashContentManager.getMarkers();
-		if (ie == true) {
-			for (var el = 0; el < hashContentArr[el].length; el++) {
-				if(tags.inString(mmanager.hashContentArr[el].text, tags.filtration) == false){
-					mmanager.hashContentArr[el].setVisible(false);
+	"updateMarkerVisibility" : function() {
+
+		console.log(tags.tagMarkerNoGeo);
+		console.log(tags.markerTagsNoGeo);
+
+		for (var i in tags.tagMarkerNoGeo) {
+			console.log(console.log(tags.tagMarkerNoGeo));
+			if (tags.tagMarkerNoGeo.hasOwnProperty(i)) {
+				tags.arrEls[i] = new Array;
+				for (var zeds = 0; zeds < tags.markerTagsNoGeo[i].length; zeds++) {
+					if (tags.inString(tags.markerTagsNoGeo[i][zeds].text, tags.filtration) == true) {
+						tags.arrEls[i].push(tags.markerTagsNoGeo[i][zeds]);
+					}
 				}
-				else{
-					mmanager.hashContentArr[el].setVisible(true);
+				//content : elements.info(arr[i]),
+				console.log(tags.tagMarkerNoGeo[i].info.isOpen());
+				tags.tagMarkerNoGeo[i].labelContent = tags.arrEls[i].length;
+
+				if (tags.arrEls[i].length == 1) {
+					tags.tagMarkerNoGeo[i].icon = "images/singleLocation.png";
+					//hashhashbang;
+				} else {
+					tags.tagMarkerNoGeo[i].icon = "images/multiLocation.png";
+				}				
+				
+				var divCont = document.createElement("div");
+				divCont.setAttribute("class", "lister");
+				divCont.setAttribute("id", i + "scrollContainer");
+				divCont.setAttribute("data-rel-zed", i);
+				var appDiv = document.createElement("ul");
+				appDiv.setAttribute("id", i + "UL");
+				appDiv.setAttribute("class", "listNoGeoTag");
+				divCont.appendChild(appDiv);
+				if (tags.arrEls[i].length > 9) {
+					for (var k = 0; k < 9; k++) {
+						appDiv.appendChild(elements.domListing(tags.arrEls[i][k], false, false, k, k + "LI"));
+						//console.log(elements.domListing(tags.markerTagsNoGeo[zed][i],false,false,zed,zed+"LI"));
+						tags.arrEls[i].splice(k, 1);
+					}
+				} else {
+					for (var k = 0; k < tags.arrEls[i].length; k++) {
+						appDiv.appendChild(elements.domListing(tags.arrEls[i][k], false, false, k, k + "LI"));
+						//console.log(elements.domListing(tags.markerTagsNoGeo[zed][i],false,false,zed,zed+"LI"));
+						tags.arrEls[i].splice(k, 1);
+					}
+				}
+				tags.tagMarkerNoGeo[i].info.setContent(divCont);
+				tags.tagMarkerNoGeo[i].info.redraw_();
+				//				$( 'li' ).off( 'scroll' );
+				$(divCont).scroll(function(e) {
+					var zedder = this.getAttribute("data-rel-zed");
+					console.log(tags.arrEls);
+					if (this.scrollTop >= (document.getElementById(zedder + "UL").offsetHeight - 278)) {
+						if (tags.arrEls[zedder].length > 9) {
+							for (var k = 0; k < 9; k++) {
+								document.getElementById(zedder + "UL").appendChild(elements.domListing(tags.arrEls[zedder][k], false, false, zedder, zedder + "LI"));
+								//console.log(elements.domListing(tags.markerTagsNoGeo[zedder][i],false,false,zed,zed+"LI"));
+								tags.arrEls[zedder].splice(k, 1);
+							}
+						} else {
+							for (var k = 0; k < tags.arrEls[zedder].length; k++) {
+								document.getElementById(zedder + "UL").appendChild(elements.domListing(tags.arrEls[zedder][k], false, false, zedder, zedder + "LI"));
+								//console.log(elements.domListing(tags.markerTagsNoGeo[zed][i],false,false,zed,zed+"LI"));
+								tags.arrEls[zedder].splice(k, 1);
+							}
+						}
+					}
+				});
+//leRise
+
+
+
+
+				tags.tagMarkerNoGeo[i].label.setStyles();
+				tags.tagMarkerNoGeo[i].setMap(null);
+				tags.tagMarkerNoGeo[i].setMap(maps.map);
+			}
+		} 
+		console.log(tags.tagMarkerNoGeo);
+
+		console.log("ERROR BEOTCH" + tags.filtration);
+		if (mmanager.hashContentManager != null) {
+			var cycleArr = mmanager.hashContentManager.getMarkers();
+			if (ie == true) {
+				for (var el = 0; el < hashContentArr[el].length; el++) {
+					if (tags.inString(mmanager.hashContentArr[el].text, tags.filtration) == false) {
+						mmanager.hashContentArr[el].setVisible(false);
+					} else {
+						mmanager.hashContentArr[el].setVisible(true);
+					}
 				}
 			}
+			if (ie == false) {
+				for (var el = 0; el < cycleArr.length; el++) {
+					//console.log(cycleArr[el].text);
+					//console.log(tags.inString(cycleArr[el].text, tags.filtration));
+					if (tags.inString(cycleArr[el].text, tags.filtration) == false) {
+						cycleArr[el].setVisible(false);
+					} else {
+						cycleArr[el].setVisible(true);
+					}
+				}//	mmanager.hashContentManager.removeMarker(mmanager.hashContentArr[el]);
+				mmanager.hashContentManager.setIgnoreHidden(true);
+				mmanager.hashContentManager.repaint();
+			}
 		}
-		if (ie == false) {
-			for (var el = 0; el < cycleArr.length; el++) {
-				//console.log(cycleArr[el].text);
-				console.log(tags.inString(cycleArr[el].text, tags.filtration));
-				if (tags.inString(cycleArr[el].text, tags.filtration) == false) {
-					cycleArr[el].setVisible(false);
-				}
-				else{
-					cycleArr[el].setVisible(true);
-				}
-			}//	mmanager.hashContentManager.removeMarker(mmanager.hashContentArr[el]);
-					mmanager.hashContentManager.setIgnoreHidden(true); 
-					mmanager.hashContentManager.repaint();
-		}
-}
-/*---------------------------------------------------------------------
-
----------------------------------------------------------------------*/
-
 	},
 	"fullUpdate" : function() {
 		var ins = $(".sideBar");
 		var comparator;
-			elements.updateMarkerVisibility();
+		elements.updateMarkerVisibility();
 
 		if (maps.map.getZoom() >= 9 && tags.singleTag != "" && tags.filtration == "") {
-			var shortSingle = tags.singleTag.substring(1,tags.singleTag.length);
+			var shortSingle = tags.singleTag.substring(1, tags.singleTag.length);
 			if (tags.optionaltags[shortSingle] != undefined) {
 				if (tags.optionaltags[shortSingle] != "") {
 					$("#header").text(tags.optionaltags[shortSingle]);
@@ -1086,13 +1147,13 @@ if (mmanager.hashContentManager != null) {
 				if (tags.optionaltags[tags.inBound[0]] != "") {
 					$("#header").text(tags.optionaltags[tags.inBound[0]]);
 				} else {
-					$("#header").text("#"+tags.inBound[0]);
+					$("#header").text("#" + tags.inBound[0]);
 				}
 			} else {
-				$("#header").text("#"+tags.inBound[0]);
+				$("#header").text("#" + tags.inBound[0]);
 			}
 		} else {
-			if(tags.filtration == ""){
+			if (tags.filtration == "") {
 				$("#header").text(headingLabel);
 			}
 		}
@@ -1105,15 +1166,15 @@ if (mmanager.hashContentManager != null) {
 				////////////console.log((ins[i]);
 				if (Object.prototype.hasOwnProperty.call(ins, i)) {
 					var content = "";
-					if ($(ins[i]).data("textcontent")!="") {
+					if ($(ins[i]).data("textcontent") != "") {
 						//////console.log(("twit");
 						//////console.log(();
-						content = $(ins[i]).data("textcontent");//$(ins[i]).(".e-entry-answer").first().text();
-					}
-					else{
+						content = $(ins[i]).data("textcontent");
+						//$(ins[i]).(".e-entry-answer").first().text();
+					} else {
 						////console.log(($(ins[i]));
 					}
-					
+
 					if (tags.filtration != "") {
 						//////console.log(("filtering");
 						////console.log((content);
@@ -1145,11 +1206,11 @@ if (mmanager.hashContentManager != null) {
 			////console.log((disp);
 			//////////console.log((tags.filtration);
 			if (disp < 5) {
-				for (var zeds = 0; zeds < tags.DOMrender.length; zeds++){
+				for (var zeds = 0; zeds < tags.DOMrender.length; zeds++) {
 					////////////console.log((tags.DOMrender[zeds]);
 					if (disp >= 5 || zeds == tags.DOMrender.length) {
-				$("#content").css("display","block");
-				$("#searchError").css("display","none");
+						$("#content").css("display", "block");
+						$("#searchError").css("display", "none");
 						twttr.widgets.load();
 						return;
 					} else if (tags.filtration.length > 0) {
@@ -1172,19 +1233,19 @@ if (mmanager.hashContentManager != null) {
 				}
 			}
 			//console.log(match);
-			if(match == -1){
+			if (match == -1) {
 				//////console.log(("MATCHEM UP DIGGA" + match);
-				if(tags.filtration != ""){
-						$("#content").css("display","none");
-						$("#searchError").css("display","block");
-					}
-			}else{
-				$("#content").css("display","block");
-				$("#searchError").css("display","none");
+				if (tags.filtration != "") {
+					$("#content").css("display", "none");
+					$("#searchError").css("display", "block");
+				}
+			} else {
+				$("#content").css("display", "block");
+				$("#searchError").css("display", "none");
 
 			}
 		}
-		
+
 		twttr.widgets.load();
 		////////////console.log(("callingWidgets");
 	},
@@ -1197,135 +1258,135 @@ if (mmanager.hashContentManager != null) {
 		}
 		return false;
 	},
-	"domListing" : function(obj, hidden, notLazyLoad, Classing,idSuffix) {
-			notLazyLoad = true;
-			var li = document.createElement("li");
-			$(li).attr("id", idSuffix + obj.id);
-			if (hidden == true) {
-				$(li).css("display", "none");
-			}
-			$(li).attr("class", Classing);
-			$(li).attr("data-rel-hashtag", obj.hashtag.replace(/#/g, ""));
-			$(li).attr("data-timestamp", obj.time);
-			$(li).attr("data-rel-source", obj.src);
-			$(li).attr("data-textContent", obj.text);
-			var topDiv = document.createElement("div");
-			topDiv.setAttribute("class", "topDiv");
-			if (obj.imgURL != "") {
-				var profImg = document.createElement("img");
-				profImg.setAttribute("src", obj.userIMG);
-				profImg.setAttribute("class", "profileImages");
-				topDiv.appendChild(profImg);
-				$(profImg).bind("error", function() {
-					////////////console.log("sideBar" + obj.id);
-					$(profImg).css("display", "none");
-				})
-			}
+	"domListing" : function(obj, hidden, notLazyLoad, Classing, idSuffix) {
+		notLazyLoad = true;
+		var li = document.createElement("li");
+		$(li).attr("id", idSuffix + obj.id);
+		if (hidden == true) {
+			$(li).css("display", "none");
+		}
+		$(li).attr("class", Classing);
+		$(li).attr("data-rel-hashtag", obj.hashtag.replace(/#/g, ""));
+		$(li).attr("data-timestamp", obj.time);
+		$(li).attr("data-rel-source", obj.src);
+		$(li).attr("data-textContent", obj.text);
+		var topDiv = document.createElement("div");
+		topDiv.setAttribute("class", "topDiv");
+		if (obj.imgURL != "") {
+			var profImg = document.createElement("img");
+			profImg.setAttribute("src", obj.userIMG);
+			profImg.setAttribute("class", "profileImages");
+			topDiv.appendChild(profImg);
+			$(profImg).bind("error", function() {
+				////////////console.log("sideBar" + obj.id);
+				$(profImg).css("display", "none");
+			})
+		}
 
-			//////////console.log(JSON.stringify(obj));
-			if (obj.name != null) {
-				var str = obj.name.replace(/(^\s+|\s+$)/g, ' ');
-				;
+		//////////console.log(JSON.stringify(obj));
+		if (obj.name != null) {
+			var str = obj.name.replace(/(^\s+|\s+$)/g, ' ');
+			;
+		} else {
+			var str = "";
+		}
+		//////////console.log(str);
+		var splitString = [str.substr(0, str.indexOf(" ")), str.substr(str.indexOf(" ") + 1)];
+		// "tocirah sneab"]
+		var classes = ["firstName", "lastName"];
+		var domDiv = document.createElement("div");
+		domDiv.setAttribute("class", "nameContainer");
+		for (var i = 0; i < splitString.length; i++) {
+			var addDiv = document.createElement("p");
+			addDiv.setAttribute("class", classes[i]);
+			var addDivText = document.createTextNode(splitString[i].toUpperCase());
+			addDiv.appendChild(addDivText);
+			domDiv.appendChild(addDiv);
+
+		}
+		var namesDiv = document.createElement("div");
+		namesDiv.setAttribute("class", "names");
+		namesDiv.appendChild(domDiv);
+
+		if (obj.source != "FACEB") {
+			var userDiv = document.createElement("p");
+			userDiv.setAttribute("class", "userNameTag");
+			var userDivText = document.createTextNode("@" + obj.user);
+			userDiv.appendChild(userDivText);
+			namesDiv.appendChild(userDiv);
+		}
+		topDiv.appendChild(namesDiv);
+
+		var icon = document.createElement("div");
+		if (obj.source == "TWTTR") {
+			icon.setAttribute("class", "twttrImage");
+		}
+		if (obj.source == "INSTA") {
+			icon.setAttribute("class", "instaImage");
+		}
+		if (obj.source == "FACEB") {
+			icon.setAttribute("class", "facebImage");
+		}
+		topDiv.appendChild(icon);
+
+		var bottomDiv = document.createElement("div");
+		bottomDiv.setAttribute("class", "bottomDiv");
+
+		if (obj.img_small != undefined && obj.img_small != "") {
+			var div = document.createElement("img");
+			$(div).attr("class", "image");
+			if (notLazyLoad == false) {
+				$(div).attr("data-img-src", obj.img_small);
 			} else {
-				var str = "";
+				$(div).attr("src", obj.img_small);
 			}
-			//////////console.log(str);
-			var splitString = [str.substr(0, str.indexOf(" ")), str.substr(str.indexOf(" ") + 1)];
-			// "tocirah sneab"]
-			var classes = ["firstName", "lastName"];
-			var domDiv = document.createElement("div");
-			domDiv.setAttribute("class", "nameContainer");
-			for (var i = 0; i < splitString.length; i++) {
-				var addDiv = document.createElement("p");
-				addDiv.setAttribute("class", classes[i]);
-				var addDivText = document.createTextNode(splitString[i].toUpperCase());
-				addDiv.appendChild(addDivText);
-				domDiv.appendChild(addDiv);
+			//"sideBar" + obj.id
+			//div.attr("onerror",)
+			//			tpht.setAttr(div, "onError", tpht.setAttr(div,"style","display:none;"));
+			$(div).bind("error", function() {
+				////////////console.log("sideBar" + obj.id);
+				$(div).css("display", "none");
+				$("#sideBar" + obj.id).find(".textWithImg").attr("class", "text");
+				////////console.log("ERRORED SORTED");
+			})
+			bottomDiv.appendChild(div);
 
-			}
-			var namesDiv = document.createElement("div");
-			namesDiv.setAttribute("class", "names");
-			namesDiv.appendChild(domDiv);
+		}
 
-			if (obj.source != "FACEB") {
-				var userDiv = document.createElement("p");
-				userDiv.setAttribute("class", "userNameTag");
-				var userDivText = document.createTextNode("@" + obj.user);
-				userDiv.appendChild(userDivText);
-				namesDiv.appendChild(userDiv);
-			}
-			topDiv.appendChild(namesDiv);
-
-			var icon = document.createElement("div");
-			if(obj.source == "TWTTR"){
-				icon.setAttribute("class","twttrImage");
-			}
-			if(obj.source == "INSTA"){
-				icon.setAttribute("class","instaImage");
-			}
-			if(obj.source == "FACEB"){
-				icon.setAttribute("class","facebImage");
-			}
-			topDiv.appendChild(icon);
-
-			var bottomDiv = document.createElement("div");
-			bottomDiv.setAttribute("class", "bottomDiv");
-
+		if (obj.text != undefined) {
+			var divt = document.createElement("div");
+			$(divt).attr("class", "text");
 			if (obj.img_small != undefined && obj.img_small != "") {
-				var div = document.createElement("img");
-				$(div).attr("class", "image");
-				if (notLazyLoad == false) {
-					$(div).attr("data-img-src", obj.img_small);
-				} else {
-					$(div).attr("src", obj.img_small);
-				}
-				//"sideBar" + obj.id
-				//div.attr("onerror",)
-				//			tpht.setAttr(div, "onError", tpht.setAttr(div,"style","display:none;"));
-				$(div).bind("error", function() {
-					////////////console.log("sideBar" + obj.id);
-					$(div).css("display", "none");
-					$("#sideBar" + obj.id).find(".textWithImg").attr("class", "text");
-					////////console.log("ERRORED SORTED");
-				})
-				bottomDiv.appendChild(div);
-
+				$(divt).attr("class", "textWithImg");
 			}
+			$(divt).html(obj.text);
+			bottomDiv.appendChild(divt);
+		}
+		if (obj.source == "FACEB") {
+			var a = document.createElement("a");
+			a.setAttribute("class", "socialLinkage");
+			var splitId = obj.id.split("_");
+			a.setAttribute("href", "https://www.facebook.com/" + splitId[0] + "/posts/" + splitId[1]);
+			a.setAttribute("target", "_blank");
+			a.appendChild(topDiv);
+			a.appendChild(bottomDiv);
+			li.appendChild(a);
+		} else {
+			var a = document.createElement("a");
+			a.setAttribute("class", "socialLinkage");
+			var splitId = obj.id.split("_");
+			a.setAttribute("href", obj.link);
+			a.setAttribute("target", "_blank");
+			a.appendChild(topDiv);
+			a.appendChild(bottomDiv);
+			li.appendChild(a);
+		}
+		li.appendChild(topDiv);
+		li.appendChild(bottomDiv);
 
-			if (obj.text != undefined) {
-				var divt = document.createElement("div");
-				$(divt).attr("class", "text");
-				if (obj.img_small != undefined && obj.img_small != "") {
-					$(divt).attr("class", "textWithImg");
-				}
-				$(divt).html(obj.text);
-				bottomDiv.appendChild(divt);
-			}
-			if (obj.source == "FACEB") {
-				var a = document.createElement("a");
-				a.setAttribute("class", "socialLinkage");
-				var splitId = obj.id.split("_");
-				a.setAttribute("href", "https://www.facebook.com/" + splitId[0] + "/posts/" + splitId[1]);
-				a.setAttribute("target", "_blank");
-				a.appendChild(topDiv);
-				a.appendChild(bottomDiv);
-				li.appendChild(a);
-			} else  {
-				var a = document.createElement("a");
-				a.setAttribute("class", "socialLinkage");
-				var splitId = obj.id.split("_");
-				a.setAttribute("href", obj.link);
-				a.setAttribute("target", "_blank");
-				a.appendChild(topDiv);
-				a.appendChild(bottomDiv);
-				li.appendChild(a);
-			} 
-				li.appendChild(topDiv);
-				li.appendChild(bottomDiv);
-			
-			//		//////////console.log($(li).html());
-			return li;
-		
+		//		//////////console.log($(li).html());
+		return li;
+
 	},
 
 	"list" : function(obj, hidden, notLazyLoad) {
@@ -1338,7 +1399,7 @@ if (mmanager.hashContentManager != null) {
 			$(insLI).attr("data-rel-hashtag", obj.hashtag.replace(/#/g, ""));
 			$(insLI).attr("data-timestamp", obj.time);
 			$(insLI).attr("data-rel-source", obj.src);
-			$(insLI).attr("data-textContent",obj.text);
+			$(insLI).attr("data-textContent", obj.text);
 			if (hidden == true) {
 				$(insLI).css("display", "none");
 			}
@@ -1374,7 +1435,7 @@ if (mmanager.hashContentManager != null) {
 			$(li).attr("data-rel-hashtag", obj.hashtag.replace(/#/g, ""));
 			$(li).attr("data-timestamp", obj.time);
 			$(li).attr("data-rel-source", obj.src);
-			$(li).attr("data-textContent",obj.text);
+			$(li).attr("data-textContent", obj.text);
 			var topDiv = document.createElement("div");
 			topDiv.setAttribute("class", "topDiv");
 			if (obj.imgURL != "") {
@@ -1423,14 +1484,14 @@ if (mmanager.hashContentManager != null) {
 			topDiv.appendChild(namesDiv);
 
 			var icon = document.createElement("div");
-			if(obj.source == "TWTTR"){
-				icon.setAttribute("class","twttrImage");
+			if (obj.source == "TWTTR") {
+				icon.setAttribute("class", "twttrImage");
 			}
-			if(obj.source == "INSTA"){
-				icon.setAttribute("class","instaImage");
+			if (obj.source == "INSTA") {
+				icon.setAttribute("class", "instaImage");
 			}
-			if(obj.source == "FACEB"){
-				icon.setAttribute("class","facebImage");
+			if (obj.source == "FACEB") {
+				icon.setAttribute("class", "facebImage");
 			}
 			topDiv.appendChild(icon);
 
@@ -1576,17 +1637,17 @@ if (mmanager.hashContentManager != null) {
 		namesDiv.setAttribute("class", "names");
 		namesDiv.appendChild(domDiv);
 		var icon = document.createElement("div");
-			if(obj.source == "TWTTR"){
-				icon.setAttribute("class","twttrImage");
-			}
-			if(obj.source == "INSTA"){
-				icon.setAttribute("class","instaImage");
-			}
-			if(obj.source == "FACEB"){
-				icon.setAttribute("class","facebImage");
-			}
-			topDiv.appendChild(icon);
-			
+		if (obj.source == "TWTTR") {
+			icon.setAttribute("class", "twttrImage");
+		}
+		if (obj.source == "INSTA") {
+			icon.setAttribute("class", "instaImage");
+		}
+		if (obj.source == "FACEB") {
+			icon.setAttribute("class", "facebImage");
+		}
+		topDiv.appendChild(icon);
+
 		if (obj.source != "FACEB") {
 			var userDiv = document.createElement("p");
 			userDiv.setAttribute("class", "userNameTag");
@@ -1708,10 +1769,10 @@ var sse = {
 }
 
 var general = {
-	"error" : function(head, mess, id){
+	"error" : function(head, mess, id) {
 		var div = document.createElement("div");
-		div.setAttribute("class","nothing");
-		div.setAttribute("id",id);
+		div.setAttribute("class", "nothing");
+		div.setAttribute("id", id);
 		var head = document.createElement("h3");
 		head.textContent = head;
 		div.appendChild(head);
@@ -1719,7 +1780,7 @@ var general = {
 		bod.textContent = mess;
 		div.appendChild(bod);
 		return div;
-			
+
 	},
 	"refreshLabelSize" : function() {
 		if ( typeof config.sizesOfLabels != "function") {
@@ -1789,11 +1850,11 @@ var general = {
 			$(decline).attr("id", "modalDeny");
 			var inText = document.createTextNode("CLOSE");
 			decline.appendChild(inText);
-			decline.on("click",function() {
+			decline.on("click", function() {
 				$("#modalDialogue").slideUp(400, function() {
 					$("#modalInside").html("")
 				});
-			}); 
+			});
 			content.appendChild(confirm);
 			content.appendChild(decline);
 		}
@@ -1812,20 +1873,18 @@ var general = {
 			});
 			content.appendChild(decline);
 		}
-		if(opts.padded == true){
-	$("#modalDialogue").find(".textContainer").first().css("padding-left","50px");
-			}
-			else{
-				$("#modalDialogue").find(".textContainer").first().css("padding","0px");
-			}
+		if (opts.padded == true) {
+			$("#modalDialogue").find(".textContainer").first().css("padding-left", "50px");
+		} else {
+			$("#modalDialogue").find(".textContainer").first().css("padding", "0px");
+		}
 
 		$("#modalDialogue").slideDown();
 	},
 	"updateSinglePoint" : function() {
-		if(document.documentElement.clientWidth < 480){
+		if (document.documentElement.clientWidth < 480) {
 			var extraString = "twitMobi.html";
-		}
-		else{
+		} else {
 			var extraString = "twitButton.html";
 		}
 		extraString += "#type=hashtag&count=none";
@@ -1868,7 +1927,7 @@ var general = {
 		var tweet = document.getElementById("twitterButton");
 		//extraString = extraString + "&hashtags=" + tags.singleTag.replace(/#/g, "");
 		$('#twitterButton').hide();
-		$(tweet).attr("src", extraString+"&text="+"My fave student hotspot is #ASOS[Insert Uni Here]");
+		$(tweet).attr("src", extraString + "&text=" + "My fave student hotspot is #ASOS[Insert Uni Here]");
 		//console.log("reloading");
 		tweet.contentWindow.location.reload();
 	}
