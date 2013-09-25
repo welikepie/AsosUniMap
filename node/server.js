@@ -186,7 +186,7 @@ function writEm() {
 			console.log(results);
 			asyncLoop(results.length, function(loop, i) {
 				console.log(results[i]);
-				var prepare = "SELECT id,user,name,userIMG, UNIX_TIMESTAMP(time) as time,lat,lon,text,img_small,img_med,img_large,source,hashtag,link FROM asosUniMap.content WHERE hashtag = '" + results[i] + "'";
+				var prepare = "SELECT id,user,name,userIMG, UNIX_TIMESTAMP(time) as time,lat,lon,text,img_small,img_med,img_large,source,hashtag,link FROM asosUniMap.content WHERE hashtag LIKE '" + results[i] + "'";
 				db.connection.query(prepare, function(err, result) {
 					//console.log(result.length);
 					if (err) {
@@ -203,9 +203,16 @@ function writEm() {
 						writeArr.answers = result;
 						var thing;
 						
-						sizeArr[results[i]] = result.length;
-						
+			
 						try {
+							var inDoc = fs.readdirSync("jsons/");
+							for(var zeds = 0; zeds < inDoc.length; zeds++){
+								if(insensStrComp(inDoc[zeds].replace("#","").replace(".json",""),results[i])==true){
+									results[i] = inDoc[zeds].replace(".json","");
+									break;
+								}
+							}
+							sizeArr[results[i]] = result.length;
 							thing = JSON.parse(fs.readFileSync("jsons/" + results[i] + ".json", 'utf-8')).answers;
 						} catch(e) {
 							thing = "";
@@ -249,6 +256,15 @@ function writEm() {
 			});
 		}
 	});
+}
+
+function insensStrComp(str1,str2){
+	if(str1.toLowerCase() == str2.toLowerCase()){
+		return true;
+	}
+	else{
+		return false;
+	}
 }
 
 function testForEquality(t1, t2) {

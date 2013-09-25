@@ -1,6 +1,8 @@
 var headingLabel = $("#header").text();
 //////////console.log((headingLabel);
 var config = {
+	//array of wave images. First array is for mobile, second is for desktop size map.
+	"waveArr" : [["wave.gif","wave.gif"],["closePop.png","twitMini.png"]],
 	"whitelistNames" : ["Asos", "Asos_HereToHelp", "Asos_Menswear", "ASOS_heretohelp", "ASOS_HilftEuch", "ASOS_ServiceClient", "ASOSMarketplace", "ASOS_ID"],
 	"inArr" : function(name, arr) {
 		//////console.log((name+","+arr);
@@ -54,7 +56,26 @@ var config = {
 		})
 	}
 };
-var maps = {
+var maps = {//waves structure is object first, mobile image second, and desktop image third.
+	waves : [[new google.maps.LatLng(59.0631, -8.21777)], 
+					[new google.maps.LatLng(56.1455, 3.8671)], 
+					[new google.maps.LatLng(52.26815, 8.12988)], 
+					[new google.maps.LatLng(55.22902, 12.3486)], 
+					[new google.maps.LatLng(59.822731, 8.56933)], 
+					[new google.maps.LatLng(50.48547, -14.6777)], 
+					[new google.maps.LatLng(55.6527, -19.204)], 
+					[new google.maps.LatLng(60.21799, -16.6522)], 
+					[new google.maps.LatLng(60.54377, 0.3515)], 
+					[new google.maps.LatLng(58.81374, -27.1142)], 
+					[new google.maps.LatLng(52.6963,-28.21289)],
+					[new google.maps.LatLng(63.54855,-9.3164)],
+					[new google.maps.LatLng(64.6803, 2.9443)],
+					[new google.maps.LatLng(59.3107, 20.83)],
+					[new google.maps.LatLng(52.0254, 22.0605)],
+					[new google.maps.LatLng(45.39844, 12.172)],
+					[new google.maps.LatLng(43.61226, -10.371)],
+					[new google.maps.LatLng(46.3165, -29.0039)],
+					[new google.maps.LatLng(64.3779,15.3803)]],
 	oldInfoBox : null,
 	oldBounds : null,
 	map : "",
@@ -108,15 +129,35 @@ var maps = {
 			position : myLatLng,
 			//			icon : 'images/uk.png',
 			icon : "images/" + config.labelArr[maps.map.getZoom() - config.minZoom],
-			pane : "mapPane",
-			zIndex : 500
+			zIndex : 500,
+			map : maps.map
 		});
-
-		beachMarker.setMap(maps.map);
-		google.maps.event.addListener(maps.map, 'dblclick', function() {
-			////console.log((maps.map.getCenter());
-		});
-
+		
+		for(var i = 0; i < maps.waves.length; i++){
+			maps.waves[i][0] = new google.maps.Marker({
+			position : maps.waves[i][0],
+			//			icon : 'images/uk.png',
+			icon : "images/wave.gif",
+			zIndex : 501,
+			optimized:false,
+			map : maps.map
+			});
+			if(i%2 == 0){
+				
+				//mobile with l2r
+				maps.waves[i].push("images/" + config.waveArr[0][0]);
+				//desktop with r2l
+				maps.waves[i].push("images/" + config.waveArr[1][1]);
+			}
+			else{
+				//mobile with l2r
+				maps.waves[i].push("images/" + config.waveArr[0][1]);
+				//desktop with r2l
+				maps.waves[i].push("images/" + config.waveArr[1][0]);				
+			}
+			maps.waves[i][0].icon = maps.waves[i][maps.map.getZoom() - config.minZoom+1]
+		}
+	console.log(maps.waves);
 		google.maps.event.addListener(maps.map, 'zoom_changed', function() {
 			console.log(maps.map.getZoom());
 			if (config.previousZoom > maps.map.getZoom() && document.documentElement.clientWidth < 480) {
@@ -152,6 +193,9 @@ var maps = {
 					}
 				}
 				beachMarker.setVisible(false);
+				for(var i = 0; i < maps.waves.length; i++){
+					maps.waves[i][0].setVisible(false);
+				}
 			} else {
 				maps.map.setOptions({
 					"styles" : [{
@@ -161,9 +205,15 @@ var maps = {
 						}]
 					}]
 				});
-				beachMarker.setVisible(true);
-				//////console.log((config.labelArr[maps.map.getZoom() - config.minZoom]);
 				beachMarker.setIcon("images/" + config.labelArr[maps.map.getZoom() - config.minZoom]);
+				beachMarker.setVisible(true);
+				for(var i = 0; i < maps.waves.length; i++){
+					console.log(maps.waves[i][maps.map.getZoom() - config.minZoom+1]);
+					maps.waves[i][0].setIcon(maps.waves[i][maps.map.getZoom() - config.minZoom+1]);
+					maps.waves[i][0].setVisible(true);
+				}
+				//////console.log((config.labelArr[maps.map.getZoom() - config.minZoom]);
+	
 			}
 			//////////console.log((maps.map.getZoom());
 			var bounds = maps.map.getBounds();
@@ -212,7 +262,11 @@ var maps = {
 				}]
 			});
 			beachMarker.setVisible(true);
-
+				for(var i = 0; i < maps.waves.length; i++){
+					maps.waves[i][0].icon = maps.waves[i][maps.map.getZoom() - config.minZoom+1]
+					maps.waves[i][0].setVisible(true);
+				}
+			
 		});
 		google.maps.event.addListener(maps.map, 'dragend', function() {
 			//tpht.getById("map-canvas").onclick = function() {
@@ -226,6 +280,20 @@ var maps = {
 			//}
 		});
 		google.maps.event.addListenerOnce(maps.map, 'idle', function() {
+
+			google.maps.event.addListener(beachMarker, "rightclick", function(event) {
+				var lat = event.latLng.lat();
+				var lng = event.latLng.lng();
+				// populate yor box/field with lat, lng
+				alert("Lat=" + lat + "; Lng=" + lng);
+			});
+
+			google.maps.event.addListener(maps.map, "rightclick", function(event) {
+				var lat = event.latLng.lat();
+				var lng = event.latLng.lng();
+				// populate yor box/field with lat, lng
+				alert("Lat=" + lat + "; Lng=" + lng);
+			});
 
 			if ($("#map-canvas > #sidebarChunk").length == 0) {
 				var divToAdd = document.createElement("div");
@@ -320,6 +388,7 @@ var mmanager = {
 				//console.log(tags.markerTagsNoGeo[zed].length-1);
 				if (tags.markerTagsNoGeo[zed].length - 1 == 1) {
 					//	console.log("YEAHYEAHYEAH");
+
 					var marker = new google.maps.Marker({//WithLabel({
 						"position" : new google.maps.LatLng(tags.locations[zed].latitude, tags.locations[zed].longitude),
 						"map" : maps.map,
@@ -574,6 +643,7 @@ var tags = {
 			if (ans.hasOwnProperty("locations")) {
 				tags.locations = ans.locations;
 			}
+			console.log(ans.locations);
 			//			////////////console.log((tags);
 			if (ans.hasOwnProperty("optionaltags")) {
 				tags.optionaltags = ans.optionaltags;
@@ -634,12 +704,13 @@ var tags = {
 			//	console.log(arr[i]);
 
 			tpht.easyXHR("get", config.baseURL + "node/jsons/" + arr[i] + ".json", "", function(response) {
-				////console.log((JSON.parse(response));
+				console.log(JSON.parse(response));
 				////////////console.log((response.length);
 				//console.log(response);
 				try
 				{
 					var jsonP = JSON.parse(response);
+					console.log(jsonP);
 					if (jsonP.hasOwnProperty("error") == false) {
 						////////////console.log(("GETTING");
 						tags.tagData[JSON.parse(response).tag] = JSON.parse(response);
@@ -652,15 +723,14 @@ var tags = {
 							}
 						}
 					}
-					////////////console.log((tags.tagData[JSON.parse(response).tag].answers.length);
-					////////////console.log((tags.tagData[JSON.parse(response).tag]);
 					loop.next();
 				} catch(e) {
+					console.log(e.stack);
 					loop.next();
 				}
 			});
-
 		}, function() {
+			console.log(tags.tagData);
 			tags.gather();
 		});
 	},
@@ -866,7 +936,7 @@ var tags = {
 						position : new google.maps.LatLng(arr[i].latitude, arr[i].longitude),
 						map : maps.map,
 						icon : new google.maps.MarkerImage(image, new google.maps.Size(34, 55), null, null, new google.maps.Size(34, 55)),
-						zIndex : 9000,
+						zIndex : 520,
 						text : arr[i].text,
 						disableAutoPan : true
 					});
@@ -1034,28 +1104,26 @@ var elements = {
 				tags.tagMarkerNoGeo[i].labelContent = tags.arrEls[i].length;
 
 				if (tags.arrEls[i].length == 1) {
-					if(tags.tagMarkerNoGeo[i].getMap() == null){
+					if (tags.tagMarkerNoGeo[i].getMap() == null) {
 						tags.tagMarkerNoGeo[i].setMap(maps.map);
 					}
 					tags.tagMarkerNoGeo[i].icon = "images/singleLocation.png";
 					//hashhashbang;
-				} else if (tags.arrEls[i].length > 1){
-					if(tags.tagMarkerNoGeo[i].getMap() == null){
+				} else if (tags.arrEls[i].length > 1) {
+					if (tags.tagMarkerNoGeo[i].getMap() == null) {
 						tags.tagMarkerNoGeo[i].setMap(maps.map);
 					}
 					tags.tagMarkerNoGeo[i].icon = "images/multiLocation.png";
-				}				
-				else if(tags.arrEls[i].length == 0){
+				} else if (tags.arrEls[i].length == 0) {
 					tags.tagMarkerNoGeo[i].setMap(null);
-					if(tags.tagMarkerNoGeo[i].info.isOpen() == true){
+					if (tags.tagMarkerNoGeo[i].info.isOpen() == true) {
 						tags.tagMarkerNoGeo[i].info.close();
 						//tags.tagMarkerNoGeo[i].info.open();
 					}
 					break;
-//					if(tags.tagMarkerNoGeo[i].setMap(null))
+					//					if(tags.tagMarkerNoGeo[i].setMap(null))
 				}
-				
-				
+
 				var divCont = document.createElement("div");
 				divCont.setAttribute("class", "lister");
 				divCont.setAttribute("id", i + "scrollContainer");
@@ -1099,15 +1167,15 @@ var elements = {
 						}
 					}
 				});
-			if(tags.tagMarkerNoGeo[i].info.isOpen() == true){
-				tags.tagMarkerNoGeo[i].info.close();
-				tags.tagMarkerNoGeo[i].info.open();
-			}
+				if (tags.tagMarkerNoGeo[i].info.isOpen() == true) {
+					tags.tagMarkerNoGeo[i].info.close();
+					tags.tagMarkerNoGeo[i].info.open();
+				}
 				tags.tagMarkerNoGeo[i].label.setStyles();
 				tags.tagMarkerNoGeo[i].setMap(null);
 				tags.tagMarkerNoGeo[i].setMap(maps.map);
 			}
-		} 
+		}
 		console.log(tags.tagMarkerNoGeo);
 
 		console.log("ERROR BEOTCH" + tags.filtration);
