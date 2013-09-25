@@ -402,7 +402,7 @@ var mmanager = {
 					maxWidth : 320,
 					minWidth : 320,
 					type : "noGeo",
-
+					objLength : tags.markerTagsNoGeo[zed].length,
 					//maxWidth : 320,
 					arrowPosition : 30,
 					borderColor : "#22b9c8",
@@ -721,7 +721,7 @@ var tags = {
 			var marker = new google.maps.Marker({
 				"position" : obj.position,
 				"map" : obj.map,
-				"icon" : new google.maps.MarkerImage(image, new google.maps.Size(34, 47), null, null, new google.maps.Size(34, 47)),
+				"icon" : new google.maps.MarkerImage(image, new google.maps.Size(34, 55), null, null, new google.maps.Size(34, 55)),
 				"zIndex" : 9000,
 				"disableAutoPan" : true,
 				"text" : obj.text
@@ -865,7 +865,7 @@ var tags = {
 					var marker = new google.maps.Marker({
 						position : new google.maps.LatLng(arr[i].latitude, arr[i].longitude),
 						map : maps.map,
-						"icon" : new google.maps.MarkerImage(image, new google.maps.Size(34, 47), null, null, new google.maps.Size(34, 47)),
+						icon : new google.maps.MarkerImage(image, new google.maps.Size(34, 55), null, null, new google.maps.Size(34, 55)),
 						zIndex : 9000,
 						text : arr[i].text,
 						disableAutoPan : true
@@ -876,7 +876,7 @@ var tags = {
 					zIndex : 9001
 					});*/
 					//map marker styling
-					console.log(arr[i]);
+					console.log(arr[i].length);
 					var markerObj = {
 						content : elements.info(arr[i]),
 						zIndex : 9001,

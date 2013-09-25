@@ -225,7 +225,7 @@ ClusterIcon.prototype.onRemove = function () {
 ClusterIcon.prototype.draw = function () {
   if (this.visible_) {
     var pos = this.getPosFromLatLng_(this.center_);
-    this.div_.style.top = pos.y + "px";
+    this.div_.style.top = (pos.y - (this.height_/2)) + "px";
     this.div_.style.left = pos.x + "px";
   }
 };
@@ -331,11 +331,12 @@ ClusterIcon.prototype.createCss = function (pos) {
       style.push('width:' + this.width_ + 'px; text-align:center;');
     }
   } else {
+//  	style.push("margin-top:-25px");
     style.push('height:' + this.height_ + 'px; line-height:' +
         this.height_ + 'px; width:' + this.width_ + 'px; text-align:center;');
   }
 
-  style.push('cursor:pointer; top:' + pos.y + 'px; left:' +
+  style.push('cursor:pointer; top:' + (pos.y) + 'px; left:' +
       pos.x + 'px; color:' + this.textColor_ + '; position:absolute; font-size:' +
       this.textSize_ + 'px; font-family:' + this.fontFamily_ + '; font-weight:' +
       this.fontWeight_ + '; font-style:' + this.fontStyle_ + '; text-decoration:' +
@@ -816,7 +817,8 @@ MarkerClusterer.prototype.setupStyles_ = function () {
   for (i = 0; i < this.imageSizes_.length; i++) {
     size = this.imageSizes_[i];
     this.styles_.push({
-      url: this.imagePath_ + (i + 1) + "." + this.imageExtension_,
+    	//i+1 if you're actually using the variable sizing.
+      url: this.imagePath_+"1." + this.imageExtension_,
       height: size,
       width: size
     });

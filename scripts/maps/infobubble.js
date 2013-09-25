@@ -241,7 +241,12 @@ InfoBubble.prototype.buildDom_ = function() {
 	if (this.type != null) {
 		var HeadBar = document.createElement("div");
 		HeadBar.setAttribute("class", "noGeoLoc");
+		if(this.objLength > 1){
 		$(HeadBar).text("no geo location for these spots");
+		}
+		else{
+		$(HeadBar).text("no geo location for this spot");
+		}
 		contentContainer.appendChild(HeadBar);
 		//console.log(HeadBar);
 	}
