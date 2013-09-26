@@ -74,6 +74,16 @@ window.onload = function() {
 				$("#searchProxy").css("display", "none");
 				$("#searchI").css("display", "block");
 				$("#searchDiv").attr("style", "");
+				if (popUp == true) {
+					popUp = false;
+					
+					//rest of your logic will go here
+					$('#map-overlay').attr("class", "upWeGo");
+					$('#map-overlay').css("bottom",  ((contHeight * -1) + 60)+"px");
+					e.stopPropagation();
+					e.preventDefault();
+				}
+				
 			});
 			$('#pinImage').click(function() {
 				//////console.log("clicked");

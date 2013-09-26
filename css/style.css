@@ -57,7 +57,7 @@ html .lister .listNoGeoTag li .topDiv img{float:left;border:5px solid #22b9c8;ma
 html .lister .listNoGeoTag li .bottomDiv{width:100%;font-family:"futura-pt-1","futura-pt-2",sans-serif;font-size:14px;line-height:14px;float:left;clear:left;}html .lister .listNoGeoTag li .bottomDiv img{float:left;width:140px;margin-right:10px;margin-bottom:10px;border:5px solid #000000;}
 html .lister .listNoGeoTag li .bottomDiv .textWithImg{padding-bottom:10px;font-family:"futura-pt-1","futura-pt-2",sans-serif;font-size:14px;line-height:14px;text-overflow:ellipsis;overflow:hidden;width:130px;float:left;}
 html .lister .listNoGeoTag li .bottomDiv .text{padding-bottom:10px;font-family:"futura-pt-1","futura-pt-2",sans-serif;font-size:14px;line-height:14px;clear:both;float:left;text-overflow:ellipsis;overflow:hidden;width:100%;}
-html .infoBox{width:100%;float:left;}html .infoBox .socialLinkage{float:left;text-decoration:none;color:#000000;width:100%;}
+html .infoBox{z-index:900;width:100%;float:left;}html .infoBox .socialLinkage{float:left;text-decoration:none;color:#000000;width:100%;}
 html .infoBox .topDiv{float:left;font-family:"futura-pt-1","futura-pt-2",sans-serif;width:100%;margin-bottom:10px;}html .infoBox .topDiv .twttrImage,html .infoBox .topDiv .facebImage,html .infoBox .topDiv .instaImage{width:24px;height:24px;float:right;margin-top:0px;margin-right:10px;}
 html .infoBox .topDiv .twttrImage{background-image:url("../images/twitMini.png");background-repeat:no-repeat;}
 html .infoBox .topDiv .facebImage{background-image:url("../images/faceMini.png");background-repeat:no-repeat;}
@@ -81,7 +81,7 @@ html body .widget .btn-o>a .intBorder{background-image:url("../images/twittr.png
 html body .widget .btn-o>a .intBorder .contText{top:30px;position:relative;font-size:10px;color:#ffffff;clear:left;float:left;margin:0 auto;width:100%;text-align:center;text-decoration:none;}
 html body #spinney{height:100%;width:100%;position:absolute;top:0px;left:0px;z-index:9001;background-color:#ffffff;background-color:rgba(255, 255, 255, 0.9);}html body #spinney #spinContainer{position:absolute;top:50%;left:50%;margin:0 auto;margin:-75px 0 0 -80px;width:160px;height:150px;}html body #spinney #spinContainer #spinImage{width:160px;height:134px;}
 html body #spinney #spinContainer #spinText{text-transform:uppercase;width:100%;text-align:center;font-size:22px;font-weight:bold;}
-html body #map-canvas{position:absolute;left:0px;right:0px;top:0px;bottom:30px;background-color:#54bec6 !important;}html body #map-canvas .geoSizing{width:25px;text-align:center;color:white;line-height:14px;font-size:12px;text-align:vertical;}
+html body #map-canvas{position:absolute;left:0px;right:0px;top:0px;bottom:30px;background-color:#54bec6 !important;}html body #map-canvas .geoSizing{width:30px;text-align:center;color:white;line-height:14px;font-size:12px;text-align:vertical;}
 html body #map-canvas #sidebarChunk{width:35px;height:100%;background-color:#38a6b0;background-color:rgba(56, 166, 176, 0.8);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";filter:alpha(opacity=80);position:absolute;left:0px;}html body #map-canvas #sidebarChunk a{width:35px;height:35px;display:block;margin-top:20px;background-image:url("../images/homeOn.png");background-repeat:no-repeat;background-position:center;}
 html body #map-canvas #sidebarChunk a:hover{background-image:url("../images/homeOff.png");}
 html body #overlayImage{cursor:pointer;position:absolute;left:60px;top:20px;}

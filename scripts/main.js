@@ -410,12 +410,16 @@ var mmanager = {
 				if (tags.markerTagsNoGeo[zed].length - 1 == 1) {
 					//	console.log("YEAHYEAHYEAH");
 
-					var marker = new google.maps.Marker({//WithLabel({
+					var marker = new MarkerWithLabel({//WithLabel({
 						"position" : new google.maps.LatLng(tags.locations[zed].latitude, tags.locations[zed].longitude),
 						"map" : maps.map,
 						"icon" : "images/singleLocation.png",
 						"zIndex" : 600,
 						"disableAutoPan" : true,
+						"labelContent" : "",
+						"labelAnchor" : new google.maps.Point(8, 16),
+						"labelClass" : "geoSizing", // the CSS class for the label
+
 					});
 				} else {
 					var marker = new MarkerWithLabel({
@@ -542,9 +546,11 @@ var mmanager = {
 				//////////console.log((zed);
 
 				var toWrite = "hidden";
+				console.log(config.sizesOfLabels);
 				if (config.bandSizes[config.sizesOfLabels[zed]] != undefined) {
 					toWrite = config.bandSizes[config.sizesOfLabels[zed]];
 				}
+//				console.log(config.bandSizes);
 				//////////console.log((toWrite);
 				//////////console.log((config.sizesOfLabels[zed]);
 				//////////console.log(();
@@ -1115,21 +1121,30 @@ var elements = {
 
 		for (var i in tags.tagMarkerNoGeo) {
 			if (tags.tagMarkerNoGeo.hasOwnProperty(i)) {
+				console.log("OLOLOLOLOLOLOLOL");
+				console.log(i);
 				tags.arrEls[i] = new Array;
 				for (var zeds = 0; zeds < tags.markerTagsNoGeo[i].length; zeds++) {
+			//		console.log(zeds);
 					if (tags.inString(tags.markerTagsNoGeo[i][zeds].text, tags.filtration) == true) {
 						tags.arrEls[i].push(tags.markerTagsNoGeo[i][zeds]);
 					}
 				}
 				//content : elements.info(arr[i]),
 				tags.tagMarkerNoGeo[i].labelContent = tags.arrEls[i].length;
-
+				console.log("ALERTALERTALERTALERT");
+				console.log(tags.arrEls[i].length);
 				if (tags.arrEls[i].length == 1) {
 					if (tags.tagMarkerNoGeo[i].getMap() == null) {
 						tags.tagMarkerNoGeo[i].setMap(maps.map);
 					}
 					tags.tagMarkerNoGeo[i].icon = "images/singleLocation.png";
 					//hashhashbang;
+					console.log(tags.tagMarkerNoGeo[i]);
+					tags.tagMarkerNoGeo[i].labelContent = "";
+//					tags.tagMarkerNoGeo[i].label.setStyles();
+	//				console.log(tags.tagMarkerNoGeo[i]);
+
 				} else if (tags.arrEls[i].length > 1) {
 					if (tags.tagMarkerNoGeo[i].getMap() == null) {
 						tags.tagMarkerNoGeo[i].setMap(maps.map);
@@ -1141,10 +1156,11 @@ var elements = {
 						tags.tagMarkerNoGeo[i].info.close();
 						//tags.tagMarkerNoGeo[i].info.open();
 					}
-					break;
+					continue;
 					//					if(tags.tagMarkerNoGeo[i].setMap(null))
 				}
-
+				console.log(tags.tagMarkerNoGeo[i]);
+				console.log("brokenstuff");
 				var divCont = document.createElement("div");
 				divCont.setAttribute("class", "lister");
 				divCont.setAttribute("id", i + "scrollContainer");
@@ -1192,12 +1208,16 @@ var elements = {
 					tags.tagMarkerNoGeo[i].info.close();
 					tags.tagMarkerNoGeo[i].info.open();
 				}
-				tags.tagMarkerNoGeo[i].label.setStyles();
-				tags.tagMarkerNoGeo[i].setMap(null);
-				tags.tagMarkerNoGeo[i].setMap(maps.map);
+//				console.log(tags.tagMarkerNoGeo[i].label);
+				if(tags.tagMarkerNoGeo[i].label!=undefined){
+					tags.tagMarkerNoGeo[i].label.setStyles();
+					tags.tagMarkerNoGeo[i].label.draw();
+				}
+				tags.tagMarkerNoGeo[i].setVisible(false);
+				tags.tagMarkerNoGeo[i].setVisible(true);
 			}
 		}
-		console.log(tags.tagMarkerNoGeo);
+//				console.log(tags.tagMarkerNoGeo[i].label);
 
 		console.log("ERROR BEOTCH" + tags.filtration);
 		if (mmanager.hashContentManager != null) {
@@ -1240,7 +1260,7 @@ var elements = {
 					$("#header").text(tags.singleTag);
 				}
 			} else {
-				$("#header").text("headingLabel");
+				$("#header").text(tags.singleTag);
 			}
 
 		} else if (tags.inBound.length == 1 && tags.filtration == "") {
@@ -1762,7 +1782,7 @@ var elements = {
 			var follow = document.createElement("a");
 			follow.setAttribute("href", "https://twitter.com/" + obj.user);
 			follow.setAttribute("class", "twitter-follow-button");
-			//			follow.setAttribute("data-show-screen-name","false");
+			follow.setAttribute("data-show-screen-name","false");
 			follow.setAttribute("data-show-count", "false");
 			var followText = document.createTextNode("Follow @" + obj.user);
 			follow.appendChild(followText);
