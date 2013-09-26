@@ -10,8 +10,8 @@
 		<title>STUDENT LOWDOWN</title>
 		<meta name="description" content="STUDENT LOWDOWN" />
 		<meta name="author" content="AMRoche, of WeLikePie Productions" />
-
-		<meta name="viewport" content="width=device-width; initial-scale=1.0" />
+		<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
 
 		<!-- Replace favicon.ico & apple-touch-icon.png in the root of your domain and delete these references -->
 		<!--<link rel="stylesheet" href="css/bootstrap.css"/>
@@ -19,8 +19,8 @@
 		<link rel="stylesheet" href="css/style.css"/>
 		<link rel="shortcut icon" href="/favicon.ico" />
 		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-		<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
-		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<!--<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+		<meta name="apple-mobile-web-app-capable" content="yes" />-->
 		<script type="text/javascript">
 			var ie = false;
 		</script>
@@ -44,98 +44,101 @@
 				</div>
 			</div>
 		</div>
-		<div id="JS-MoreInfo">
-			<div class="textContainer">
-				<span class="heading">We’re looking for the coolest uni hangouts in the country. </span>
-				<p class="subHeadingP">
-					We want to know the best student hotspots in your uni city. Add your favourite hangouts to the map and explore your city to find out where fellow classmates spend their time away from the lecture hall.
-				</p>
-				<p class="subHeadingP">
-					To submit a hotspot via Twitter, Facebook or Instagram, simply upload using #ASOS[insert uni here] to drop it on the map. Remember to turn on location services or your spot will remain a secret!
-				</p>
-			</div>
-		</div>
-		<div id="JS-facebookInput">
-			<img src="images/facebook_sign.png" class="relationImage">
-			<div class="textContainer">
-
-				<span class='heading'>facebook it:</span>
-				<p class="subHeading">
-					Add your fave hotspot to the ASOS Lowdown map by telling us below - make sure you include #ASOS[Insert Uni Here]!
-				</p>
-				<textarea class='facebookInput'>My fave student hotspot is #ASOS[Insert Uni Here]</textarea>
-			</div>
-		</div>
-		<div id="JS-instaInput">
-			<img src="images/insta_sign.png" class="relationImage">
-			<div class = "textContainer">
-				<span class="heading">Instagram it:</span>
-				<p class="subHeading">
-					1) Take/choose photo of your fave student hangout
-				</p>
-				<p class="subHeading">
-					2) Upload to Instagram using the #ASOS[Insert Uni Here] hashtag
-				</p>
-				<p class="subHeading">
-					3) Choose to add to photo map/choose location before posting
-				</p>
-				<p class="subHeading">
-					4) You’re good to go: watch your photo appear on the map
-				</p>
-			</div>
-		</div>
-		<div id="modalDialogue">
-			<div id="modalInside"></div>
-		</div>
-		<div id="JS-MBtopMenu">
-			<div id="blackBit">
-				<img id="studentImage" src="images/studentPic.png"/>
-				<div id="tapMENU">
-					<a id = "homelink" href="http://www.asos.com/130909-Students-Hub/Cat/pgehtml.aspx?cid=18342&full_site=yes" target="_blank"></a>
-					<div id="infolink" ></div>
-					<!--MENU-->
+		<div id="container">
+			<div id="JS-MoreInfo">
+				<div class="textContainer">
+					<span class="heading">We’re looking for the coolest uni hangouts in the country. </span>
+					<p class="subHeadingP">
+						We want to know the best student hotspots in your uni city. Add your favourite hangouts to the map and explore your city to find out where fellow classmates spend their time away from the lecture hall.
+					</p>
+					<p class="subHeadingP">
+						To submit a hotspot via Twitter, Facebook or Instagram, simply upload using #ASOS[insert uni here] to drop it on the map. Remember to turn on location services or your spot will remain a secret!
+					</p>
 				</div>
 			</div>
+			<div id="JS-facebookInput">
+				<img src="images/facebook_sign.png" class="relationImage">
+				<div class="textContainer">
 
-		</div>
-		<div id="map-canvas"></div>
-		<div id="map-overlay">
-			<div id="search">
-				<div id="searchMe" value="search"></div>
-				<!--Image by Javier Cabezas, from The Noun Project-->
-				<input type="text" class = "default" value="SEARCH UNI" id="searchField"/>
-				<div id="searchGO"></div>
-				<div id="searchClear" value="clear"></div>
-			</div>
-			<div id="SurroundContainer">
-				<div id="header" >
-					TRENDING NOW
+					<span class='heading'>facebook it:</span>
+					<p class="subHeading">
+						Add your fave hotspot to the ASOS Lowdown map by telling us below - make sure you include #ASOS[Insert Uni Here]!
+					</p>
+					<textarea class='facebookInput'>My fave student hotspot is #ASOS[Insert Uni Here]</textarea>
 				</div>
-				<div id="surrounder">
-					<div id="searchError">
-						<p>
-							There are no search results for <span id="searchContent"></span>.
-						</p>
-						<p>
-							Get your uni on the map now by <span id="moreInfoLink">adding a spot.</span>
-						</p>
+			</div>
+			<div id="JS-instaInput">
+				<img src="images/insta_sign.png" class="relationImage">
+				<div class = "textContainer">
+					<span class="heading">Instagram it:</span>
+					<p class="subHeading">
+						1) Take/choose photo of your fave student hangout
+					</p>
+					<p class="subHeading">
+						2) Upload to Instagram using the #ASOS[Insert Uni Here] hashtag
+					</p>
+					<p class="subHeading">
+						3) Choose to add to photo map/choose location before posting
+					</p>
+					<p class="subHeading">
+						4) You’re good to go: watch your photo appear on the map
+					</p>
+				</div>
+			</div>
+			<div id="modalDialogue">
+				<div id="modalInside"></div>
+			</div>
+			<div id="JS-MBtopMenu">
+				<div id="blackBit">
+					<img id="studentImage" src="images/studentPic.png"/>
+					<div id="tapMENU">
+						<a id = "homelink" href="http://www.asos.com/130909-Students-Hub/Cat/pgehtml.aspx?cid=18342&full_site=yes" target="_blank"></a>
+						<div id="infolink" ></div>
+						<!--MENU-->
 					</div>
-					<ul id="content"></ul>
+				</div>
+
+			</div>
+			<div id="map-canvas"></div>
+			<div id="map-overlay">
+				<div id="search">
+					<div id="searchMe" value="search"></div>
+					<!--Image by Javier Cabezas, from The Noun Project-->
+					<input type="text" class = "default" value="SEARCH UNI" id="searchField"/>
+					<div id="searchGO"></div>
+					<div id="searchClear" value="clear"></div>
+				</div>
+				<div id="SurroundContainer">
+					<div id="header" >
+						TRENDING NOW
+					</div>
+					<div id="surrounder">
+						<div id="searchError">
+							<p>
+								There are no search results for <span id="searchContent"></span>.
+							</p>
+							<p>
+								Get your uni on the map now by <span id="moreInfoLink">adding a spot.</span>
+							</p>
+						</div>
+						<ul id="content"></ul>
+					</div>
 				</div>
 			</div>
-		</div>
-		<img id="overlayImage" src="images/fonts.png"/>
-		<img id="overlayAsosImage" src="images/asos.png"/>
-		<div id="searchDiv" style="width: 100%;">
-			<img id="searchI" src="images/searchSide.png">
-			<div id="searchProxy">
-				<div id="searchMe" value="search"></div>
-				<!--Image by Javier Cabezas, from The Noun Project-->
-				<span><input type="text" class="default" value="SEARCH UNI" id="searchField" style=""></span>
-				<div id="searchGO"></div>
-				<div id="searchClear" value="clear"></div>
+			<img id="overlayImage" src="images/fonts.png"/>
+			<img id="overlayAsosImage" src="images/asos.png"/>
+			<div id="searchDiv" style="width: 100%;">
+				<img id="searchI" src="images/searchSide.png">
+				<div id="searchProxy">
+					<div id="searchMe" value="search"></div>
+					<!--Image by Javier Cabezas, from The Noun Project-->
+					<span>
+						<input type="text" class="default" value="SEARCH UNI" id="searchField" style="">
+					</span>
+					<div id="searchGO"></div>
+					<div id="searchClear" value="clear"></div>
+				</div>
 			</div>
-		</div>
 			<div id="tagDiv">
 				<img id="tagI" src="images/pins.png">
 				<div id="socialProxy"><img id="pinImage" src="images/pinInput.png">
@@ -169,32 +172,33 @@
 					</div>
 				</div>
 			</div>
-		<div id="blackOverlay">
-			<div id="labelText">
-				<div>
-					Get your uni on the map for the ultimate asos kudos.
-				</div>
-				<div id="JS-bbMoreInfo">
-					Find out more
-				</div>
-			</div>
-			<div id="socialMedia">
-				<div id="twittr">
-					<iframe allowtransparency="true" visibility="hidden" id="twitterButton" frameBorder="0" src="twitButton.html#type=hashtag&count=none"></iframe>
-					<!-- This be an iFrame. The actual content is in twitButton.html, but the styling is in the same file as for this document. Aww yeah. -->
-				</div>
-				<div id="insta">
-					<div class="intBorder">
-						<img src="images/insta.png"/>
-						<div class="contText">
-							INSTAGRAM IT
-						</div>
+			<div id="blackOverlay">
+				<div id="labelText">
+					<div>
+						Get your uni on the map for the ultimate asos kudos.
+					</div>
+					<div id="JS-bbMoreInfo">
+						Find out more
 					</div>
 				</div>
-				<div id="faceb">
-					<img src="images/facebook.png"/>
-					<div class="contText">
-						FACEBOOK IT
+				<div id="socialMedia">
+					<div id="twittr">
+						<iframe allowtransparency="true" visibility="hidden" id="twitterButton" frameBorder="0" src="twitButton.html#type=hashtag&count=none"></iframe>
+						<!-- This be an iFrame. The actual content is in twitButton.html, but the styling is in the same file as for this document. Aww yeah. -->
+					</div>
+					<div id="insta">
+						<div class="intBorder">
+							<img src="images/insta.png"/>
+							<div class="contText">
+								INSTAGRAM IT
+							</div>
+						</div>
+					</div>
+					<div id="faceb">
+						<img src="images/facebook.png"/>
+						<div class="contText">
+							FACEBOOK IT
+						</div>
 					</div>
 				</div>
 			</div>

@@ -38,209 +38,229 @@ function setSSE() {
 }
 
 window.onload = function() {
-window.scrollTo(0, 0);
-	////console.log("adding listeners");
-	$('#twitterButton').load(function() {
-		$(this).show();
-	});
-	var open = false;
-	var totalHeight = document.documentElement.clientHeight;
-	var contHeight = totalHeight - 165;
-	$("#SurroundContainer").css("height", contHeight + 6);
-	$("#surrounder").css("height", contHeight - 42);
-	var popUp = false;
+	// Scroll after a timeout, since iOS will scroll to the top of the page
+	// after it fires the onload event
+	var totalHeight = window.innerHeight;
+
+	//		console.log($("body"));
 
 	if (document.documentElement.clientWidth < 480) {
-		/*$("#JS-MBtopMenu").click(function(e){
-		 //console.log(e);
-		 //e.preventDefault();
-		 //e.stopPropagation();
-		 //console.log("CLICKING")
-		 }
-		 );*/
-		$("#searchGO").css("display", "block");
-	//	//console.log("displaying!");
-		$("#search").html("");
-		$("#searchProxy").css("display", "none");
-	
-		$("#search").html("");
-		$("#blackOverlay").html("");
-	//	$("#searchField").css("width", document.documentElement.clientWidth - 83);
-		//$("#searchProxy").append($("#search").html());
+		
+			$("#search").html("");
+			$("#blackOverlay").html("");
 
-		/*
-		 var img = document.createElement("img");
-		 img.setAttribute("id","pinImage");
-		 img.setAttribute("src","images/pinInput.png");
-		 $("#twitterButton").prop("src","twitMobi.html");
-		 document.getElementById("twitterButton").contentWindow.location.reload();
-		 $("#labelText").html("<p>ADD YOUR SPOT TO </p><p>THE MAP TO WIN A PRIZE</p>");
-		 $("#socialProxy").append(img);
-		 $("#socialProxy").append($("#blackOverlay").html());
-		 */
+		//	alert(totalHeight);
+		var popUp = false;
+			$("#spinney").css("height",window.innerHeight+60);
 
-		$("#map-overlay").first().css("top", (totalHeight - 60) + "px");
-		$("#SurroundContainer").css("height", totalHeight - 105);
-		$("#surrounder").css("height", totalHeight - 160);
-		// don’t download complicated script
-		// use low-source images instead of full-source ones
-		$('#pinImage').click(function() {
-			//////console.log("clicked");
-			$('#tagI').css("display", "block");
-			$('#socialProxy').css("display", "none");
-			$('#tagDiv').css("width", '');
-		});
-		$('#studentImage').click(function(e) {
-			tags.filtration = "";
-			elements.fullUpdate();
+		setTimeout(function() {
+			window.scrollTo(0, 1);
+			var totalHeight = window.innerHeight;
+			var contHeight = totalHeight - 170;
+			config.contHeight = contHeight;
+			//alert(totalHeight+","+contHeight);
+			$("#SurroundContainer").css("height", contHeight);
+			$("#surrounder").css("height", contHeight - 56);
+			$("#map-overlay").css("bottom", (contHeight * -1) + 60);
+			
+			$("#searchGO").css("display", "block");
+			//	//console.log("displaying!");
+			
 			$("#searchProxy").css("display", "none");
-			$("#searchI").css("display", "block");
-			$("#searchDiv").attr("style", "");
-			if (popUp == true) {
-				popUp = false;
-				//rest of your logic will go here
-				$('#map-overlay').attr("class", "upWeGo");
-				$('#map-overlay').css("top", (totalHeight - 60) + "px");
-				e.stopPropagation();
-				e.preventDefault();
-			}
+			// don’t download complicated script
+			// use low-source images instead of full-source ones
+			console.log($("#searchMe"));
+			$("#searchMe").bind("click", function(){
+				$("#searchProxy").css("display", "none");
+				$("#searchI").css("display", "block");
+				$("#searchDiv").attr("style", "");
+			});
+			$('#pinImage').click(function() {
+				//////console.log("clicked");
+				$('#tagI').css("display", "block");
+				$('#socialProxy').css("display", "none");
+				$('#tagDiv').css("width", '');
+			});
 
-		});
-		$('#map-overlay').click(function(e) {
-			////console.log(e);
-			if (popUp == false) {
-				popUp = true;
-				////console.log(e);
-				//rest of your logic will go here
-				$('#map-overlay').attr("class", "upWeGo");
-				$('#map-overlay').css("top", 120 + "px");
-			}
-		});
-
-		$(document.getElementById("searchGO")).bind('click', function() {
-
-			$("#content").css("display", "block");
-			var stuff = $("#searchField").val();
-			if (stuff == "SEARCH UNI") {
-				stuff = "";
-			}
-			////console.log($("#searchField").val().toUpperCase());
-			$("#header").text("SEARCH RESULTS");
-			if (tags.filtration != stuff) {
-				tags.filtration = stuff;
-				$("#searchContent").text(stuff.toUpperCase());
-			}
-			if (popUp == false) {
-				popUp = true;
-				$('#map-overlay').attr("class", "upWeGo");
-				$('#map-overlay').css("top", 120 + "px");
-			}
-			elements.fullUpdate();
-		});
-
-		$('#header').click(function(e) {
-			if (popUp == true) {
-				popUp = false;
-				//rest of your logic will go here
-				$('#map-overlay').attr("class", "upWeGo");
-				$('#map-overlay').css("top", (totalHeight - 60) + "px");
-				e.stopPropagation();
-				e.preventDefault();
-			}
-		});
-		$('#searchI').click(function(e) {
-			$('#searchI').css("display", "none");
-			$('#searchProxy').css("display", "block");
-			$("#searchDiv").css("width", "100%");
-			$('#tagI').css("display", "block");
-			$('#socialProxy').css("display", "none");
-			$('#tagDiv').css("width", '');
-			e.stopPropagation();
-			e.preventDefault();
-		})
-
-		$('#tagI').click(function() {
-			$('#tagDiv').css("width", "100%");
-			$('#tagI').css("display", "none");
-			$('#socialProxy').css("display", "block");
-			$("#searchProxy").css("display", "none");
-			$("#searchI").css("display", "block");
-			$("#searchDiv").attr("style", "");
-		});
-
-		$('#map-canvas').click(function(e) {
-			$('#tagI').css("display", "block");
-			$('#socialProxy').css("display", "none");
-			$('#tagDiv').css("width", '');
-
-			$("#searchProxy").css("display", "none");
-			$("#searchI").css("display", "block");
-			$("#searchDiv").attr("style", "");
-			////console.log(e);
-			if ($("#menuHolder").length > 0) {
-				open = false;
-				var i = document.getElementById("menuHolder");
-				i.parentNode.removeChild(i);
-			}
-			if (popUp == true) {
+			$('#studentImage').click(function(e) {
 				tags.filtration = "";
 				elements.fullUpdate();
-				popUp = false;
+				$("#searchProxy").css("display", "none");
+				$("#searchI").css("display", "block");
+				$("#searchDiv").attr("style", "");
+				if (popUp == true) {
+					popUp = false;
+					//rest of your logic will go here
+					$('#map-overlay').attr("class", "upWeGo");
+					//$("#map-overlay").first().css("bottom", "0px");
+					$('#map-overlay').css("bottom",  ((contHeight * -1) + 60)+"px");
+					e.stopPropagation();
+					e.preventDefault();
+				}
+			});
+
+			$('#map-overlay').click(function(e) {
+				////console.log(e);
+				if (popUp == false) {
+					popUp = true;
+					$('#tagI').css("display", "block");
+				$('#socialProxy').css("display", "none");
+				$('#tagDiv').css("width", '');
+					////console.log(e);
+					//rest of your logic will go here
+					$('#map-overlay').attr("class", "upWeGo");
+					$("#map-overlay").first().css("bottom", "0px");
+
+					//$('#map-overlay').css("top", "120px");
+				}
+			});
+
+			$(document.getElementById("searchGO")).bind('click', function() {
+
+				$("#content").css("display", "block");
+				var stuff = $("#searchField").val();
+				if (stuff == "SEARCH UNI") {
+					stuff = "";
+				}
+				////console.log($("#searchField").val().toUpperCase());
+				$("#header").text("SEARCH RESULTS");
+				if (tags.filtration != stuff) {
+					tags.filtration = stuff;
+					$("#searchContent").text(stuff.toUpperCase());
+				}
+				if (popUp == false) {
+					popUp = true;
+					$('#map-overlay').attr("class", "upWeGo");
+					$("#map-overlay").first().css("bottom", "0px");
+
+					//	$('#map-overlay').css("top", "120px");
+				}
+				elements.fullUpdate();
+			});
+
+			$('#header').click(function(e) {
+				if (popUp == true) {
+					popUp = false;
+					
+					//rest of your logic will go here
+					$('#map-overlay').attr("class", "upWeGo");
+					$('#map-overlay').css("bottom",  ((contHeight * -1) + 60)+"px");
+					e.stopPropagation();
+					e.preventDefault();
+				}
+			});
+			$('#searchI').click(function(e) {
+				$('#searchI').css("display", "none");
+				$('#searchProxy').css("display", "block");
+				$("#searchDiv").css("width", "100%");
+				$('#tagI').css("display", "block");
+				$('#socialProxy').css("display", "none");
+				$('#tagDiv').css("width", '');
 				e.stopPropagation();
 				e.preventDefault();
-				//rest of your logic will go here
-				$('#map-overlay').attr("class", "upWeGo");
-				$('#map-overlay').css("top", (totalHeight - 60) + "px");
+			})
+	
+			$('#tagI').click(function(e) {
+				$('#tagDiv').css("width", "100%");
+				$('#tagI').css("display", "none");
+				$('#socialProxy').css("display", "block");
+				$("#searchProxy").css("display", "none");
+				$("#searchI").css("display", "block");
+				$("#searchDiv").attr("style", "");
+				if (popUp == true) {
+					popUp = false;
+					//rest of your logic will go here
+					$('#map-overlay').attr("class", "upWeGo");
+					$('#map-overlay').css("bottom",  ((contHeight * -1) + 60)+"px");
+					e.stopPropagation();
+					e.preventDefault();
+				}
+			});
 
-			}
-		})
-		
-		/*$('#tapMENU').bind("click", function() {
-		 if (open == false) {
-		 open = true;
-		 //		<a class="prodLink"><div>YOURMOM ></div></a>
-		 var varToAppend = document.getElementById("JS-MBtopMenu");
-		 var div = document.createElement("div");
-		 div.setAttribute("id", "menuHolder");
-		 for (var i = 0; i < links.length; i++) {
-		 var a = document.createElement("a");
-		 a.setAttribute("class", "prodLink");
-		 a.setAttribute("href", links[i]);
-		 a.setAttribute("target", "_blank");
-		 var d = document.createElement("div");
-		 dText = document.createTextNode(text[i]);
-		 d.appendChild(dText);
-		 a.appendChild(d);
-		 div.appendChild(a);
-		 }
-		 varToAppend.appendChild(div);
-		 } else {
-		 open = false;
-		 var i = document.getElementById("menuHolder");
-		 i.parentNode.removeChild(i);
-		 }
-		 })*/
+			$('#map-canvas').click(function(e) {
+				$('#tagI').css("display", "block");
+				$('#socialProxy').css("display", "none");
+				$('#tagDiv').css("width", '');
+
+				$("#searchProxy").css("display", "none");
+				$("#searchI").css("display", "block");
+				$("#searchDiv").attr("style", "");
+				////console.log(e);
+				if ($("#menuHolder").length > 0) {
+					open = false;
+					var i = document.getElementById("menuHolder");
+					i.parentNode.removeChild(i);
+				}
+				if (popUp == true) {
+					tags.filtration = "";
+					elements.fullUpdate();
+					popUp = false;
+					e.stopPropagation();
+					e.preventDefault();
+					//rest of your logic will go here
+					$('#map-overlay').attr("class", "upWeGo");
+					$('#map-overlay').css("bottom",  ((contHeight * -1) + 60)+"px");
+
+				}
+			})
+			/*$('#tapMENU').bind("click", function() {
+			 if (open == false) {
+			 open = true;
+			 //		<a class="prodLink"><div>YOURMOM ></div></a>
+			 var varToAppend = document.getElementById("JS-MBtopMenu");
+			 var div = document.createElement("div");
+			 div.setAttribute("id", "menuHolder");
+			 for (var i = 0; i < links.length; i++) {
+			 var a = document.createElement("a");
+			 a.setAttribute("class", "prodLink");
+			 a.setAttribute("href", links[i]);
+			 a.setAttribute("target", "_blank");
+			 var d = document.createElement("div");
+			 dText = document.createTextNode(text[i]);
+			 d.appendChild(dText);
+			 a.appendChild(d);
+			 div.appendChild(a);
+			 }
+			 varToAppend.appendChild(div);
+			 } else {
+			 open = false;
+			 var i = document.getElementById("menuHolder");
+			 i.parentNode.removeChild(i);
+			 }
+			 })*/
+		}, 0);
+
 	} else {
 		$("#searchProxy").html("");
 		$("#socialProxy").html("");
 		$('#twitterButton').load(function() {
 			$(this).show();
 		});
-		
+
+		var contHeight = totalHeight - 165;
+		config.contHeight = contHeight;
+		$("#SurroundContainer").css("height", contHeight + 6);
+		$("#surrounder").css("height", contHeight - 42);
+
 	}
+	$('#twitterButton').load(function() {
+		$(this).show();
+	});
+
+	var open = false;
 
 	$('#searchField').focus(function() {
 		if (this.value == this.defaultValue) {
 			this.value = '';
-			$(this).removeClass('default');	
+			$(this).removeClass('default');
 		}
 	});
 	$('#searchField').keypress(function(e) {
 		if (e.which == 13) {
 			jQuery(this).blur();
-			if(document.documentElement.clientWidth < 480){
+			if (document.documentElement.clientWidth < 480) {
 				$("#searchGO").focus().click();
-			}else{
+			} else {
 				$('#searchMe').focus().click();
 			}
 		}
@@ -255,7 +275,7 @@ window.scrollTo(0, 0);
 	tags.retrieve();
 	config.sizesOfLabels();
 	$(document.getElementById("searchClear")).bind('click', function() {
-		
+
 		$("#content").css("display", "block");
 		$("#searchError").css("display", "none");
 		document.getElementById("searchField").value = "SEARCH UNI";
@@ -274,7 +294,7 @@ window.scrollTo(0, 0);
 
 	});
 	if (document.documentElement.clientWidth > 480) {
-		$(document.getElementById("searchMe")).bind('click', function() {
+		$("#searchMe").bind('click', function() {
 			$("#content").css("display", "block");
 			var stuff = $("#searchField").val();
 			if (stuff == "SEARCH UNI") {

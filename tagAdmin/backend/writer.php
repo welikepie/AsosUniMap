@@ -1,9 +1,11 @@
 <?php
+
 if(isset($_GET["locations"])){
 		$tested = json_decode($_GET["locations"],true);	
 		$newThings = array();
 		foreach($tested as $ind=>$value){
-			if(isset($value["grouptag"])){		
+			if(isset($value["grouptag"])){
+						
 				if(!isset($newThings[$ind])){
 					$newThings[$ind] = "";
 				}	

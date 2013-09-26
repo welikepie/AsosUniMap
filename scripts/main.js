@@ -2,7 +2,8 @@ var headingLabel = $("#header").text();
 //////////console.log((headingLabel);
 var config = {
 	//array of wave images. First array is for mobile, second is for desktop size map.
-	"waveArr" : [["wave.gif","wave.gif"],["closePop.png","twitMini.png"]],
+	"contHeight" : 0,
+	"waveArr" : [["closePop.png","instaMini.png"],["wave.gif","twitMini.png"]],
 	"whitelistNames" : ["Asos", "Asos_HereToHelp", "Asos_Menswear", "ASOS_heretohelp", "ASOS_HilftEuch", "ASOS_ServiceClient", "ASOSMarketplace", "ASOS_ID"],
 	"inArr" : function(name, arr) {
 		//////console.log((name+","+arr);
@@ -85,7 +86,7 @@ var maps = {//waves structure is object first, mobile image second, and desktop 
 	},
 	boundingBox : new Array(),
 	"initialize" : function() {
-		if (document.documentElement.clientHeight > 700) {
+		if (window.innerHeight > 700) {
 			config.startZoom = 6;
 			config.previousZoom = 6;
 		}
@@ -109,10 +110,10 @@ var maps = {//waves structure is object first, mobile image second, and desktop 
 			mapTypeId : google.maps.MapTypeId.SATELITE,
 			minZoom : config.minZoom
 		};
-		if (document.documentElement.clientHeight < 490) {
+		if (window.innerHeight < 490) {
 			mapOptions.zoomControlOptions.style = google.maps.ZoomControlStyle.SMALL;
 		}
-		if (document.documentElement.clientWidth < 480 || document.documentElement.clientHeight < 700) {
+		if (document.documentElement.clientWidth < 480 || window.innerHeight < 700) {
 			mapOptions.center = new google.maps.LatLng(maps.mblLatLng[0], maps.mblLatLng[1]);
 		}
 		maps.map = new google.maps.Map(tpht.getById("map-canvas"), mapOptions);
@@ -140,7 +141,7 @@ var maps = {//waves structure is object first, mobile image second, and desktop 
 			icon : "images/wave.gif",
 			zIndex : 501,
 			optimized:false,
-			map : maps.map
+//			map : maps.map
 			});
 			if(i%2 == 0){
 				
@@ -194,7 +195,7 @@ var maps = {//waves structure is object first, mobile image second, and desktop 
 				}
 				beachMarker.setVisible(false);
 				for(var i = 0; i < maps.waves.length; i++){
-					maps.waves[i][0].setVisible(false);
+					//maps.waves[i][0].setVisible(false);
 				}
 			} else {
 				maps.map.setOptions({
@@ -210,7 +211,7 @@ var maps = {//waves structure is object first, mobile image second, and desktop 
 				for(var i = 0; i < maps.waves.length; i++){
 					console.log(maps.waves[i][maps.map.getZoom() - config.minZoom+1]);
 					maps.waves[i][0].setIcon(maps.waves[i][maps.map.getZoom() - config.minZoom+1]);
-					maps.waves[i][0].setVisible(true);
+					//maps.waves[i][0].setVisible(true);
 				}
 				//////console.log((config.labelArr[maps.map.getZoom() - config.minZoom]);
 	
@@ -235,11 +236,13 @@ var maps = {//waves structure is object first, mobile image second, and desktop 
 			if (maps.map.getZoom() != config.startZoom) {
 				maps.map.setZoom(config.startZoom);
 			}
-
+				if (mmanager.tagManager != null) {
+						mmanager.tagManager.show();
+				}
 			if (document.documentElement.clientWidth < 480) {
 				maps.map.setCenter(new google.maps.LatLng(maps.mblLatLng[0], maps.mblLatLng[1]));
 			} else {
-				if (document.documentElement.clientHeight > 700) {
+				if (window.innerHeight > 700) {
 					maps.map.setCenter(new google.maps.LatLng(maps.mblLatLng[0], maps.mblLatLng[1]));
 				} else {
 					maps.map.setCenter(new google.maps.LatLng(maps.stLatLng[0], maps.stLatLng[1]));
@@ -247,7 +250,7 @@ var maps = {//waves structure is object first, mobile image second, and desktop 
 			}
 
 			//			tags.filtration = "";
-
+			
 			var bounds = maps.map.getBounds();
 			var bArr = bounds.toString().replace(/[()]/g, "").split(",");
 			maps.boundingBox = [parseFloat(bArr[1]), parseFloat(bArr[0]), parseFloat(bArr[3]), parseFloat(bArr[2])];
@@ -264,7 +267,7 @@ var maps = {//waves structure is object first, mobile image second, and desktop 
 			beachMarker.setVisible(true);
 				for(var i = 0; i < maps.waves.length; i++){
 					maps.waves[i][0].icon = maps.waves[i][maps.map.getZoom() - config.minZoom+1]
-					maps.waves[i][0].setVisible(true);
+					//maps.waves[i][0].setVisible(true);
 				}
 			
 		});
@@ -285,14 +288,14 @@ var maps = {//waves structure is object first, mobile image second, and desktop 
 				var lat = event.latLng.lat();
 				var lng = event.latLng.lng();
 				// populate yor box/field with lat, lng
-				alert("Lat=" + lat + "; Lng=" + lng);
+		//		alert("Lat=" + lat + "; Lng=" + lng);
 			});
 
 			google.maps.event.addListener(maps.map, "rightclick", function(event) {
 				var lat = event.latLng.lat();
 				var lng = event.latLng.lng();
 				// populate yor box/field with lat, lng
-				alert("Lat=" + lat + "; Lng=" + lng);
+	//			alert("Lat=" + lat + "; Lng=" + lng);
 			});
 
 			if ($("#map-canvas > #sidebarChunk").length == 0) {
@@ -346,7 +349,16 @@ var mmanager = {
 			if (maps.oldInfoBox != null) {
 				maps.oldInfoBox.close();
 			}
-			console.log();
+			if(document.documentElement.clientWidth < 480){
+				$("#searchProxy").css("display", "none");
+				$("#searchI").css("display", "block");
+				$("#searchDiv").attr("style", "");
+				//////console.log("clicked");
+				$('#tagI').css("display", "block");
+				$('#socialProxy').css("display", "none");
+				$('#tagDiv').css("width", '');
+				$('#map-overlay').css("bottom",  ((config.contHeight * -1) + 60)+"px");						
+			}
 			obj.info.open(maps.map, obj);
 			maps.oldInfoBox = obj.info;
 			console.log($(".listNoGeoTag"));
@@ -363,7 +375,16 @@ var mmanager = {
 			if (maps.oldInfoBox != null) {
 				maps.oldInfoBox.close();
 			}
-			console.log();
+			if(document.documentElement.clientWidth < 480){
+				$("#searchProxy").css("display", "none");
+				$("#searchI").css("display", "block");
+				$("#searchDiv").attr("style", "");
+				//////console.log("clicked");
+				$('#tagI').css("display", "block");
+				$('#socialProxy').css("display", "none");
+				$('#tagDiv').css("width", '');
+				$('#map-overlay').css("bottom",  ((config.contHeight * -1) + 60)+"px");
+			}
 			obj.info.open(maps.map, obj);
 			maps.oldInfoBox = obj.info;
 
@@ -1924,14 +1945,14 @@ var general = {
 			$(confirm).attr("id", "modalConfirm");
 			var confText = document.createTextNode("CONFIRM");
 			confirm.appendChild(confText);
-			confirm.on("click", function() {
+			$(confirm).on("click", function() {
 				opts.confirm();
 			});
 			var decline = document.createElement("a");
 			$(decline).attr("id", "modalDeny");
 			var inText = document.createTextNode("CLOSE");
 			decline.appendChild(inText);
-			decline.on("click", function() {
+			$(decline).on("click", function() {
 				$("#modalDialogue").slideUp(400, function() {
 					$("#modalInside").html("")
 				});
