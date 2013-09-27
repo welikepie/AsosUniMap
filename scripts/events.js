@@ -248,7 +248,15 @@ window.onload = function() {
 		$('#twitterButton').load(function() {
 			$(this).show();
 		});
-
+window.onresize = function(){
+		var contHeightMark = window.innerHeight - 165;
+	
+		if(contHeightMark-42 > 100){
+			config.contHeight = contHeightMark;
+		$("#SurroundContainer").css("height", contHeightMark + 6);
+		$("#surrounder").css("height", contHeightMark - 42);
+		}
+}
 		var contHeight = totalHeight - 165;
 		config.contHeight = contHeight;
 		$("#SurroundContainer").css("height", contHeight + 6);

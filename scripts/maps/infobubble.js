@@ -249,10 +249,10 @@ InfoBubble.prototype.buildDom_ = function() {
 		HeadBar.setAttribute("id",this.hashtag+"boxyThing");
 		//console.log(this["objLength"]);
 		if(this.objLength > 1){
-		$(HeadBar).text("no geo location for these spots");
+		$(HeadBar).text("no geo location data for these spots");
 		}
 		else{
-		$(HeadBar).text("no geo location for this spot");
+		$(HeadBar).text("no geo location data for this spot");
 		}
 		contentContainer.appendChild(HeadBar);
 		////console.log(HeadBar);
@@ -1009,10 +1009,10 @@ if(this.type!=null){
 //	alert(this.objLength+","+this.hashtag);
 //	console.log($("#"+this.hashtag+"boxyThing"));
 	if(this.objLength > 1){
-		$("#"+this.hashtag+"boxyThing").text("no geo location for these spots");
+		$("#"+this.hashtag+"boxyThing").text("no geo location data for these spots");
 		}
 		else{
-		$("#"+this.hashtag+"boxyThing").text("no geo location for this spot");
+		$("#"+this.hashtag+"boxyThing").text("no geo location data for this spot");
 		}
 }
 	var pan = !this.get('disableAutoPan');
@@ -1120,8 +1120,11 @@ InfoBubble.prototype.panToView = function() {
 		pos.x += Math.floor(document.documentElement.clientWidth * (2 / 7));
 		//pos.x += 140;
 	}
-
-	pos.y -= deltaY;
+//alert(pos.y);
+	pos.y -=deltaY;
+	//pos.y = height;
+	//pos.y+=deltaY/2;
+//alert(pos.y+","+$(this.bubble_).height() +","+ anchorHeight+","+height+","+deltaY+","+spaceTop+","+spaceBottom);
 
 	latLng = projection.fromContainerPixelToLatLng(pos);
 

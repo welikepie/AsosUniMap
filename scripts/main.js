@@ -162,6 +162,10 @@ var maps = {//waves structure is object first, mobile image second, and desktop 
 		google.maps.event.addListener(maps.map, 'zoom_changed', function() {
 			//console.log(maps.map.getZoom());
 			if (config.previousZoom > maps.map.getZoom() && document.documentElement.clientWidth < 480) {
+						//CLOSER
+				if (maps.oldInfoBox != null) {
+					maps.oldInfoBox.close();
+				}
 				if (tags.filtration != "") {
 					tags.filtration = "";
 					elements.fullUpdate();
