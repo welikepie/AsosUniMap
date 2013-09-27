@@ -1,13 +1,13 @@
 var headingLabel = $("#header").text();
-//////////console.log((headingLabel);
+////////////console.log((headingLabel);
 var config = {
 	//array of wave images. First array is for mobile, second is for desktop size map.
 	"contHeight" : 0,
 	"waveArr" : [["closePop.png","instaMini.png"],["wave.gif","twitMini.png"]],
 	"whitelistNames" : ["Asos", "Asos_HereToHelp", "Asos_Menswear", "ASOS_heretohelp", "ASOS_HilftEuch", "ASOS_ServiceClient", "ASOSMarketplace", "ASOS_ID"],
 	"inArr" : function(name, arr) {
-		//////console.log((name+","+arr);
-		//////console.log((name == undefined);
+		////////console.log((name+","+arr);
+		////////console.log((name == undefined);
 		if (name == undefined || name == "") {
 			return false;
 		}
@@ -52,7 +52,7 @@ var config = {
 	},
 	"sizesOfLabels" : function() {
 		tpht.easyXHR("get", "node/jsons/TAGSSIZES.json", "", function(response) {
-			////////////console.log((response);
+			//////////////console.log((response);
 			config.sizesOfLabels = JSON.parse(response);
 		})
 	}
@@ -158,9 +158,9 @@ var maps = {//waves structure is object first, mobile image second, and desktop 
 			}
 			maps.waves[i][0].icon = maps.waves[i][maps.map.getZoom() - config.minZoom+1]
 		}
-	console.log(maps.waves);
+	//console.log(maps.waves);
 		google.maps.event.addListener(maps.map, 'zoom_changed', function() {
-			console.log(maps.map.getZoom());
+			//console.log(maps.map.getZoom());
 			if (config.previousZoom > maps.map.getZoom() && document.documentElement.clientWidth < 480) {
 				if (tags.filtration != "") {
 					tags.filtration = "";
@@ -209,14 +209,14 @@ var maps = {//waves structure is object first, mobile image second, and desktop 
 				beachMarker.setIcon("images/" + config.labelArr[maps.map.getZoom() - config.minZoom]);
 				beachMarker.setVisible(true);
 				for(var i = 0; i < maps.waves.length; i++){
-					console.log(maps.waves[i][maps.map.getZoom() - config.minZoom+1]);
+					//console.log(maps.waves[i][maps.map.getZoom() - config.minZoom+1]);
 					maps.waves[i][0].setIcon(maps.waves[i][maps.map.getZoom() - config.minZoom+1]);
 					//maps.waves[i][0].setVisible(true);
 				}
-				//////console.log((config.labelArr[maps.map.getZoom() - config.minZoom]);
+				////////console.log((config.labelArr[maps.map.getZoom() - config.minZoom]);
 	
 			}
-			//////////console.log((maps.map.getZoom());
+			////////////console.log((maps.map.getZoom());
 			var bounds = maps.map.getBounds();
 			maps.oldBounds = bounds;
 			var bArr = bounds.toString().replace(/[()]/g, "").split(",");
@@ -307,7 +307,7 @@ var maps = {//waves structure is object first, mobile image second, and desktop 
 				$(divAdd).attr("id", "homeButton");
 				divToAdd.appendChild(divAdd);
 				$("#map-canvas").children().first().append(divToAdd);
-				////console.log(($("#map-canvas").children().first());
+				//////console.log(($("#map-canvas").children().first());
 				$(".gmnoprint").css("z-index", "1");
 			}
 
@@ -316,8 +316,8 @@ var maps = {//waves structure is object first, mobile image second, and desktop 
 			maps.oldBounds = bounds;
 			var bArr = bounds.toString().replace(/[()]/g, "").split(",");
 			maps.boundingBox = [parseFloat(bArr[1]), parseFloat(bArr[0]), parseFloat(bArr[3]), parseFloat(bArr[2])];
-			////////////console.log((maps.map.getCenter());
-			////////////console.log((maps.boundingBox);
+			//////////////console.log((maps.map.getCenter());
+			//////////////console.log((maps.boundingBox);
 		});
 	}
 }
@@ -331,7 +331,7 @@ var mmanager = {
 	"addClickToOverHashes" : function(obj) {
 		google.maps.event.addListener(obj, 'click', function() {
 
-			//			//////////console.log((split);
+			//			////////////console.log((split);
 			maps.map.panTo(new google.maps.LatLng(obj.location.latitude, obj.location.longitude));
 
 			maps.map.setZoom(9);
@@ -341,7 +341,7 @@ var mmanager = {
 			maps.boundingBox = [parseFloat(bArr[1]), parseFloat(bArr[0]), parseFloat(bArr[3]), parseFloat(bArr[2])];
 			tags.filterBasedOnBound("doNothing");
 
-			//	////////////console.log(("calling");
+			//	//////////////console.log(("calling");
 		});
 	},
 	"addClickToHashesAutoHide" : function(obj) {
@@ -353,7 +353,7 @@ var mmanager = {
 				$("#searchProxy").css("display", "none");
 				$("#searchI").css("display", "block");
 				$("#searchDiv").attr("style", "");
-				//////console.log("clicked");
+				////////console.log("clicked");
 				$('#tagI').css("display", "block");
 				$('#socialProxy').css("display", "none");
 				$('#tagDiv').css("width", '');
@@ -361,7 +361,7 @@ var mmanager = {
 			}
 			obj.info.open(maps.map, obj);
 			maps.oldInfoBox = obj.info;
-			console.log($(".listNoGeoTag"));
+			//console.log($(".listNoGeoTag"));
 			if ($("#infoBoxDisplay").find(".image")) {
 				$("#infoBoxDisplay").find(".image").first().bind("error", function() {
 					$("#infoBoxDisplay").find(".image").css("display", "none");
@@ -371,7 +371,7 @@ var mmanager = {
 	},
 	"addClickToHashes" : function(obj) {
 		google.maps.event.addListener(obj, 'click', function() {
-			console.log(obj.info);
+			//console.log(obj.info);
 			if (maps.oldInfoBox != null) {
 				maps.oldInfoBox.close();
 			}
@@ -379,7 +379,7 @@ var mmanager = {
 				$("#searchProxy").css("display", "none");
 				$("#searchI").css("display", "block");
 				$("#searchDiv").attr("style", "");
-				//////console.log("clicked");
+				////////console.log("clicked");
 				$('#tagI').css("display", "block");
 				$('#socialProxy').css("display", "none");
 				$('#tagDiv').css("width", '');
@@ -399,16 +399,18 @@ var mmanager = {
 		var thisMarker;
 		//mmanager.hashContentManager = new MarkerClusterer(maps.map);
 		var element = 3;
-		////////////console.log((tags.optionaltags);
+		//////////////console.log((tags.optionaltags);
+	
 		general.refreshLabelSize();
+		
 		for (var zed in tags.markerTagsNoGeo) {
 			//			new Marker
-			console.log(tags.markerTagsNoGeo[zed].length);
-			console.log(tags.markerTagsNoGeo[zed]);
+			//console.log(tags.markerTagsNoGeo[zed].length);
+			//console.log(tags.markerTagsNoGeo[zed]);
 			if (tags.markerTagsNoGeo[zed].length - 1 > 0) {
-				//console.log(tags.markerTagsNoGeo[zed].length-1);
+				////console.log(tags.markerTagsNoGeo[zed].length-1);
 				if (tags.markerTagsNoGeo[zed].length - 1 == 1) {
-					//	console.log("YEAHYEAHYEAH");
+					//	//console.log("YEAHYEAHYEAH");
 
 					var marker = new MarkerWithLabel({//WithLabel({
 						"position" : new google.maps.LatLng(tags.locations[zed].latitude, tags.locations[zed].longitude),
@@ -433,7 +435,7 @@ var mmanager = {
 						"labelClass" : "geoSizing", // the CSS class for the label
 					});
 					//marker.labelcontent = tags.markerTagsNoGeo.length;
-					console.log(tags.markerTagsNoGeo[zed]);
+					//console.log(tags.markerTagsNoGeo[zed]);
 				}
 
 				var divCont = document.createElement("div");
@@ -447,39 +449,41 @@ var mmanager = {
 				if (tags.markerTagsNoGeo[zed].length > 9) {
 					for (var i = 0; i < 9; i++) {
 						appDiv.appendChild(elements.domListing(tags.markerTagsNoGeo[zed][i], false, false, zed, zed + "LI"));
-						//console.log(elements.domListing(tags.markerTagsNoGeo[zed][i],false,false,zed,zed+"LI"));
+						////console.log(elements.domListing(tags.markerTagsNoGeo[zed][i],false,false,zed,zed+"LI"));
 						tags.markerTagsNoGeo[zed].splice(i, 1);
 					}
 				} else {
 					for (var i = 0; i < tags.markerTagsNoGeo[zed].length; i++) {
 						appDiv.appendChild(elements.domListing(tags.markerTagsNoGeo[zed][i], false, false, zed, zed + "LI"));
-						//console.log(elements.domListing(tags.markerTagsNoGeo[zed][i],false,false,zed,zed+"LI"));
+						////console.log(elements.domListing(tags.markerTagsNoGeo[zed][i],false,false,zed,zed+"LI"));
 						tags.markerTagsNoGeo[zed].splice(i, 1);
 					}
 				}
 				//				$( 'li' ).off( 'scroll' );
 				$(divCont).scroll(function(e) {
 					var zedder = this.getAttribute("data-rel-zed");
-					console.log(this.scrollTop);
+					//console.log(this.scrollTop);
 					if (this.scrollTop >= (document.getElementById(zedder + "UL").offsetHeight - 278)) {
 						if (tags.markerTagsNoGeo[zedder].length > 9) {
 							for (var i = 0; i < 9; i++) {
 								document.getElementById(zedder + "UL").appendChild(elements.domListing(tags.markerTagsNoGeo[zedder][i], false, false, zedder, zedder + "LI"));
-								//console.log(elements.domListing(tags.markerTagsNoGeo[zed][i],false,false,zed,zed+"LI"));
+								////console.log(elements.domListing(tags.markerTagsNoGeo[zed][i],false,false,zed,zed+"LI"));
 								tags.markerTagsNoGeo[zedder].splice(i, 1);
 							}
 						} else {
 							for (var i = 0; i < tags.markerTagsNoGeo[zedder].length; i++) {
 								document.getElementById(zedder + "UL").appendChild(elements.domListing(tags.markerTagsNoGeo[zedder][i], false, false, zedder, zedder + "LI"));
-								//console.log(elements.domListing(tags.markerTagsNoGeo[zed][i],false,false,zed,zed+"LI"));
+								////console.log(elements.domListing(tags.markerTagsNoGeo[zed][i],false,false,zed,zed+"LI"));
 								tags.markerTagsNoGeo[zedder].splice(i, 1);
 							}
 						}
 					}
 				});
 				//				tags.markerTagsNoGeo[zed];
+				//console.log(zed);
+				//console.log(tags.markerTagsNoGeo);
 				console.log(zed);
-				console.log(tags.markerTagsNoGeo);
+				console.log(tags.markerTagsNoGeo[zed].length);
 				var markerObj = {
 					content : divCont,
 					data : tags.markerTagsNoGeo[zed],
@@ -496,6 +500,7 @@ var mmanager = {
 					maxWidth : 320,
 					minWidth : 320,
 					type : "noGeo",
+					hash : zed,
 					objLength : tags.markerTagsNoGeo[zed].length,
 					//maxWidth : 320,
 					arrowPosition : 30,
@@ -513,24 +518,16 @@ var mmanager = {
 			}
 		}
 		for (var zed in tags.locations) {
-
 			if (tags.locations[zed].latitude != null && tags.locations[zed].longitude != null) {
-				//////////////console.log((new google.maps.LatLng(tags.locations[zed].latitude, tags.locations[zed].longitude));
-				//thisMarker = new google.maps.Marker({
-				//////////console.log((tags.locations[zed].LeftAligned);
 				var toInsert = "";
-				////////////console.log((zed);
-				////////////console.log((tags.optionaltags[zed]);
 				if (tags.optionaltags[zed] != "" && tags.optionaltags.hasOwnProperty(zed)) {
 					toInsert = tags.optionaltags[zed];
 				} else {
 					toInsert = "#" + zed;
 				}
-
 				var div = document.createElement("div");
 				var h2 = document.createElement("h2");
 				h2.innerHTML = toInsert.toUpperCase();
-				//////////console.log((tags.locations[zed].LeftAligned);
 				if (tags.locations[zed].LeftAligned) {
 					h2.setAttribute("class", "left");
 				} else {
@@ -543,17 +540,11 @@ var mmanager = {
 				var addDiv = document.createElement("div");
 				addDiv.appendChild(div);
 				addDiv.appendChild(domDiv);
-				//////////console.log((zed);
-
 				var toWrite = "hidden";
-				console.log(config.sizesOfLabels);
+				//console.log(config.sizesOfLabels);
 				if (config.bandSizes[config.sizesOfLabels[zed]] != undefined) {
 					toWrite = config.bandSizes[config.sizesOfLabels[zed]];
 				}
-//				console.log(config.bandSizes);
-				//////////console.log((toWrite);
-				//////////console.log((config.sizesOfLabels[zed]);
-				//////////console.log(();
 				thisMarker = new MarkerWithLabel({
 					position : new google.maps.LatLng(tags.locations[zed].latitude, tags.locations[zed].longitude),
 					title : "#" + zed.toUpperCase(),
@@ -566,30 +557,28 @@ var mmanager = {
 					icon : "images/marker.png"
 				});
 				element++;
-
-				//thisMarker.setVisible(false);
 				mmanager.addClickToOverHashes(thisMarker);
 				mmanager.overMark.push(thisMarker);
 			}
-
-			//			////////////console.log((mmanager.overMark[mmanager.overMark.length-1]);
 		}
 		mmanager.tagManager = new MarkerManager(maps.map);
-
+		//alert("noTag");
 		google.maps.event.addListener(mmanager.tagManager, 'loaded', function() {
-			//////////////console.log((mmanager.overMark);
-			//////////console.log((mmanager.overMark);
+			//alert("manager loaded");
+			////////////////console.log((mmanager.overMark);
+			////////////console.log((mmanager.overMark);
 			mmanager.tagManager.addMarkers(mmanager.overMark, config.minZoom);
-			//////////////console.log((mmanager.tagManager);
+			////////////////console.log((mmanager.tagManager);
 			mmanager.tagManager.show();
-			tags.datHeight();
-			////////////console.log((document.getElementsByClassName("size-xs"));
+			//tags.datHeight();
+			//////////////console.log((document.getElementsByClassName("size-xs"));
 
 			//tags.labelRefresh();
 		});
 
 		//		tags.labelRefresh();
-		//	console.log("refreshed");
+		//	//console.log("refreshed");
+		//alert("SHIT BE DONE");
 		setTimeout(function() {
 			$("#spinney").css("display", "none");
 		}, 4000);
@@ -613,11 +602,11 @@ var tags = {
 	"tagMarkerNoGeo" : {}, //reference to markers for each hashtag, JSON object with key being hashtag without #
 	"markerTags" : {},
 	"datHeight" : function() {
-		//////////console.log(("getting");
-		//////////console.log(($(".size-xs"));
+		////////////console.log(("getting");
+		////////////console.log(($(".size-xs"));
 		$(".size-xs").each(function(index, value) {
-			//////////console.log((index);
-			//////////console.log((value);
+			////////////console.log((index);
+			////////////console.log((value);
 		});
 		$(".size-s").each(function(index, value) {
 		});
@@ -629,20 +618,20 @@ var tags = {
 		});
 	},
 	"inString" : function(haystack, needle) {
-		//		//////////console.log((needle.toLowerCase()).test(haystack.toLowerCase());
+		//		////////////console.log((needle.toLowerCase()).test(haystack.toLowerCase());
 		if (needle.replace(/\s+/g, "") == "") {
 			return true;
 		} else if (haystack == null) {
 			return false;
 		}
-		//		////////////console.log((new RegExp(needle.toLowerCase()).test(haystack.toLowerCase()));
+		//		//////////////console.log((new RegExp(needle.toLowerCase()).test(haystack.toLowerCase()));
 		return new RegExp(needle.toLowerCase()).test(haystack.toLowerCase());
-		//////////console.log((needle.toLowerCase()).test(haystack.toLowerCase());
+		////////////console.log((needle.toLowerCase()).test(haystack.toLowerCase());
 		// false
 	},
 	"labelRefresh" : function() {
 		var thing = window.setInterval(function() {
-			//////////////console.log((document.getElementsByClassName("labels"));
+			////////////////console.log((document.getElementsByClassName("labels"));
 			var elements = $(".labels");
 			if (elements.length > 0) {
 				window.clearInterval(thing);
@@ -650,7 +639,7 @@ var tags = {
 		}, 100);
 
 		//		 for(var i = 0, length = elements.length; i < length; i++) {
-		//		 	////////////console.log((elements.item(i));
+		//		 	//////////////console.log((elements.item(i));
 		//		 }
 	},
 	"markerPos" : function() {
@@ -660,8 +649,8 @@ var tags = {
 		//
 		//	}
 		//}
-		//////////////console.log((tags.locations);
-		//////////////console.log((tags.markerTags);
+		////////////////console.log((tags.locations);
+		////////////////console.log((tags.markerTags);
 	},
 	"retrieve" : function() {
 		var waiting;
@@ -670,8 +659,8 @@ var tags = {
 			if (ans.hasOwnProperty("locations")) {
 				tags.locations = ans.locations;
 			}
-			console.log(ans.locations);
-			//			////////////console.log((tags);
+			//console.log(ans.locations);
+			//			//////////////console.log((tags);
 			if (ans.hasOwnProperty("optionaltags")) {
 				tags.optionaltags = ans.optionaltags;
 				//tpht.ping();
@@ -688,7 +677,7 @@ var tags = {
 				}, 500);
 			}
 			general.updateSinglePoint();
-			////////////console.log(("filterBased");
+			//////////////console.log(("filterBased");
 
 			//tags.markerPos();
 
@@ -701,14 +690,14 @@ var tags = {
 				if (tags.locations[i].radius == null) {
 					tags.locations[i].radius = 0;
 				}
-				////////////console.log((maps.boundingBox);
+				//////////////console.log((maps.boundingBox);
 				var near = tpht.compareBoxesRect(maps.boundingBox, tpht.haversine(tags.locations[i].latitude, tags.locations[i].longitude, tags.locations[i].radius));
 				if (near == true) {
 					tags.inBound.push(i);
 				}
 			}
 		}
-		////////////console.log((tags.inBound);
+		//////////////console.log((tags.inBound);
 		elements.fullUpdate();
 
 		if (carryOn == true || carryOn == "update") {
@@ -721,25 +710,26 @@ var tags = {
 			tags.loadTagFiles(zedsArr, "");
 		}
 		general.updateSinglePoint();
-		////////////console.log(("preLoadTagFiles");
+		//////////////console.log(("preLoadTagFiles");
 	},
 	"loadTagFiles" : function(arr, updater) {
 		//tags.locations
+
 		tpht.asyncLoop(arr.length, function(loop, i) {
-			//		////////////console.log(("node/jsons/"+tags.inBound[t]+".json");
-			////////////console.log((tags.inBound);
-			//	console.log(arr[i]);
+			//		//////////////console.log(("node/jsons/"+tags.inBound[t]+".json");
+			//////////////console.log((tags.inBound);
+			//	//console.log(arr[i]);
 
 			tpht.easyXHR("get", config.baseURL + "node/jsons/" + arr[i] + ".json", "", function(response) {
-				console.log(JSON.parse(response));
-				////////////console.log((response.length);
-				//console.log(response);
+				//console.log(JSON.parse(response));
+				//////////////console.log((response.length);
+				////console.log(response);
 				try
 				{
 					var jsonP = JSON.parse(response);
-					console.log(jsonP);
+					//console.log(jsonP);
 					if (jsonP.hasOwnProperty("error") == false) {
-						////////////console.log(("GETTING");
+						//////////////console.log(("GETTING");
 						tags.tagData[JSON.parse(response).tag] = JSON.parse(response);
 						tags.markerTagsNoGeo[JSON.parse(response).tag] = [];
 						var z = JSON.parse(response).answers.length - 1;
@@ -752,16 +742,18 @@ var tags = {
 					}
 					loop.next();
 				} catch(e) {
-					console.log(e.stack);
+					//console.log(e.stack);
 					loop.next();
 				}
 			});
 		}, function() {
-			console.log(tags.tagData);
+		
+			//console.log(tags.tagData);
 			tags.gather();
 		});
 	},
 	"gather" : function() {
+
 		for (var i in tags.tagData) {
 			var arrMake = tags.tagData[i];
 			var arrTags = arrMake.tag;
@@ -770,7 +762,7 @@ var tags = {
 			for (var t in arrAns) {
 				if (parseInt(arrAns[t].time, 10) * 1000 >= config.minTime) {
 					if (arrAns[t].lat != null) {
-						//					////////////console.log((arrAns[t]);
+						//					//////////////console.log((arrAns[t]);
 						arrAns[t].position = new google.maps.LatLng(arrAns[t].lat, arrAns[t].lon);
 						tags.MAPrender.push(arrAns[t]);
 						tags.DOMrender.push(arrAns[t]);
@@ -806,11 +798,13 @@ var tags = {
 			return 0;
 
 		});
-		////////////console.log(("starting");
+		
+		
+		//////////////console.log(("starting");
 		for (var zed in tags.MAPrender) {
 			var obj = tags.MAPrender[zed];
-			//	////////////console.log((obj);
-			//////////////console.log((obj.position);
+			//	//////////////console.log((obj);
+			////////////////console.log((obj.position);
 			var image = "images/mapMarker.png"
 			if (config.inArr(tags.MAPrender[zed].user, config.whitelistNames)) {
 				image = "images/asosMarker.png"
@@ -823,14 +817,14 @@ var tags = {
 				"disableAutoPan" : true,
 				"text" : obj.text
 			});
-			//			//////////console.log((marker);
+			//			////////////console.log((marker);
 
 			/*			marker.info = new google.maps.InfoWindow({
 			"content" : elements.info(obj),
 			"zIndex" : 9005
 			});*/
 			//			var t = new In
-			//console.log(obj);
+			////console.log(obj);
 			var markerObj = {
 				content : elements.info(obj),
 				zIndex : 9001,
@@ -851,8 +845,8 @@ var tags = {
 			if (document.documentElement.clientWidth < 480) {
 				markerObj.maxWidth = Math.floor(document.documentElement.clientWidth * 0.9);
 				markerObj.minWidth = Math.floor(document.documentElement.clientWidth * 0.9);
-				//////console.log(("----------------------------");
-				//////console.log((markerObj.minWidth);
+				////////console.log(("----------------------------");
+				////////console.log((markerObj.minWidth);
 			}
 			marker.info = new InfoBubble(markerObj);
 
@@ -884,10 +878,10 @@ var tags = {
 					var longest = tags.DOMrenderOnPage.length;
 					var lengthToReach = tags.DOMrender.length;
 					for (var zeds = 0; zeds < lengthToReach; zeds++) {
-						//////////console.log((tags.filtration);
-						//////////console.log((tags.DOMrender);
-						//////console.log((tags.DOMrender);
-						//////console.log((zeds);
+						////////////console.log((tags.filtration);
+						////////////console.log((tags.DOMrender);
+						////////console.log((tags.DOMrender);
+						////////console.log((zeds);
 						if (tags.inBound.indexOf(tags.DOMrender[zeds].hashtag) > -1) {
 							tags.renderToList(tags.DOMrender[zeds], false);
 							tags.DOMrender.splice(zeds, 1);
@@ -909,23 +903,23 @@ var tags = {
 						}
 					}
 					twttr.widgets.load();
-					////////////console.log((iterate.length);
-					////////////console.log(("ITERATIVE PROGRESS");
+					//////////////console.log((iterate.length);
+					//////////////console.log(("ITERATIVE PROGRESS");
 					carried = false;
 					//--------------------------------------------------------------------
 				}
 			}
 		}
-		////////////console.log(("addedRender");
-		//////////////console.log((tags.DOMrender.length);
+		//////////////console.log(("addedRender");
+		////////////////console.log((tags.DOMrender.length);
 	},
 	"listImageLoad" : function() {
 
 		var unloaded = $(".image");
 		for (var i in unloaded) {
-			//////////////console.log(( typeof (unloaded[i]));
+			////////////////console.log(( typeof (unloaded[i]));
 			if ( typeof (unloaded[i]) == "object") {
-				//////////////console.log((unloaded[i]);
+				////////////////console.log((unloaded[i]);
 				$(unloaded[i]).bind("error", function() {
 					$("#sideBar" + obj.id).children("img")[0].css("display:none;");
 				});
@@ -937,21 +931,21 @@ var tags = {
 
 	},
 	"renew" : function(arr) {
-		//////////////console.log((arr.length);
+		////////////////console.log((arr.length);
 		var longWay = 500;
-		//		////////////console.log((longWay);
+		//		//////////////console.log((longWay);
 		tpht.asyncLoop(arr.length, function(loop, i) {
-			//	////////////console.log((arr[i]);
-			//		////////////console.log((new Date(arrAns[t].time).getTime()/1000);
+			//	//////////////console.log((arr[i]);
+			//		//////////////console.log((new Date(arrAns[t].time).getTime()/1000);
 
-			//	////////////console.log((new Date(arr[i].time).getTime() + "," + config.minTime);
+			//	//////////////console.log((new Date(arr[i].time).getTime() + "," + config.minTime);
 			if (parseInt(arr[i].time, 10) * 1000 >= config.minTime) {
 				if (arr[i].lat != null) {
-					//////////////console.log((arrAns[t]);
+					////////////////console.log((arrAns[t]);
 					arr[i].position = new google.maps.LatLng(arr[i].lat, arr[i].lon);
 					arr[i].map = maps.map;
 					tags.MAPrender.push(arr[i]);
-					//////////////console.log((arr[i]);
+					////////////////console.log((arr[i]);
 					//shove in to thing here.
 					// config.whitelistNames
 					var image = "images/mapMarker.png"
@@ -967,13 +961,13 @@ var tags = {
 						text : arr[i].text,
 						disableAutoPan : true
 					});
-					//////////console.log((marker);
+					////////////console.log((marker);
 					/*marker.info = new google.maps.InfoWindow({
 					content : elements.info(arr[i]),
 					zIndex : 9001
 					});*/
 					//map marker styling
-					console.log(arr[i].length);
+					//console.log(arr[i].length);
 					var markerObj = {
 						content : elements.info(arr[i]),
 						zIndex : 9001,
@@ -996,15 +990,15 @@ var tags = {
 						markerObj.maxWidth = Math.floor(document.documentElement.clientWidth * 0.9);
 						markerObj.minWidth = Math.floor(document.documentElement.clientWidth * 0.9);
 
-						//////console.log(("----------------------------");
-						//////console.log((markerObj.minWidth);
+						////////console.log(("----------------------------");
+						////////console.log((markerObj.minWidth);
 
 					}
 
 					marker.info = new InfoBubble(markerObj)
 					mmanager.addClickToHashes(marker);
 
-					//	////////////console.log((obj.position);
+					//	//////////////console.log((obj.position);
 					tags.renderToList(arr[i], true);
 					marker.setVisible(true);
 					setTimeout(loop.next, Math.floor(longWay));
@@ -1014,12 +1008,12 @@ var tags = {
 					setTimeout(loop.next, Math.floor(longWay));
 				}
 			}
-			////////////console.log((i);
+			//////////////console.log((i);
 			if (i % 10 == 0 || i == arr.length - 1) {
 				twttr.widgets.load();
 			}
 		}, function() {
-			////////////console.log(("added all!")
+			//////////////console.log(("added all!")
 		});
 		tags.MAPrender.sort(function(a, b) {
 			var aTime = parseInt(a.time, 10) * 1000;
@@ -1047,15 +1041,17 @@ var tags = {
 			return 0;
 
 		});
-		//////////////console.log((tags.DOMrender.length);
+		////////////////console.log((tags.DOMrender.length);
 	},
 
 	"renderToMap" : function(obj) {
-		////////////console.log(("instantiationg");
+	
+		
+		//////////////console.log(("instantiationg");
 		var mcOptions = {
 			"maxZoom" : 18,
 		};
-		////////////console.log(("instantiationg");
+		//////////////console.log(("instantiationg");
 		try
 		{
 			if (ie == false) {
@@ -1070,15 +1066,15 @@ var tags = {
 			}
 		} catch(e) {
 		}
-		////////////console.log(("markerClusterer");
-		////////////console.log(("listener");
+		//////////////console.log(("markerClusterer");
+		//////////////console.log(("listener");
 		mmanager.initialise();
-		////////////console.log(("init");
+		//////////////console.log(("init");
 
 		//tpht.lazyLoader("data-image-src");
 		//	mmanager.hashContentManager = new MarkerManager(maps.map);
 		//	google.maps.event.addListener(mmanager.hashContentManager, 'loaded', function() {
-		//////////////console.log(("==============================");
+		////////////////console.log(("==============================");
 		//			mmanager.tagManager.addMarkers(obj, config.minZoom);
 		//		mmanager.tagManager.refresh();
 		//	});
@@ -1094,7 +1090,7 @@ var tags = {
 		} else {
 			toAdd = elements.list(obj, false, inb4);
 		}
-		//////////////console.log(($(toAdd).children(".text").text());
+		////////////////console.log(($(toAdd).children(".text").text());
 
 		if (tags.inBound.length > 0) {
 			if (tags.inBound.indexOf($(toAdd).attr("data-rel-hashtag")) == -1 || tags.inString(obj.text, tags.filtration) == false) {
@@ -1116,34 +1112,38 @@ var tags = {
 var elements = {
 	"updateMarkerVisibility" : function() {
 
-		console.log(tags.tagMarkerNoGeo);
-		console.log(tags.markerTagsNoGeo);
+		//console.log(tags.tagMarkerNoGeo);
+		//console.log(tags.markerTagsNoGeo);
 
 		for (var i in tags.tagMarkerNoGeo) {
 			if (tags.tagMarkerNoGeo.hasOwnProperty(i)) {
-				console.log("OLOLOLOLOLOLOLOL");
-				console.log(i);
+				//console.log("OLOLOLOLOLOLOLOL");
+				//console.log(i);
 				tags.arrEls[i] = new Array;
 				for (var zeds = 0; zeds < tags.markerTagsNoGeo[i].length; zeds++) {
-			//		console.log(zeds);
+			//		//console.log(zeds);
+	//		console.log(tags.markerTagsNoGeo[i][zeds].text+","+ tags.filtration);
 					if (tags.inString(tags.markerTagsNoGeo[i][zeds].text, tags.filtration) == true) {
 						tags.arrEls[i].push(tags.markerTagsNoGeo[i][zeds]);
+						if(tags.markerTagsNoGeo[i][zeds].hashtag == "code"){
+						console.log(tags.markerTagsNoGeo[i][zeds].hashtag+","+tags.markerTagsNoGeo[i][zeds].text+","+ tags.filtration);	
+					}
 					}
 				}
 				//content : elements.info(arr[i]),
 				tags.tagMarkerNoGeo[i].labelContent = tags.arrEls[i].length;
-				console.log("ALERTALERTALERTALERT");
-				console.log(tags.arrEls[i].length);
+				//console.log("ALERTALERTALERTALERT");
+				//console.log(tags.arrEls[i].length);
 				if (tags.arrEls[i].length == 1) {
 					if (tags.tagMarkerNoGeo[i].getMap() == null) {
 						tags.tagMarkerNoGeo[i].setMap(maps.map);
 					}
 					tags.tagMarkerNoGeo[i].icon = "images/singleLocation.png";
 					//hashhashbang;
-					console.log(tags.tagMarkerNoGeo[i]);
+					//console.log(tags.tagMarkerNoGeo[i]);
 					tags.tagMarkerNoGeo[i].labelContent = "";
 //					tags.tagMarkerNoGeo[i].label.setStyles();
-	//				console.log(tags.tagMarkerNoGeo[i]);
+	//				//console.log(tags.tagMarkerNoGeo[i]);
 
 				} else if (tags.arrEls[i].length > 1) {
 					if (tags.tagMarkerNoGeo[i].getMap() == null) {
@@ -1159,8 +1159,8 @@ var elements = {
 					continue;
 					//					if(tags.tagMarkerNoGeo[i].setMap(null))
 				}
-				console.log(tags.tagMarkerNoGeo[i]);
-				console.log("brokenstuff");
+				//console.log(tags.tagMarkerNoGeo[i]);
+				//console.log("brokenstuff");
 				var divCont = document.createElement("div");
 				divCont.setAttribute("class", "lister");
 				divCont.setAttribute("id", i + "scrollContainer");
@@ -1169,17 +1169,23 @@ var elements = {
 				appDiv.setAttribute("id", i + "UL");
 				appDiv.setAttribute("class", "listNoGeoTag");
 				divCont.appendChild(appDiv);
-				if (tags.arrEls[i].length > 9) {
+				console.log(i);
+				tags.tagMarkerNoGeo[i].info.setObjLength(tags.arrEls[i].length);
+				console.log(tags.arrEls[i].length);
+				if (tags.arrEls[i].length > 10) {
+					console.log("highLength");
+					console.log(tags.arrEls[i]);
 					for (var k = 0; k < 9; k++) {
-						appDiv.appendChild(elements.domListing(tags.arrEls[i][k], false, false, k, k + "LI"));
-						//console.log(elements.domListing(tags.markerTagsNoGeo[zed][i],false,false,zed,zed+"LI"));
-						tags.arrEls[i].splice(k, 1);
+						appDiv.appendChild(elements.domListing(tags.arrEls[i][0], false, false, "", "" + "LI"));
+						tags.arrEls[i].splice(0, 1);
 					}
-				} else {
+				} 
+				if(tags.arrEls[i].length <= 10){
+						console.log("lowLength");
+						console.log(tags.arrEls[i]);
 					for (var k = 0; k < tags.arrEls[i].length; k++) {
-						appDiv.appendChild(elements.domListing(tags.arrEls[i][k], false, false, k, k + "LI"));
-						//console.log(elements.domListing(tags.markerTagsNoGeo[zed][i],false,false,zed,zed+"LI"));
-						tags.arrEls[i].splice(k, 1);
+						appDiv.appendChild(elements.domListing(tags.arrEls[i][0], false, false, "", "" + "LI"));
+						tags.arrEls[i].splice(0, 1);
 					}
 				}
 				tags.tagMarkerNoGeo[i].info.setContent(divCont);
@@ -1187,18 +1193,18 @@ var elements = {
 				//				$( 'li' ).off( 'scroll' );
 				$(divCont).scroll(function(e) {
 					var zedder = this.getAttribute("data-rel-zed");
-					console.log(tags.arrEls);
+					//console.log(tags.arrEls);
 					if (this.scrollTop >= (document.getElementById(zedder + "UL").offsetHeight - 278)) {
 						if (tags.arrEls[zedder].length > 9) {
 							for (var k = 0; k < 9; k++) {
 								document.getElementById(zedder + "UL").appendChild(elements.domListing(tags.arrEls[zedder][k], false, false, zedder, zedder + "LI"));
-								//console.log(elements.domListing(tags.markerTagsNoGeo[zedder][i],false,false,zed,zed+"LI"));
+								////console.log(elements.domListing(tags.markerTagsNoGeo[zedder][i],false,false,zed,zed+"LI"));
 								tags.arrEls[zedder].splice(k, 1);
 							}
 						} else {
 							for (var k = 0; k < tags.arrEls[zedder].length; k++) {
 								document.getElementById(zedder + "UL").appendChild(elements.domListing(tags.arrEls[zedder][k], false, false, zedder, zedder + "LI"));
-								//console.log(elements.domListing(tags.markerTagsNoGeo[zed][i],false,false,zed,zed+"LI"));
+								////console.log(elements.domListing(tags.markerTagsNoGeo[zed][i],false,false,zed,zed+"LI"));
 								tags.arrEls[zedder].splice(k, 1);
 							}
 						}
@@ -1208,7 +1214,7 @@ var elements = {
 					tags.tagMarkerNoGeo[i].info.close();
 					tags.tagMarkerNoGeo[i].info.open();
 				}
-//				console.log(tags.tagMarkerNoGeo[i].label);
+//				//console.log(tags.tagMarkerNoGeo[i].label);
 				if(tags.tagMarkerNoGeo[i].label!=undefined){
 					tags.tagMarkerNoGeo[i].label.setStyles();
 					tags.tagMarkerNoGeo[i].label.draw();
@@ -1217,9 +1223,9 @@ var elements = {
 				tags.tagMarkerNoGeo[i].setVisible(true);
 			}
 		}
-//				console.log(tags.tagMarkerNoGeo[i].label);
+//				//console.log(tags.tagMarkerNoGeo[i].label);
 
-		console.log("ERROR BEOTCH" + tags.filtration);
+		//console.log("ERROR BEOTCH" + tags.filtration);
 		if (mmanager.hashContentManager != null) {
 			var cycleArr = mmanager.hashContentManager.getMarkers();
 			if (ie == true) {
@@ -1233,8 +1239,8 @@ var elements = {
 			}
 			if (ie == false) {
 				for (var el = 0; el < cycleArr.length; el++) {
-					//console.log(cycleArr[el].text);
-					//console.log(tags.inString(cycleArr[el].text, tags.filtration));
+					////console.log(cycleArr[el].text);
+					////console.log(tags.inString(cycleArr[el].text, tags.filtration));
 					if (tags.inString(cycleArr[el].text, tags.filtration) == false) {
 						cycleArr[el].setVisible(false);
 					} else {
@@ -1264,7 +1270,7 @@ var elements = {
 			}
 
 		} else if (tags.inBound.length == 1 && tags.filtration == "") {
-			console.log(tags.inBound[0]);
+			//console.log(tags.inBound[0]);
 			if (tags.optionaltags.hasOwnProperty(tags.inBound[0])) {
 				if (tags.optionaltags[tags.inBound[0]] != "") {
 					$("#header").text(tags.optionaltags[tags.inBound[0]]);
@@ -1280,26 +1286,25 @@ var elements = {
 			}
 		}
 		if (ins.length > 0) {
-			//////////console.log(("ins.length");
+			////////////console.log(("ins.length");
 			var hidden = 0;
 			var disp = 0;
 			var match = -1;
 			for (var i = 0; i < ins.length; i++) {
-				////////////console.log((ins[i]);
+				//////////////console.log((ins[i]);
 				if (Object.prototype.hasOwnProperty.call(ins, i)) {
 					var content = "";
 					if ($(ins[i]).data("textcontent") != "") {
-						//////console.log(("twit");
-						//////console.log(();
+						////////console.log(("twit");
+						////////console.log(();
 						content = $(ins[i]).data("textcontent");
 						//$(ins[i]).(".e-entry-answer").first().text();
 					} else {
-						////console.log(($(ins[i]));
+						//////console.log(($(ins[i]));
 					}
-
 					if (tags.filtration != "") {
-						//////console.log(("filtering");
-						////console.log((content);
+						////////console.log(("filtering");
+						//////console.log((content);
 						if (tags.inString(content, tags.filtration) == false) {
 							$(ins[i]).css("display", "none");
 						} else {
@@ -1309,8 +1314,8 @@ var elements = {
 						}
 					} else if (tags.inBound.length > 0) {
 						if (tags.inBound.indexOf($(ins[i]).data("rel-hashtag")) == -1) {
-							////////////console.log((tags.inBound.indexOf($(ins[i]).data("rel-hashtag")));
-							////////////console.log((ins[i]);
+							//////////////console.log((tags.inBound.indexOf($(ins[i]).data("rel-hashtag")));
+							//////////////console.log((ins[i]);
 							$(ins[i]).css("display", "none");
 						} else {
 							match = 1;
@@ -1324,21 +1329,21 @@ var elements = {
 					}
 				}
 			}
-			////console.log(("and out the other side");
-			////console.log((disp);
-			//////////console.log((tags.filtration);
+			//////console.log(("and out the other side");
+			//////console.log((disp);
+			////////////console.log((tags.filtration);
 			if (disp < 5) {
 				for (var zeds = 0; zeds < tags.DOMrender.length; zeds++) {
-					////////////console.log((tags.DOMrender[zeds]);
+					//////////////console.log((tags.DOMrender[zeds]);
 					if (disp >= 5 || zeds == tags.DOMrender.length) {
 						$("#content").css("display", "block");
 						$("#searchError").css("display", "none");
 						twttr.widgets.load();
 						return;
 					} else if (tags.filtration.length > 0) {
-						////////////console.log(("searching");
+						//////////////console.log(("searching");
 						if (tags.DOMrender[zeds].text != null && tags.DOMrender[zeds].text.length > 0) {
-							//////////console.log((tags.inString(tags.DOMrender[zeds].text, tags.filtration));
+							////////////console.log((tags.inString(tags.DOMrender[zeds].text, tags.filtration));
 							if (tags.inString(tags.DOMrender[zeds].text, tags.filtration) == true) {
 								tags.renderToList(tags.DOMrender[zeds], false);
 								tags.DOMrenderOnPage.push(tags.DOMrender[zeds].id);
@@ -1354,9 +1359,9 @@ var elements = {
 					}
 				}
 			}
-			//console.log(match);
+			////console.log(match);
 			if (match == -1) {
-				//////console.log(("MATCHEM UP DIGGA" + match);
+				////////console.log(("MATCHEM UP DIGGA" + match);
 				if (tags.filtration != "") {
 					$("#content").css("display", "none");
 					$("#searchError").css("display", "block");
@@ -1369,7 +1374,7 @@ var elements = {
 		}
 
 		twttr.widgets.load();
-		////////////console.log(("callingWidgets");
+		//////////////console.log(("callingWidgets");
 	},
 	"filter" : function(input, string) {
 		if (input.substring(0, 5) == "text:") {
@@ -1383,8 +1388,11 @@ var elements = {
 	"domListing" : function(obj, hidden, notLazyLoad, Classing, idSuffix) {
 		notLazyLoad = true;
 		var li = document.createElement("li");
+		try{
 		$(li).attr("id", idSuffix + obj.id);
-		if (hidden == true) {
+		}catch(e){
+			//console.log(e.stack);
+		}if (hidden == true) {
 			$(li).css("display", "none");
 		}
 		$(li).attr("class", Classing);
@@ -1400,19 +1408,19 @@ var elements = {
 			profImg.setAttribute("class", "profileImages");
 			topDiv.appendChild(profImg);
 			$(profImg).bind("error", function() {
-				////////////console.log("sideBar" + obj.id);
+				//////////////console.log("sideBar" + obj.id);
 				$(profImg).css("display", "none");
 			})
 		}
 
-		//////////console.log(JSON.stringify(obj));
+		////////////console.log(JSON.stringify(obj));
 		if (obj.name != null) {
 			var str = obj.name.replace(/(^\s+|\s+$)/g, ' ');
 			;
 		} else {
 			var str = "";
 		}
-		//////////console.log(str);
+		////////////console.log(str);
 		var splitString = [str.substr(0, str.indexOf(" ")), str.substr(str.indexOf(" ") + 1)];
 		// "tocirah sneab"]
 		var classes = ["firstName", "lastName"];
@@ -1466,10 +1474,10 @@ var elements = {
 			//div.attr("onerror",)
 			//			tpht.setAttr(div, "onError", tpht.setAttr(div,"style","display:none;"));
 			$(div).bind("error", function() {
-				////////////console.log("sideBar" + obj.id);
+				//////////////console.log("sideBar" + obj.id);
 				$(div).css("display", "none");
 				$("#sideBar" + obj.id).find(".textWithImg").attr("class", "text");
-				////////console.log("ERRORED SORTED");
+				//////////console.log("ERRORED SORTED");
 			})
 			bottomDiv.appendChild(div);
 
@@ -1506,7 +1514,7 @@ var elements = {
 		li.appendChild(topDiv);
 		li.appendChild(bottomDiv);
 
-		//		//////////console.log($(li).html());
+		//		////////////console.log($(li).html());
 		return li;
 
 	},
@@ -1566,19 +1574,19 @@ var elements = {
 				profImg.setAttribute("class", "profileImages");
 				topDiv.appendChild(profImg);
 				$(profImg).bind("error", function() {
-					//////////////console.log(("sideBar" + obj.id);
+					////////////////console.log(("sideBar" + obj.id);
 					$(profImg).css("display", "none");
 				})
 			}
 
-			////////////console.log((JSON.stringify(obj));
+			//////////////console.log((JSON.stringify(obj));
 			if (obj.name != null) {
 				var str = obj.name.replace(/(^\s+|\s+$)/g, ' ');
 				;
 			} else {
 				var str = "";
 			}
-			////////////console.log((str);
+			//////////////console.log((str);
 			var splitString = [str.substr(0, str.indexOf(" ")), str.substr(str.indexOf(" ") + 1)];
 			// "tocirah sneab"]
 			var classes = ["firstName", "lastName"];
@@ -1632,10 +1640,10 @@ var elements = {
 				//div.attr("onerror",)
 				//			tpht.setAttr(div, "onError", tpht.setAttr(div,"style","display:none;"));
 				$(div).bind("error", function() {
-					//////////////console.log(("sideBar" + obj.id);
+					////////////////console.log(("sideBar" + obj.id);
 					$(div).css("display", "none");
 					$("#sideBar" + obj.id).find(".textWithImg").attr("class", "text");
-					//////////console.log(("ERRORED SORTED");
+					////////////console.log(("ERRORED SORTED");
 				})
 				bottomDiv.appendChild(div);
 
@@ -1672,7 +1680,7 @@ var elements = {
 				li.appendChild(topDiv);
 				li.appendChild(bottomDiv);
 			}
-			//		////////////console.log(($(li).html());
+			//		//////////////console.log(($(li).html());
 			return li;
 		}
 	},
@@ -1713,8 +1721,8 @@ var elements = {
 		var li = document.createElement("div");
 		$(li).attr("id", "infoBoxDisplay");
 		$(li).attr("class", "infoBox");
-		//		////////////console.log((JSON.stringify(obj));
-		//		////////////console.log((obj.hashtag);
+		//		//////////////console.log((JSON.stringify(obj));
+		//		//////////////console.log((obj.hashtag);
 		if ( typeof obj.hashtag != "string") {
 			obj.hashtag = "";
 		}
@@ -1729,19 +1737,19 @@ var elements = {
 			profImg.setAttribute("class", "profileImages");
 			topDiv.appendChild(profImg);
 			$(profImg).bind("error", function() {
-				//////////////console.log(("sideBar" + obj.id);
+				////////////////console.log(("sideBar" + obj.id);
 				$(profImg).css("display", "none");
 			})
 		}
 
-		//////////////console.log((JSON.stringify(obj));
+		////////////////console.log((JSON.stringify(obj));
 		if (obj.name != null) {
 			var str = obj.name.replace(/(^\s+|\s+$)/g, ' ');
 			;
 		} else {
 			var str = "";
 		}
-		//////////////console.log((str);
+		////////////////console.log((str);
 		var splitString = [str.substr(0, str.indexOf(" ")), str.substr(str.indexOf(" ") + 1)];
 		// "tocirah sneab"]
 		var classes = ["firstName", "lastName"];
@@ -1799,7 +1807,7 @@ var elements = {
 			//div.attr("onerror",)
 			//			tpht.setAttr(div, "onError", tpht.setAttr(div,"style","display:none;"));
 			$(div).bind("error", function() {
-				//////////////console.log(("sideBar" + obj.id);
+				////////////////console.log(("sideBar" + obj.id);
 				$(div).css("display", "none");
 				$(div).parent().find(".textWithImg").first().attr("class", "text");
 			})
@@ -1848,18 +1856,18 @@ var elements = {
 			li.appendChild(topDiv);
 			li.appendChild(bottomDiv);
 		}
-		//		////////////console.log(($(li).html());
+		//		//////////////console.log(($(li).html());
 		return li;
 		//}
 	}
 }
 var sse = {
 	"longtroll" : function(input) {
-		////////////console.log((input);
+		//////////////console.log((input);
 		var ins = JSON.parse(input);
 		if (ins.hasOwnProperty("tag")) {
 			var timeToBeat = 0;
-			////////////console.log((tags.tagData);
+			//////////////console.log((tags.tagData);
 
 			var newPushArr = new Array();
 			for (var inputs in ins.answers) {
@@ -1876,15 +1884,15 @@ var sse = {
 					}
 					newPushArr.push(ins.answers[inputs]);
 				}
-				//////////////console.log((ins.answers[inputs]);
+				////////////////console.log((ins.answers[inputs]);
 				//check time against last updated
 			}
-			//			////////////console.log((newPushArr);
+			//			//////////////console.log((newPushArr);
 			if (newPushArr.length > 0) {
 				tags.renew(newPushArr);
 			}
 		} else {
-			//////////////console.log((input.data);
+			////////////////console.log((input.data);
 		}
 
 	}
@@ -1906,8 +1914,8 @@ var general = {
 	},
 	"refreshLabelSize" : function() {
 		if ( typeof config.sizesOfLabels != "function") {
-			////////////console.log(("WORKING!!!");
-			////////////console.log((config.sizesOfLabels);
+			//////////////console.log(("WORKING!!!");
+			//////////////console.log((config.sizesOfLabels);
 			var max = 0;
 			var maxJSON = 0;
 			for (var i in config.bandSizes) {
@@ -1919,10 +1927,10 @@ var general = {
 			}
 			for (var i in config.sizesOfLabels) {
 				if (config.sizesOfLabels.hasOwnProperty(i)) {
-					////////////console.log((i + "," + config.sizesOfLabels[i]);
+					//////////////console.log((i + "," + config.sizesOfLabels[i]);
 					for (var q in config.bandSizes) {
 						if (config.bandSizes.hasOwnProperty(q)) {
-							////////////console.log(((config.sizesOfLabels[i] - q) + "," + q);
+							//////////////console.log(((config.sizesOfLabels[i] - q) + "," + q);
 							if (config.sizesOfLabels[i] - q < q || config.sizesOfLabels[i] - q < 0) {
 								config.sizesOfLabels[i] = q;
 								break;
@@ -1934,8 +1942,8 @@ var general = {
 					config.sizesOfLabels[i] = maxJSON.toString();
 				}
 			}
-			//////////////console.log((max);
-			////////////console.log((config.sizesOfLabels);
+			////////////////console.log((max);
+			//////////////console.log((config.sizesOfLabels);
 		}
 		else {
 			general.refreshLabelSize();
@@ -1953,12 +1961,12 @@ var general = {
 		}
 		});
 		*/
-		//		////////////console.log((opts);
+		//		//////////////console.log((opts);
 		var content = document.getElementById("modalInside");
 		var textIn = document.createElement("div");
 		$(textIn).attr("id", "modalText");
 		if (opts.type == "dialog") {
-			//			////////////console.log((opts.message);
+			//			//////////////console.log((opts.message);
 			textIn.innerHTML = opts.message;
 			content.appendChild(textIn);
 			var confirm = document.createElement("a");
@@ -2012,7 +2020,7 @@ var general = {
 		extraString += "#type=hashtag&count=none";
 		if (tags.inBound.length > 0) {
 			var center = maps.map.getCenter().toString().replace(/[()]/g, "").split(",");
-			////////////console.log((center);
+			//////////////console.log((center);
 			var dist = [999, ""];
 			for (var i in tags.inBound) {
 				if (tags.inBound.hasOwnProperty(i)) {
@@ -2037,7 +2045,7 @@ var general = {
 		 if(i > 0){
 		 extraString += "%2C";
 		 }
-		 ////////////console.log((tags.campaign[i]);
+		 //////////////console.log((tags.campaign[i]);
 		 extraString+=tags.campaign[i].replace(/#/g,"");
 		 }
 		 if(tags.inBound.length == 1){
@@ -2050,7 +2058,7 @@ var general = {
 		//extraString = extraString + "&hashtags=" + tags.singleTag.replace(/#/g, "");
 		$('#twitterButton').hide();
 		$(tweet).attr("src", extraString + "&text=" + "My fave student hotspot is #ASOS[Insert Uni Here]");
-		//console.log("reloading");
+		////console.log("reloading");
 		tweet.contentWindow.location.reload();
 	}
 }

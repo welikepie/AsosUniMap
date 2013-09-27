@@ -38,7 +38,10 @@ function InfoBubble(opt_options) {
 	this.type = null;
 	if (opt_options["type"] != undefined) {
 		this.type = opt_options["type"];
+		this.objLength = opt_options["objLength"];
+		this.hashtag = opt_options["hash"];
 	}
+	
 	this.activeTab_ = null;
 	this.baseZIndex_ = 100;
 	this.isOpen_ = false;
@@ -97,8 +100,10 @@ function InfoBubble(opt_options) {
 	}
 
 	this.buildDom_();
-
+//	//console.log(options);
 	this.setValues(options);
+
+//	//console.log(this.get(objLength));
 }
 
 window['InfoBubble'] = InfoBubble;
@@ -241,6 +246,8 @@ InfoBubble.prototype.buildDom_ = function() {
 	if (this.type != null) {
 		var HeadBar = document.createElement("div");
 		HeadBar.setAttribute("class", "noGeoLoc");
+		HeadBar.setAttribute("id",this.hashtag+"boxyThing");
+		//console.log(this["objLength"]);
 		if(this.objLength > 1){
 		$(HeadBar).text("no geo location for these spots");
 		}
@@ -248,10 +255,9 @@ InfoBubble.prototype.buildDom_ = function() {
 		$(HeadBar).text("no geo location for this spot");
 		}
 		contentContainer.appendChild(HeadBar);
-		//console.log(HeadBar);
+		////console.log(HeadBar);
 	}
-	////console.log(content);
-
+	//////console.log(content);
 	contentContainer.appendChild(content);
 
 	// Arrow
@@ -712,6 +718,19 @@ InfoBubble.prototype.updateArrowStyle_ = function() {
 	}
 };
 
+InfoBubble.prototype.getObjLength = function(){
+		//console.log(this);
+	return parseInt(this.get('objLength'), 10) || 0;
+}
+InfoBubble.prototype['getObjLength'] = InfoBubble.prototype.getObjLength;
+
+
+InfoBubble.prototype.setObjLength = function(content) {
+	this.set('objLength', content);
+};
+InfoBubble.prototype['setObjLength'] = InfoBubble.prototype.setObjLength;
+
+
 /**
  * Set the padding of the InfoBubble
  *
@@ -834,9 +853,9 @@ InfoBubble.prototype.draw = function() {
 	}
 
 	// Adjust for the height of the info bubble
-	console.log(pos.y+","+height+","+arrowSize);
+	//console.log(pos.y+","+height+","+arrowSize);
 	var top = pos.y - (height + arrowSize);
-	////console.log("top:"+top);
+	//////console.log("top:"+top);
 	if (anchorHeight) {
 		// If there is an anchor then include the height
 		top -= anchorHeight;
@@ -844,17 +863,17 @@ InfoBubble.prototype.draw = function() {
 
 	var left = pos.x - arrowPosition;
 	//- (width * arrowPosition);
-	////console.log(arrowPosition);
+	//////console.log(arrowPosition);
 	/*if(document.documentElement.clientWidth > 480){
 
 	this.bubble_.style['top'] = this.px(top);
 	this.bubble_.style['left'] = this.px(left);
 	}else{*/
-	//		////console.log(pos.y);
-	//		////console.log(top);
-	// //console.log(pos.y);
-	// //console.log(this.get('map').getDiv().offsetHeight);
-	console.log(top);
+	//		//////console.log(pos.y);
+	//		//////console.log(top);
+	// ////console.log(pos.y);
+	// ////console.log(this.get('map').getDiv().offsetHeight);
+	//console.log(top);
 	this.bubble_.style['top'] = this.px(top);
 	// +this.get('map').getDiv().offsetHeight + 17;
 	this.bubble_.style['left'] = this.px(left);
@@ -940,7 +959,7 @@ InfoBubble.prototype['close'] = InfoBubble.prototype.close;
  */
 InfoBubble.prototype.open = function(opt_map, opt_anchor) {
 	var that = this;
-	//console.log("function called");
+	////console.log("function called");
 	window.setTimeout(function() {
 		that.open_(opt_map, opt_anchor);
 	}, 0);
@@ -953,40 +972,49 @@ InfoBubble.prototype.open = function(opt_map, opt_anchor) {
  * @param {google.maps.MVCObject=} opt_anchor Optional anchor to position at.
  */
 InfoBubble.prototype.open_ = function(opt_map, opt_anchor) {
-	//console.log("passed on");
+	////console.log("passed on");
 	this.updateContent_();
-	//console.log("updated");
+	////console.log("updated");
 	if (opt_map) {
 		this.setMap(opt_map);
 	}
-	//console.log("map set");
+	////console.log("map set");
 	if (opt_anchor) {
 		this.set('anchor', opt_anchor);
 		this.bindTo('anchorPoint', opt_anchor);
 		this.bindTo('position', opt_anchor);
 	}
-	//console.log("set position");
+	////console.log("set position");
 
 	// Show the bubble and the show
 	this.bubble_.style['display'] = this.bubbleShadow_.style['display'] = 'block';
 	var animation = !this.get('disableAnimation');
-	//console.log("setAnimation");
+	////console.log("setAnimation");
 
 	if (animation) {
 		// Add the animation
 		this.bubble_.className += ' ' + this.animationName_;
 		this.bubbleShadow_.className += ' ' + this.animationName_;
 	}
-	//console.log("animated");
+	////console.log("animated");
 
 	this.redraw_();
 	//return true;
-	//console.log("redrawOne");
+	////console.log("redrawOne");
 	this.isOpen_ = true;
-	//console.log("re set isOpen");
+	////console.log("re set isOpen");
 	this.redraw_();
-	//console.log("redrawTwo");
-
+	////console.log("redrawTwo");
+if(this.type!=null){
+//	alert(this.objLength+","+this.hashtag);
+//	console.log($("#"+this.hashtag+"boxyThing"));
+	if(this.objLength > 1){
+		$("#"+this.hashtag+"boxyThing").text("no geo location for these spots");
+		}
+		else{
+		$("#"+this.hashtag+"boxyThing").text("no geo location for this spot");
+		}
+}
 	var pan = !this.get('disableAutoPan');
 	if (pan) {
 		var that = this;
@@ -995,7 +1023,7 @@ InfoBubble.prototype.open_ = function(opt_map, opt_anchor) {
 			that.panToView();
 			twttr.widgets.load();
 			/*    if(that.content.attributes.childNodes().indexOf("data-opened") == -1){
-			 ////console.log("LOADING");
+			 //////console.log("LOADING");
 			 //      	      twttr.widgets.load();
 			 }
 			 var longish = document.getElementsByClassName("openedTweet");*/
@@ -1039,6 +1067,14 @@ InfoBubble.prototype['position_changed'] = InfoBubble.prototype.position_changed
 /**
  * Pan the InfoBubble into view
  */
+
+
+InfoBubble.prototype.getContent = function() {
+	return /** @type {Node|string} */(this.get('content'));
+};
+InfoBubble.prototype['getContent'] = InfoBubble.prototype.getContent;
+
+
 InfoBubble.prototype.panToView = function() {
 	var projection = this.getProjection();
 
@@ -1054,7 +1090,7 @@ InfoBubble.prototype.panToView = function() {
 
 	var anchorHeight = this.getAnchorHeight_();
 	var height = $(this.bubble_).height() + anchorHeight;
-	console.log("bighigh:"+($(this.bubble_).height()+anchorHeight));
+	//console.log("bighigh:"+($(this.bubble_).height()+anchorHeight));
 	var map = this.get('map');
 	var mapDiv = map.getDiv();
 	var mapHeight = mapDiv.offsetHeight;
@@ -1139,6 +1175,7 @@ InfoBubble.prototype.removeChildren_ = function(node) {
  *
  * @param {string|Node} content The content to set.
  */
+
 InfoBubble.prototype.setContent = function(content) {
 	this.set('content', content);
 };
@@ -1537,16 +1574,16 @@ InfoBubble.prototype.getElementSize_ = function(element, opt_maxWidth, opt_maxHe
  * @private
  */
 InfoBubble.prototype.redraw_ = function() {
-	//console.log("CALLING Y'ALL");
+	////console.log("CALLING Y'ALL");
 
 	this.figureOutSize_();
-	//console.log("sizing");
+	////console.log("sizing");
 	//return true;
 	this.positionCloseButton_();
-	//console.log("closing");
+	////console.log("closing");
 
 	this.draw();
-	//console.log("drawing");
+	////console.log("drawing");
 };
 
 /**
@@ -1554,14 +1591,14 @@ InfoBubble.prototype.redraw_ = function() {
  * @private
  */
 InfoBubble.prototype.figureOutSize_ = function() {
-	//console.log("sizing y'all");
+	////console.log("sizing y'all");
 	var map = this.get('map');
-	//console.log("getting");
+	////console.log("getting");
 
 	if (!map) {
 		return;
 	}
-	//console.log("noBreak");
+	////console.log("noBreak");
 	var padding = this.getPadding_();
 	var borderWidth = this.getBorderWidth_();
 	var borderRadius = this.getBorderRadius_();
@@ -1577,13 +1614,13 @@ InfoBubble.prototype.figureOutSize_ = function() {
 	var height = /** @type {number} */(this.get('minHeight') || 0);
 	var maxWidth = /** @type {number} */(this.get('maxWidth') || 0);
 	var maxHeight = /** @type {number} */(this.get('maxHeight') || 0);
-	//console.log("done getting");
-
+	var objLength = /** @type {number} */(this.get('objLength') || 0);
+	////console.log("done getting");
 	maxWidth = Math.min(mapWidth, maxWidth);
 	maxHeight = Math.min(mapHeight, maxHeight);
 	var tabWidth = 0;
-	//console.log("maxWidth");
-	//console.log(this.tabs_.length);
+	////console.log("maxWidth");
+	////console.log(this.tabs_.length);
 
 	if (this.tabs_.length) {
 		// If there are tabs then you need to check the size of each tab's content
@@ -1616,20 +1653,20 @@ InfoBubble.prototype.figureOutSize_ = function() {
 			}
 		}
 	} else {
-		//console.log("started content");
+		////console.log("started content");
 
 		var content = /** @type {string|Node} */(this.get('content'));
-		//console.log(typeof content);
+		////console.log(typeof content);
 
 		if ( typeof content == 'string') {			content = this.htmlToDocumentFragment_(content);
 
 		}
 		if (content) {
-			//console.log("contenting");
+			////console.log("contenting");
 			var contentSize = this.getElementSize_(content, maxWidth, maxHeight);
-			//console.log(contentSize);
+			////console.log(contentSize);
 			//return true;
-			////console.log(width+","+contentSize.width);
+			//////console.log(width+","+contentSize.width);
 			//if(document.documentElement.clientWidth > 480){
 			if (width < contentSize.width) {
 				width = contentSize.width;
@@ -1641,7 +1678,7 @@ InfoBubble.prototype.figureOutSize_ = function() {
 			//}
 		}
 	}
-	////console.log(width+","+ maxWidth);
+	//////console.log(width+","+ maxWidth);
 
 	if (maxWidth) {
 		width = Math.min(width, maxWidth);
@@ -1671,16 +1708,16 @@ InfoBubble.prototype.figureOutSize_ = function() {
 		this.tabHeight_ = tabHeight;
 		this.tabsContainer_.style['width'] = this.px(tabWidth);
 	}
-	////console.log(width);
-	//console.log(height+30);
+	//////console.log(width);
+	////console.log(height+30);
 	if (document.documentElement.clientWidth < 480) {
 		this.contentContainer_.style['width'] = this.px(Math.floor(document.documentElement.clientWidth * 0.85));
 	} else {
 		this.contentContainer_.style['width'] = this.px(width);
 	}
-	console.log(height+","+padding);
+	//console.log(height+","+padding);
 	//this.contentContainer_.style['height'] = this.px((height+anchorHeight)/2);
-	console.log((height + 60 + padding * 2)/2);
+	//console.log((height + 60 + padding * 2)/2);
 	//this.px((height + 60 + padding * 2));
 	//this.contentContainer_.style['height'] = this.px(300);
 };

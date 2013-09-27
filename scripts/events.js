@@ -43,7 +43,7 @@ window.onload = function() {
 	var totalHeight = window.innerHeight;
 
 	//		console.log($("body"));
-
+	//alert(document.documentElement.clientWidth);
 	if (document.documentElement.clientWidth < 480) {
 		
 			$("#search").html("");
@@ -125,7 +125,7 @@ window.onload = function() {
 				}
 			});
 
-			$(document.getElementById("searchGO")).bind('click', function() {
+			$("#searchGO").bind('click', function() {
 
 				$("#content").css("display", "block");
 				var stuff = $("#searchField").val();
@@ -241,8 +241,10 @@ window.onload = function() {
 		}, 0);
 
 	} else {
-		$("#searchProxy").html("");
-		$("#socialProxy").html("");
+		//console.log($("#searchProxy"));
+		//$("#searchProxy").html("");
+		//$("#socialProxy").html("");
+		
 		$('#twitterButton').load(function() {
 			$(this).show();
 		});
@@ -251,7 +253,7 @@ window.onload = function() {
 		config.contHeight = contHeight;
 		$("#SurroundContainer").css("height", contHeight + 6);
 		$("#surrounder").css("height", contHeight - 42);
-
+		document.getElementById("searchProxy").innerHTML = "";
 	}
 	$('#twitterButton').load(function() {
 		$(this).show();
@@ -284,7 +286,7 @@ window.onload = function() {
 	});
 	tags.retrieve();
 	config.sizesOfLabels();
-	$(document.getElementById("searchClear")).bind('click', function() {
+	$("#searchClear").bind('click', function() {
 
 		$("#content").css("display", "block");
 		$("#searchError").css("display", "none");
@@ -337,7 +339,7 @@ window.onload = function() {
 		});
 	});
 
-	$(document.getElementById("insta")).bind('click', function() {
+	$(".insta").bind('click', function() {
 		$("#modalInside").html("");
 		general.customModal({
 			"type" : "alert",
@@ -346,7 +348,7 @@ window.onload = function() {
 		});
 
 	});
-	$(document.getElementById("faceb")).bind('click', function() {
+	$(".faceb").bind('click', function() {
 		$("#modalInside").html("");
 		var inputToSend = "";
 		general.customModal({
