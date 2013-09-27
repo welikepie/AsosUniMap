@@ -1183,15 +1183,18 @@ var elements = {
 						appDiv.appendChild(elements.domListing(tags.arrEls[i][0], false, false, "", "" + "LI"));
 						tags.arrEls[i].splice(0, 1);
 					}
+					
 				} 
-				if(tags.arrEls[i].length <= 10){
+				else if(tags.arrEls[i].length <= 10){
 						console.log("lowLength");
 						console.log(tags.arrEls[i]);
 					for (var k = 0; k < tags.arrEls[i].length; k++) {
 						appDiv.appendChild(elements.domListing(tags.arrEls[i][0], false, false, "", "" + "LI"));
 						tags.arrEls[i].splice(0, 1);
 					}
+					
 				}
+				twttr.widgets.load();
 				tags.tagMarkerNoGeo[i].info.setContent(divCont);
 				tags.tagMarkerNoGeo[i].info.redraw_();
 				//				$( 'li' ).off( 'scroll' );
@@ -1213,6 +1216,7 @@ var elements = {
 							}
 						}
 					}
+					twttr.widgets.load();
 				});
 				if (tags.tagMarkerNoGeo[i].info.isOpen() == true) {
 					tags.tagMarkerNoGeo[i].info.close();
@@ -1462,7 +1466,17 @@ var elements = {
 			icon.setAttribute("class", "facebImage");
 		}
 		topDiv.appendChild(icon);
-
+		if (obj.source == "TWTTR") {
+			var follow = document.createElement("a");
+			follow.setAttribute("href", "https://twitter.com/" + obj.user);
+			follow.setAttribute("class", "twitter-follow-button");
+			follow.setAttribute("data-show-screen-name","false");
+			follow.setAttribute("data-show-count", "false");
+			var followText = document.createTextNode("Follow @" + obj.user);
+			follow.appendChild(followText);
+			topDiv.appendChild(follow);
+		}
+		
 		var bottomDiv = document.createElement("div");
 		bottomDiv.setAttribute("class", "bottomDiv");
 

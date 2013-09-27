@@ -46,11 +46,12 @@ html .lister ::-webkit-scrollbar-track{margin-right:4px;background-color:#ffda00
 html .lister ::-webkit-scrollbar-thumb{-webkit-border-radius:6px;border-radius:6px;background:#dbb900;margin-right:4px;}
 html .lister .noGeoHeading{margin:0px;text-transform:uppercase;}
 html .lister .listNoGeoTag{width:100%;float:left;list-style:none;padding:0px;}html .lister .listNoGeoTag li{list-style:none;width:100%;float:left;padding:5px 0px 5px 0px;border-bottom:1px solid #000000;}html .lister .listNoGeoTag li .socialLinkage{float:left;text-decoration:none;color:#000000;width:100%;}
-html .lister .listNoGeoTag li .topDiv{float:left;font-family:"futura-pt-1","futura-pt-2",sans-serif;width:100%;margin-bottom:10px;}html .lister .listNoGeoTag li .topDiv .twttrImage,html .lister .listNoGeoTag li .topDiv .facebImage,html .lister .listNoGeoTag li .topDiv .instaImage{width:24px;height:24px;float:right;margin-top:0px;margin-right:10px;}
+html .lister .listNoGeoTag li .topDiv{float:left;font-family:"futura-pt-1","futura-pt-2",sans-serif;width:100%;margin-bottom:10px;}html .lister .listNoGeoTag li .topDiv .twitter-follow-button{position:relative;float:right;margin-top:-20px;right:10px;clear:both;}
+html .lister .listNoGeoTag li .topDiv .twttrImage,html .lister .listNoGeoTag li .topDiv .facebImage,html .lister .listNoGeoTag li .topDiv .instaImage{width:24px;height:24px;float:right;margin-top:0px;margin-right:10px;}
 html .lister .listNoGeoTag li .topDiv .twttrImage{background-image:url("../images/twitMini.png");background-repeat:no-repeat;}
 html .lister .listNoGeoTag li .topDiv .facebImage{background-image:url("../images/faceMini.png");background-repeat:no-repeat;}
 html .lister .listNoGeoTag li .topDiv .instaImage{background-image:url("../images/instaMini.png");background-repeat:no-repeat;}
-html .lister .listNoGeoTag li .topDiv .twitter-follow-button{position:absolute;float:right;clear:both;margin-top:30px;right:20px;}
+html .lister .listNoGeoTag li .topDiv .twitter-follow-button{position:relative;float:right;margin-top:-20px;right:10px;clear:both;}
 html .lister .listNoGeoTag li .topDiv .names{float:left;}html .lister .listNoGeoTag li .topDiv .names .userNameTag{clear:left;font-size:12px;font-weight:bold;margin:0px;display:block;}
 html .lister .listNoGeoTag li .topDiv .names .nameContainer{padding-bottom:5px;float:left;border-bottom:3px solid #000000;}html .lister .listNoGeoTag li .topDiv .names .nameContainer p{line-height:12px;font-weight:bold;font-size:12px;margin:0px;}
 html .lister .listNoGeoTag li .topDiv img{float:left;border:5px solid #22b9c8;margin-right:8px;width:48px;height:48px;}
