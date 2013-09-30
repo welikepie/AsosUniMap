@@ -802,13 +802,8 @@ var tags = {
 			return 0;
 
 		});
-		
-		
-		//////////////console.log(("starting");
 		for (var zed in tags.MAPrender) {
 			var obj = tags.MAPrender[zed];
-			//	//////////////console.log((obj);
-			////////////////console.log((obj.position);
 			var image = "images/mapMarker.png"
 			if (config.inArr(tags.MAPrender[zed].user, config.whitelistNames)) {
 				image = "images/asosMarker.png"
@@ -821,14 +816,6 @@ var tags = {
 				"disableAutoPan" : true,
 				"text" : obj.text
 			});
-			//			////////////console.log((marker);
-
-			/*			marker.info = new google.maps.InfoWindow({
-			"content" : elements.info(obj),
-			"zIndex" : 9005
-			});*/
-			//			var t = new In
-			////console.log(obj);
 			var markerObj = {
 				content : elements.info(obj),
 				zIndex : 9001,
@@ -1595,7 +1582,6 @@ var elements = {
 					$(profImg).css("display", "none");
 				})
 			}
-
 			//////////////console.log((JSON.stringify(obj));
 			if (obj.name != null) {
 				var str = obj.name.replace(/(^\s+|\s+$)/g, ' ');

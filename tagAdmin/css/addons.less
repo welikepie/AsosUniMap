@@ -1,6 +1,78 @@
 html{
-    height:100%;}
+    height:100%;
+    
+    
     body{
+        #container{
+            #JS-loc{}
+            #JS-camp{
+                display:none;
+                }
+            #JS-DB{}
+            #DBFilt{
+                height:600px;
+                #JS-noResults{
+                    margin-top:20px;
+                        display:none;
+                        }
+                #searchSaveDiv{
+                margin-top:20px;
+                #JS-searchStuff{
+                    margin-bottom:0px;
+                    width: 250px;
+                    }
+                #JS-DBSave{
+                    display:none;
+                    float:right;
+                    }
+                }
+                #listContainer{
+                    height:420px;
+                    overflow:auto;
+                    
+                    #JS-DBInfo{
+                        list-style:none;                        
+                            li{
+                                float:left;
+                                padding-top:10px;
+                                //margin-bottom:10px;
+                                border-bottom:1px solid gray;
+                                clear:both;
+                                list-style:none;
+                                input[type="checkbox"] {
+                                    width:20px;
+                                    height:20px;
+                                    float:left;
+                                    }
+                                textarea{float:right;  resize: none; width:350px;}
+                                label{float:left;clear:left;}
+                                div{float:left;}
+                                .namesDiv{
+                                    font-weight: bold;
+                                    width: 200px;
+                                    overflow: hidden;
+                                    text-overflow: ellipsis;
+                                }
+                                .FACEB{
+                                    width: 24px;
+                                    height: 24px;
+                                    background-image:url("../../images/faceMini.png");
+                                    }
+                                .TWTTR{
+                                    background-image:url("../../images/twitMini.png");
+                                    width: 24px;
+                                    height: 24px;
+                                }
+                                .INSTA{
+                                    background-image:url("../../images/instaMini.png");
+                                    width: 24px;
+                                    height: 24px;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         height:600px;
         .left{
             float:left;
@@ -178,4 +250,5 @@ body > .well{
             }
     }
     
+}
 }

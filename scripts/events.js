@@ -64,6 +64,7 @@ window.onload = function() {
 			$("#map-overlay").css("bottom", (contHeight * -1) + 60);
 			
 			$("#searchGO").css("display", "block");
+
 			//	//console.log("displaying!");
 			
 			$("#searchProxy").css("display", "none");
