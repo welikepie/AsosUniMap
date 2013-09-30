@@ -33,6 +33,8 @@ if (isset($_POST["query"])) {
     $queryToUse = "SELECT id,user,name,source,visible,text,UNIX_TIMESTAMP(time) as time FROM content";
     if (isset($_POST["query"])) {
         $queryToUse .= " WHERE text like '%" . $_POST["query"] . "%'";
+		$queryToUse .= " OR user like '%" . $_POST["query"] . "%'";
+		$queryToUse .= " OR name like '%" . $_POST["query"] . "%'";
     }
     execute_query($queryToUse, function($row)
     {

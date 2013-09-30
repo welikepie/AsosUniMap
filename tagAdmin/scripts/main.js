@@ -23,7 +23,13 @@ var divSelected = "location";
 window.onload = function() {
 	//these things are all here to drop in to the location window by using already present code and hiding selections.
 	document.getElementById("JS-loc").click();
-
+	window.setInterval(function(){
+		if(divSelected == "dbFilter" && document.getElementById("JS-DBSave").className == "btn btn-small btn-success"){
+			document.getElementById("JS-DBSave").className="btn btn-small btn-primary";
+			document.getElementById("JS-DBSave").value="Autosave in Progress";
+			document.getElementById("JS-DBSave").click();
+		}
+	},10000);
 	commandSend("start", "post", function(response) {
 		//console.log(response);
 		//loadTagJSON();
@@ -179,8 +185,11 @@ document.getElementById("JS-DBSave").onclick = function() {
 	getDB("writes=" + toSend + "&query=" + document.getElementById("JS-searchStuff").value, "read", function(input) {
 		currentInfo = input[0];
 		hidden = input[1];
-		console.log(hidden);
-		document.getElementById("JS-DBSave").style.display="none";
+		//console.log(hidden);
+		window.setTimeout(function(){
+		document.getElementById("JS-DBSave").className="btn";
+		document.getElementById("JS-DBSave").value="Save";
+		},500);
 		currentInfo.sort(function(a, b) {
 			var aTime = parseInt(a.time, 10) * 1000;
 			var bTime = parseInt(b.time, 10) * 1000;
@@ -338,7 +347,12 @@ var addToList = function(object, integer, after) {
 	input.setAttribute("type", "checkbox");
 	input.checked = (object.visible == 1);
 	input.onclick = function(){
-		document.getElementById("JS-DBSave").style.display = "block";
+		console.log(this.id);
+		if(hidden.indexOf(this.id)>-1){
+			hidden.splice(hidden.indexOf(this.id),1);
+		}
+		document.getElementById("JS-DBSave").className = "btn btn-small btn-success";
+		document.getElementById("JS-DBSave").value = "Save";
 	}
 	input.setAttribute("id", object.id);
 	input.setAttribute("class", "checkForVisible");
@@ -372,9 +386,7 @@ var getDB = function(input, type, callback) {
 		};
 		xhReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 		xhReq.send(input);
-	} else if (type == "write") {
-
-	}
+	} 
 }
 var commandSend = function(input, type, callback) {
 	var xhReq = new XMLHttpRequest();
