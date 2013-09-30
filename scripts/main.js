@@ -585,7 +585,7 @@ var mmanager = {
 		//alert("SHIT BE DONE");
 		setTimeout(function() {
 			$("#spinney").css("display", "none");
-		}, 4000);
+		}, 500);
 	}
 }
 var tags = {
@@ -1539,7 +1539,7 @@ var elements = {
 
 	"list" : function(obj, hidden, notLazyLoad) {
 		notLazyLoad = true;
-		if (obj.source == "TWTTR" && document.documentElement.clientWidth > 480) {
+/*		if (obj.source == "TWTTR" && document.documentElement.clientWidth > 480) {
 
 			var insLI = document.createElement("li");
 			$(insLI).attr("id", "sideBar" + obj.id);
@@ -1573,7 +1573,7 @@ var elements = {
 			link.appendChild(lText);
 			insLI.appendChild(li);
 			return insLI;
-		} else if (obj.source != "TWTTR" || document.documentElement.clientWidth < 480) {
+		} else if (obj.source != "TWTTR" || document.documentElement.clientWidth < 480) {*/
 			var li = document.createElement("li");
 			$(li).attr("id", "sideBar" + obj.id);
 			if (hidden == true) {
@@ -1586,13 +1586,12 @@ var elements = {
 			$(li).attr("data-textContent", obj.text);
 			var topDiv = document.createElement("div");
 			topDiv.setAttribute("class", "topDiv");
-			if (obj.imgURL != "") {
+			if (obj.userIMG != "") {
 				var profImg = document.createElement("img");
 				profImg.setAttribute("src", obj.userIMG);
 				profImg.setAttribute("class", "profileImages");
 				topDiv.appendChild(profImg);
 				$(profImg).bind("error", function() {
-					////////////////console.log(("sideBar" + obj.id);
 					$(profImg).css("display", "none");
 				})
 			}
@@ -1610,8 +1609,15 @@ var elements = {
 			var classes = ["firstName", "lastName"];
 			var domDiv = document.createElement("div");
 			domDiv.setAttribute("class", "nameContainer");
+			console.log(splitString);
+			for (var i = 0; i < splitString.length; i++) {
+				if(splitString[i].replace(/(^\s+|\s+$)/g, '').length == 0){
+					splitString.splice(i,1);
+				}
+			}
 			for (var i = 0; i < splitString.length; i++) {
 				var addDiv = document.createElement("p");
+				console.log(splitString.length);
 				addDiv.setAttribute("class", classes[i]);
 				var addDivText = document.createTextNode(splitString[i].toUpperCase());
 				addDiv.appendChild(addDivText);
@@ -1642,6 +1648,16 @@ var elements = {
 				icon.setAttribute("class", "facebImage");
 			}
 			topDiv.appendChild(icon);
+					if (obj.source == "TWTTR") {
+			var follow = document.createElement("a");
+			follow.setAttribute("href", "https://twitter.com/" + obj.user);
+			follow.setAttribute("class", "twitter-follow-button");
+			follow.setAttribute("data-show-screen-name","false");
+			follow.setAttribute("data-show-count", "false");
+			var followText = document.createTextNode("Follow @" + obj.user);
+			follow.appendChild(followText);
+			topDiv.appendChild(follow);
+		}
 
 			var bottomDiv = document.createElement("div");
 			bottomDiv.setAttribute("class", "bottomDiv");
@@ -1700,7 +1716,7 @@ var elements = {
 			}
 			//		//////////////console.log(($(li).html());
 			return li;
-		}
+		//}
 	},
 	"info" : function(obj) {
 
