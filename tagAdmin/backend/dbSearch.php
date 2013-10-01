@@ -1,6 +1,6 @@
 <?php
 require_once 'dbCreds.php';
-$DBToUse = $devCredsLocal;
+$DBToUse = $devCredsLocal; //devCreds;
 $db      = null;
 $results = array(array(),array());
 if (!defined('JSON_PRETTY_PRINT')) {
@@ -34,7 +34,6 @@ if (isset($_POST["query"])) {
     if (isset($_POST["query"])) {
         $queryToUse .= " WHERE text like '%" . $_POST["query"] . "%'";
 		$queryToUse .= " OR user like '%" . $_POST["query"] . "%'";
-		$queryToUse .= " OR name like '%" . $_POST["query"] . "%'";
     }
     execute_query($queryToUse, function($row)
     {

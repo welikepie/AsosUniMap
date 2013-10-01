@@ -6,6 +6,40 @@ var currentInfo;
 var hidden;
 var noResultsWarning = "<strong>There was a disturbance in the Force...</strong>The search term '&%%&' does not exist.";
 
+
+if (!Array.prototype.indexOf) {
+    Array.prototype.indexOf = function (searchElement /*, fromIndex */ ) {
+        "use strict";
+        if (this == null) {
+            throw new TypeError();
+        }
+        var t = Object(this);
+        var len = t.length >>> 0;
+        if (len === 0) {
+            return -1;
+        }
+        var n = 0;
+        if (arguments.length > 0) {
+            n = Number(arguments[1]);
+            if (n != n) { // shortcut for verifying if it's NaN
+                n = 0;
+            } else if (n != 0 && n != Infinity && n != -Infinity) {
+                n = (n > 0 || -1) * Math.floor(Math.abs(n));
+            }
+        }
+        if (n >= len) {
+            return -1;
+        }
+        var k = n >= 0 ? n : Math.max(len - Math.abs(n), 0);
+        for (; k < len; k++) {
+            if (k in t && t[k] === searchElement) {
+                return k;
+            }
+        }
+        return -1;
+    }
+}
+
 //for retrieving, drop what exists in to newCoordinates from tags. if exists, swap in during creation, else leave blank.
 //change hadamar to not compute if blank.
 Math.toDegrees = function(angle) {
@@ -115,16 +149,16 @@ window.onbeforeunload = function() {
 	commandSend("end", "post", function() {
 	});
 }
-document.getElementById('JS-searchStuff').onkeypress = function(e) {
+$('#JS-searchStuff').on("keypress",function(e) {
 	if (e.which == 13) {
 		document.getElementById("JS-DBSearch").click();
 	}
-}
+});
 
 document.getElementById("JS-DBSearch").onclick = function() {
-	document.getElementById("listContainer").style.display = "none";
-	document.getElementById("JS-noResults").style.display = "none";
-	document.getElementsByClassName("spinner")[0].style.display = "block";
+	$("#listContainer").css("display", "none");
+	$("#JS-noResults").css("display", "none");
+	$(".spinner").css("display","block");
 
 	getDB("query=" + document.getElementById("JS-searchStuff").value, "read", function(input) {
 		currentInfo = input[0];
@@ -161,14 +195,14 @@ document.getElementById("JS-DBSearch").onclick = function() {
 			currentInfo.splice(0, 1);
 
 		}
-		document.getElementsByClassName("spinner")[0].style.display = "none";
-		document.getElementById("listContainer").style.display = "block";
+		$(".spinner").css("display","none");
+		$("#listContainer").css("display","block");
 	});
 }
 
 document.getElementById("JS-DBSave").onclick = function() {
 	var toSend = "";
-	var retrieval = document.getElementsByClassName("checkForVisible");
+	var retrieval = $(".checkForVisible");
 	for (var i = 0; i < retrieval.length; i++) {
 		//	//console.log(retrieval[i]);
 		if (retrieval[i].checked == true) {
@@ -182,13 +216,13 @@ document.getElementById("JS-DBSave").onclick = function() {
 			}
 			toSend += hidden[i];
 	}
-	getDB("writes=" + toSend + "&query=" + document.getElementById("JS-searchStuff").value, "read", function(input) {
+	getDB("writes=" + toSend + "&query=" + $("#JS-searchStuff").val(), "read", function(input) {
 		currentInfo = input[0];
 		hidden = input[1];
 		//console.log(hidden);
 		window.setTimeout(function(){
-		document.getElementById("JS-DBSave").className="btn";
-		document.getElementById("JS-DBSave").value="Save";
+		$("#JS-DBSave").attr("class","btn");
+		$("#JS-DBSave").val("Save");
 		},500);
 		currentInfo.sort(function(a, b) {
 			var aTime = parseInt(a.time, 10) * 1000;
@@ -201,7 +235,7 @@ document.getElementById("JS-DBSave").onclick = function() {
 			}
 			return 0;
 		});
-		document.getElementById("JS-DBInfo").innerHTML = "";
+		$("#JS-DBInfo").html("");
 		var longish = 0;
 		var arrLong = currentInfo.length
 		for (var i = 0; i < arrLong; i++) {
@@ -331,17 +365,18 @@ var addToList = function(object, integer, after) {
 	var newEl = document.createElement("div");
 	newEl.setAttribute("class", "namesDiv");
 	if (object.source != "FACEB") {
-		newEl.textContent = "@" + object.user;
+		newEl.innerHTML = "@" + object.user;
 	} else {
-		newEl.textContent = object.name;
+		newEl.innerHTML = object.name;
 	}
 	li.appendChild(newEl);
 	var text = document.createElement("textarea");
+	text.setAttribute("readonly","");
 	text.value = object.text;
 	li.appendChild(text);
 	var label = document.createElement("label");
 	label.setAttribute("for", object.id);
-	label.textContent = "Hide Me! :";
+	label.innerHTML = "Hide Me! :";
 	li.appendChild(label);
 	var input = document.createElement("input");
 	input.setAttribute("type", "checkbox");
@@ -351,13 +386,13 @@ var addToList = function(object, integer, after) {
 		if(hidden.indexOf(this.id)>-1){
 			hidden.splice(hidden.indexOf(this.id),1);
 		}
-		document.getElementById("JS-DBSave").className = "btn btn-small btn-success";
-		document.getElementById("JS-DBSave").value = "Save";
+		$("#JS-DBSave").attr("class","btn btn-small btn-success");
+		$("#JS-DBSave").val("Save");
 	}
 	input.setAttribute("id", object.id);
 	input.setAttribute("class", "checkForVisible");
 	li.appendChild(input);
-	document.getElementsByClassName("spinner")[0].style.display = "none";
+	$(".spinner").css("display", "none");
 	if (after == false) {
 		document.getElementById("JS-DBInfo").appendChild(li);
 	} else if (after == true) {
@@ -677,10 +712,14 @@ var loadTagJSON = function(type, appendIndex) {
 			//console.log(newCoordinates);
 
 			for (var i in tags[0]) {
-				renderSingle(tags[0][i].substring(1, tags[0][i].length), 0);
+				if(tags[1].hasOwnProperty(i)){
+					renderSingle(tags[0][i].substring(1, tags[0][i].length), 0);
+				}
 			}
 			for (var i in tags[1]) {
-				renderSingle(tags[1][i].substring(1, tags[1][i].length), 1);
+				if(tags[1].hasOwnProperty(i)){
+					renderSingle(tags[1][i].substring(1, tags[1][i].length), 1);
+				}
 			}
 		};
 		xhReq.send();
@@ -776,3 +815,5 @@ function placeObj(lat, lon, radius) {
 		"radius" : radius
 	};
 }
+
+

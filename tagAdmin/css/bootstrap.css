@@ -1443,15 +1443,15 @@ textarea[disabled],
 input[readonly],
 select[readonly],
 textarea[readonly] {
-  cursor: not-allowed;
-  background-color: #eeeeee;
+  //cursor: not-allowed;
+//  background-color: #eeeeee;
 }
 
 input[type="radio"][disabled],
 input[type="checkbox"][disabled],
 input[type="radio"][readonly],
 input[type="checkbox"][readonly] {
-  background-color: transparent;
+//  background-color: transparent;
 }
 
 .control-group.warning .control-label,

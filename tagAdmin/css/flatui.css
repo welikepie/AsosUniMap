@@ -1642,10 +1642,10 @@ input[disabled],
 input[readonly],
 textarea[disabled],
 textarea[readonly] {
-  background-color: #f4f6f6;
-  border-color: #d5dbdb;
-  color: #d5dbdb;
-  cursor: default;
+ // background-color: #f4f6f6;
+ // border-color: #d5dbdb;
+ // color: #d5dbdb;
+ // cursor: default;
 }
 input,
 textarea,

@@ -5,11 +5,11 @@ html body #container #DBFilt{height:600px;}html body #container #DBFilt #JS-noRe
 html body #container #DBFilt #searchSaveDiv{margin-top:30px;margin-left:50px;}html body #container #DBFilt #searchSaveDiv #JS-searchStuff{margin-bottom:0px;width:250px;}
 html body #container #DBFilt #searchSaveDiv #JS-DBAutoSave{display:none;}
 html body #container #DBFilt #searchSaveDiv #JS-DBSave{float:right;}
-html body #container #DBFilt #listContainer{margin-left:30px;margin-bottom:10px;height:420px;overflow:auto;}html body #container #DBFilt #listContainer #JS-DBInfo{list-style:none;}html body #container #DBFilt #listContainer #JS-DBInfo li{float:left;padding-top:10px;border-bottom:1px solid gray;clear:both;list-style:none;}html body #container #DBFilt #listContainer #JS-DBInfo li input[type="checkbox"]{float:left;margin-left:10px;}
+html body #container #DBFilt #listContainer{margin-left:30px;margin-bottom:10px;height:420px;overflow:auto;}html body #container #DBFilt #listContainer #JS-DBInfo{list-style:none;}html body #container #DBFilt #listContainer #JS-DBInfo li{width:100%;float:left;padding-top:10px;border-bottom:1px solid gray;clear:both;list-style:none;}html body #container #DBFilt #listContainer #JS-DBInfo li input[type="checkbox"]{float:left;margin-left:10px;}
 html body #container #DBFilt #listContainer #JS-DBInfo li textarea{float:right;resize:none;width:350px;}
 html body #container #DBFilt #listContainer #JS-DBInfo li label{float:left;clear:left;}
 html body #container #DBFilt #listContainer #JS-DBInfo li div{float:left;}
-html body #container #DBFilt #listContainer #JS-DBInfo li .namesDiv{font-weight:bold;width:200px;overflow:hidden;text-overflow:ellipsis;}
+html body #container #DBFilt #listContainer #JS-DBInfo li .namesDiv{font-weight:bold;width:200px;height:20px;float:left;overflow:hidden;text-overflow:ellipsis;}
 html body #container #DBFilt #listContainer #JS-DBInfo li .FACEB{width:24px;height:24px;background-image:url("../../images/faceMini.png");}
 html body #container #DBFilt #listContainer #JS-DBInfo li .TWTTR{background-image:url("../../images/twitMini.png");width:24px;height:24px;}
 html body #container #DBFilt #listContainer #JS-DBInfo li .INSTA{background-image:url("../../images/instaMini.png");width:24px;height:24px;}
