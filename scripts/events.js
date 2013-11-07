@@ -14,17 +14,19 @@ function checkId() {
 
 function setSSE() {
 	var es = new EventSource("http://localhost:1337/events");
-	/*es.addEventListener("open", function(e) {
-	 ////console.log("Connected!");
+	es.addEventListener("open", function(e) {
+	 //console.log("Connected!");
+	 console.log(e);
 	 });
 	 es.addEventListener("error", function(e) {
-	 //.log("erroring");
+	 	//console.log("erroring");
+	 	console.log(e);
 	 });
 	 es.addEventListener("info", function(event) {
-	 ////console.log(event);
-	 });*/
+	 	console.log(event);
+	 });
 	es.addEventListener("message", function(event) {
-		////console.log(event);
+		console.log(event);
 		////console.log(Date.now());
 		//		event = event.originalEvent;
 		//lastEventId = messageId;
@@ -338,7 +340,7 @@ window.onresize = function(){
 			elements.fullUpdate();
 		});
 	}
-	//setSSE();
+	setSSE();
 	$("#JS-bbMoreInfo, #infolink, #moreInfoLink").bind('click', function() {
 		$("#modalInside").html("");
 		general.customModal({

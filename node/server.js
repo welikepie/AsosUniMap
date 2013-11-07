@@ -38,7 +38,7 @@ setInterval(function () {
 function eventStream(request, response) {
   var parsedURL = url.parse(request.url, true);
   var lastEventId = Number(request.headers["last-event-id"]) || Number(parsedURL.query.lastEventId) || 0;
-
+  
   function sendMessages() {
     lastEventId = Math.max(lastEventId, firstId);
     while (lastEventId - firstId < history.length) {
@@ -92,7 +92,7 @@ function eventStream(request, response) {
   }
 
   response.writeHead(200, {
-    "Content-Type": "text/event-stream",
+    "Content-Type": "text/event-stream charset=utf-8",
     "Cache-Control": "no-cache",
     "Access-Control-Allow-Origin": "*"
   });
@@ -100,7 +100,6 @@ function eventStream(request, response) {
   response.write(":" + Array(2049).join(" ") + "\n"); // 2kB padding for IE
   response.write("retry: 1000\n");
   response.write("heartbeatTimeout: " + heartbeatTimeout + "\n");//!
-
   emitter.addListener("message", sendMessages);
   emitter.setMaxListeners(0);
   sendMessages();
@@ -126,40 +125,7 @@ function onRequest(request, response) {
 
   if (pathname === "/events") {
     eventStream(request, response);
-  } else {
-    var files = [
-      "/example.html",
-      "/nodechat.css",
-      "/eventsource.js",
-      "/nodechat.js",
-      "/tests.html",
-      "/qunit.css",
-      "/qunit.js",
-      "/tests.js"
-    ];
-    if (files.indexOf(pathname) === -1) {
-      pathname = files[0];
-    }
-    fs.stat(__dirname + pathname, function (error, stats) {
-      if (error) {
-        response.writeHead(404);
-        response.end();
-      } else {
-        var mtime = Date.parse(request.headers["if-modified-since"]) || 0;
-        if (stats.mtime <= mtime) {
-          response.writeHead(304);
-          response.end();
-        } else {
-          var raw = fs.createReadStream(__dirname + pathname);
-          response.writeHead(200, {
-            "Content-Type": (pathname.indexOf(".js") !== -1 ? "text/javascript" : (pathname.indexOf(".css") !== -1 ? "text/css" : "text/html")),
-            "Last-Modified": stats.mtime
-          });
-          raw.pipe(response);
-        }
-      }
-    });
-  }  
+  }
 }
 
 http.createServer(onRequest).listen(PORT1);
@@ -168,6 +134,7 @@ http.createServer(onRequest).listen(PORT2);
 writEm();
 
 function writEm() {
+
 	console.log("start");
 	var sizeArr = {};
 	fs.readFile('tags.json','utf-8', function(err, result) {
@@ -175,7 +142,7 @@ function writEm() {
 			console.log(err);
 			writEm();
 		} else {
-			console.log(result);
+			//console.log(result);
 			var results = [];
 			var res = JSON.parse(result).data.location;
 			for (var zedsdead in res) {
@@ -183,18 +150,19 @@ function writEm() {
 					results.push(res[zedsdead].replace(/#/g,""));
 				}
 			}
-			console.log(results);
+			//console.log(results);
 			asyncLoop(results.length, function(loop, i) {
-				console.log(results[i]);
+				//console.log(results[i]);
 				var prepare = "SELECT id,user,name,userIMG, UNIX_TIMESTAMP(time) as time,lat,lon,text,img_small,img_med,img_large,source,hashtag,link FROM asosUniMap.content WHERE hashtag LIKE '" + results[i] + "' AND visible = '0'";
 				db.connection.query(prepare, function(err, result) {
-					//console.log(result.length);
+					console.log("results are thiiis long: "+result.length);
 					if (err) {
 						console.log("Error occurred pulling " + results[i] + " at " + new Date().getTime());
 						loop.next();
 					} else {
+						console.log("going on to write");
 						var writeArr = {};
-						if (results[i].indexOf("#" > -1)) {
+						if (results[i].indexOf("#") > -1) {
 							results[i] = results[i].replace(/#/g, "");
 						}
 						writeArr.tag = results[i];
@@ -208,41 +176,44 @@ function writEm() {
 							var inDoc = fs.readdirSync("jsons/");
 							for(var zeds = 0; zeds < inDoc.length; zeds++){
 								if(insensStrComp(inDoc[zeds].replace("#","").replace(".json",""),results[i])==true){
-									results[i] = inDoc[zeds].replace(".json","");
+									results[i] = inDoc[zeds].replace(".json","").replace("#","");
 									break;
 								}
 							}
 							sizeArr[results[i]] = result.length;
 							thing = JSON.parse(fs.readFileSync("jsons/" + results[i] + ".json", 'utf-8')).answers;
 						} catch(e) {
+							console.log(e);
 							thing = "";
 						}
-						if (JSON.parse(JSON.stringify(writeArr.answers)).length == 0 && thing.length == 0||testForEquality(thing, JSON.parse(JSON.stringify(writeArr.answers),'utf-8')) == false) {
+						//if (JSON.parse(JSON.stringify(writeArr.answers)).length == 0 && thing.length == 0||testForEquality(thing, JSON.parse(JSON.stringify(writeArr.answers),'utf-8')) == false) {
 							//console.log(writeArr);
 							fs.writeFile("jsons/pre-" + results[i] + ".json", JSON.stringify(writeArr), function(err) {
+								console.log("writing pre-");
 								if (err) {
 									console.log("Error occurred writing " + results[i] + " at " + new Date().getTime());
+									loop.next();
 									//console.log(JSON.stringify(writeArr));
 								} else {
+									console.log("RENAMING");
 									fs.rename("jsons/pre-" + results[i] + ".json", "jsons/" + results[i] + ".json",
 									//idents.length, req,res
-
 									function() {
 										console.log("written");
 										emitter.emit("message");
-										history.push(JSON.stringify(writeArr));
-										
+										history.push(JSON.stringify(writeArr));						
 										loop.next();
 									});
 
 								}
 							});
-						} else {
-							loop.next();
-						}
+						//} else {
+						//	loop.next();
+						//}
 					}
 				});
 			}, function() {
+				
 				fs.writeFile("jsons/pre-tags.json", JSON.stringify(sizeArr), function(err) {
 								if (err) {
 									console.log("Error occurred writing sizes at " + new Date().getTime());
@@ -309,7 +280,7 @@ function asyncLoop(iterations, func, callback) {
 			}
 			if (index < iterations) {
 				index++;
-				//console.log("INDEX"+index);
+				console.log("INDEX"+index);
 				this.current = index - 1;
 				//console.log("CURRENT"+this.current);
 				func(loop, this.current);

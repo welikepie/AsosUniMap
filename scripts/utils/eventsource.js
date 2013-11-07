@@ -315,8 +315,7 @@
         charOffset = length;
       }
 
-      if ((currentState === OPEN || currentState === CONNECTING) &&
-          (isLoadEnd || isWrongStatusCodeOrContentType || (charOffset > 1024 * 1024) || (timeout === 0 && !wasActivity))) {
+      if ((currentState === OPEN || currentState === CONNECTING) && (isLoadEnd || isWrongStatusCodeOrContentType || (charOffset > 1024 * 1024) || (timeout === 0 && !wasActivity))) {
         currentState = WAITING;
         xhr.abort();
         if (timeout !== 0) {
@@ -333,6 +332,8 @@
         retry = retry * 2 + 1;
 
         that.readyState = CONNECTING;
+//        console.log("ISwrong?"+currentState);
+//        console.log("CHAROFFSET: "+charOffset);
         event = new Event("error");
         that.dispatchEvent(event);
         fire(that, that.onerror, event);

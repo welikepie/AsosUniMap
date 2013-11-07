@@ -51,7 +51,7 @@ var config = {
 		"xl" : 30
 	},
 	"sizesOfLabels" : function() {
-		tpht.easyXHR("get", "node/jsons/TAGSSIZES.json", "", function(response) {
+		tpht.easyXHR("get", "node/jsons/TAGSSIZES.json?"+Math.floor(Math.random()*10000), "", function(response) {
 			//////////////console.log((response);
 			config.sizesOfLabels = JSON.parse(response);
 		})
@@ -658,7 +658,7 @@ var tags = {
 	},
 	"retrieve" : function() {
 		var waiting;
-		tpht.easyXHR("get", config.baseURL + "node/tags.json", "", function(response) {
+		tpht.easyXHR("get", config.baseURL + "node/tags.json?"+Math.floor(Math.random()*10000), "", function(response) {
 			var ans = JSON.parse(response).data;
 			if (ans.hasOwnProperty("locations")) {
 				tags.locations = ans.locations;
@@ -724,7 +724,7 @@ var tags = {
 			//////////////console.log((tags.inBound);
 			//	//console.log(arr[i]);
 
-			tpht.easyXHR("get", config.baseURL + "node/jsons/" + arr[i] + ".json", "", function(response) {
+			tpht.easyXHR("get", config.baseURL + "node/jsons/" + arr[i] + ".json?"+Math.floor(Math.random()*10000), "", function(response) {
 				//console.log(JSON.parse(response));
 				//////////////console.log((response.length);
 				////console.log(response);
