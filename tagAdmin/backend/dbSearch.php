@@ -1,6 +1,6 @@
 <?php
 require_once 'dbCreds.php';
-$DBToUse = $devCredsLocal; //devCreds;
+$DBToUse = $prodCreds;//$devCredsLocal; //devCreds;
 $db      = null;
 $results = array(array(),array());
 if (!defined('JSON_PRETTY_PRINT')) {

@@ -28,11 +28,11 @@ var config = {
 	"labelArr" : ["ukMapMobile.png", "uk.png"],
 	"bandSizes" : {
 		1 : "hidden",
-		4 : "xs",
-		5 : "s",
-		8 : "m",
-		9 : "l",
-		99 : "xl"
+		3 : "xs",
+		11 : "s",
+		25 : "m",
+		45 : "l",
+		10000 : "xl"
 	},
 	"bandOrder" : {
 		"hidden" : 1001,
@@ -122,7 +122,6 @@ var maps = {//waves structure is object first, mobile image second, and desktop 
 			google.maps.event.addListener(maps.map, 'tilesloaded', function() {
 				// Visible tiles loaded!
 			});
-
 		}
 		var myLatLng = new google.maps.LatLng(49.5, -4.6);
 
@@ -412,7 +411,6 @@ var mmanager = {
 			//console.log(tags.markerTagsNoGeo[zed].length);
 			//console.log(tags.markerTagsNoGeo[zed]);
 			if (tags.markerTagsNoGeo[zed].length - 1 > 0) {
-				////console.log(tags.markerTagsNoGeo[zed].length-1);
 				if (tags.markerTagsNoGeo[zed].length - 1 == 1) {
 					//	//console.log("YEAHYEAHYEAH");
 
@@ -449,45 +447,56 @@ var mmanager = {
 				var appDiv = document.createElement("ul");
 				appDiv.setAttribute("id", zed + "UL");
 				appDiv.setAttribute("class", "listNoGeoTag");
-				divCont.appendChild(appDiv);
-				if (tags.markerTagsNoGeo[zed].length > 9) {
-					for (var i = 0; i < 9; i++) {
-						appDiv.appendChild(elements.domListing(tags.markerTagsNoGeo[zed][i], false, false, zed, zed + "LI"));
-						////console.log(elements.domListing(tags.markerTagsNoGeo[zed][i],false,false,zed,zed+"LI"));
-						tags.markerTagsNoGeo[zed].splice(i, 1);
+				//console.log(tags.markerTagsNoGeo[zed]);
+				if (tags.markerTagsNoGeo[zed].length > 9) {	
+					for (var i = 0; i < 9; i++) {					
+					try{
+						appDiv.appendChild(elements.domListing(tags.markerTagsNoGeo[zed][0], false, false, zed, zed + "LI"));
+						tags.markerTagsNoGeo[zed].splice(0, 1);
+						}catch(e){console.log(e);}
 					}
 				} else {
+					//console.log("====="+tags.markerTagsNoGeo[zed].length+"======");
 					for (var i = 0; i < tags.markerTagsNoGeo[zed].length; i++) {
-						appDiv.appendChild(elements.domListing(tags.markerTagsNoGeo[zed][i], false, false, zed, zed + "LI"));
-						////console.log(elements.domListing(tags.markerTagsNoGeo[zed][i],false,false,zed,zed+"LI"));
-						tags.markerTagsNoGeo[zed].splice(i, 1);
+						try{
+						appDiv.appendChild(elements.domListing(tags.markerTagsNoGeo[zed][0], false, false, zed, zed + "LI"));
+						tags.markerTagsNoGeo[zed].splice(0, 1);
+						}catch(e){console.log(e);}
+
 					}
+					//console.log(appDiv);
 				}
+								divCont.appendChild(appDiv);
 				//				$( 'li' ).off( 'scroll' );
 				$(divCont).scroll(function(e) {
+					//console.log("SCROLLTIME!");
 					var zedder = this.getAttribute("data-rel-zed");
 					//console.log(this.scrollTop);
 					if (this.scrollTop >= (document.getElementById(zedder + "UL").offsetHeight - 278)) {
+						//console.log(tags.markerTagsNoGeo[zedder]);
 						if (tags.markerTagsNoGeo[zedder].length > 9) {
 							for (var i = 0; i < 9; i++) {
-								document.getElementById(zedder + "UL").appendChild(elements.domListing(tags.markerTagsNoGeo[zedder][i], false, false, zedder, zedder + "LI"));
+								document.getElementById(zedder + "UL").appendChild(elements.domListing(tags.markerTagsNoGeo[zedder][0], false, false, zedder, zedder + "LI"));
 								////console.log(elements.domListing(tags.markerTagsNoGeo[zed][i],false,false,zed,zed+"LI"));
-								tags.markerTagsNoGeo[zedder].splice(i, 1);
+								tags.markerTagsNoGeo[zedder].splice(0, 1);
 							}
 						} else {
 							for (var i = 0; i < tags.markerTagsNoGeo[zedder].length; i++) {
-								document.getElementById(zedder + "UL").appendChild(elements.domListing(tags.markerTagsNoGeo[zedder][i], false, false, zedder, zedder + "LI"));
+								document.getElementById(zedder + "UL").appendChild(elements.domListing(tags.markerTagsNoGeo[zedder][0], false, false, zedder, zedder + "LI"));
 								////console.log(elements.domListing(tags.markerTagsNoGeo[zed][i],false,false,zed,zed+"LI"));
-								tags.markerTagsNoGeo[zedder].splice(i, 1);
+								tags.markerTagsNoGeo[zedder].splice(0, 1);
 							}
 						}
 					}
 				});
+
+
 				//				tags.markerTagsNoGeo[zed];
 				//console.log(zed);
 				//console.log(tags.markerTagsNoGeo);
-				console.log(zed);
-				console.log(tags.markerTagsNoGeo[zed].length);
+				//console.log(zed);
+				//console.log(tags.markerTagsNoGeo[zed].length);
+				//console.log(divCont);
 				var markerObj = {
 					content : divCont,
 					data : tags.markerTagsNoGeo[zed],
@@ -606,20 +615,6 @@ var tags = {
 	"tagMarkerNoGeo" : {}, //reference to markers for each hashtag, JSON object with key being hashtag without #
 	"markerTags" : {},
 	"datHeight" : function() {
-		////////////console.log(("getting");
-		////////////console.log(($(".size-xs"));
-		$(".size-xs").each(function(index, value) {
-			////////////console.log((index);
-			////////////console.log((value);
-		});
-		$(".size-s").each(function(index, value) {
-		});
-		$(".size-m").each(function(index, value) {
-		});
-		$(".size-l").each(function(index, value) {
-		});
-		$(".size-xl").each(function(index, value) {
-		});
 	},
 	"inString" : function(haystack, needle) {
 		//		////////////console.log((needle.toLowerCase()).test(haystack.toLowerCase());
@@ -628,14 +623,10 @@ var tags = {
 		} else if (haystack == null) {
 			return false;
 		}
-		//		//////////////console.log((new RegExp(needle.toLowerCase()).test(haystack.toLowerCase()));
 		return new RegExp(needle.toLowerCase()).test(haystack.toLowerCase());
-		////////////console.log((needle.toLowerCase()).test(haystack.toLowerCase());
-		// false
 	},
 	"labelRefresh" : function() {
 		var thing = window.setInterval(function() {
-			////////////////console.log((document.getElementsByClassName("labels"));
 			var elements = $(".labels");
 			if (elements.length > 0) {
 				window.clearInterval(thing);
@@ -647,45 +638,51 @@ var tags = {
 		//		 }
 	},
 	"markerPos" : function() {
-		//for(var i in tags.optionaltags){
-		//	tags.markerTags[i] = {};
-		//	for(var k in tags.markerTags[i]){
-		//
-		//	}
-		//}
-		////////////////console.log((tags.locations);
-		////////////////console.log((tags.markerTags);
 	},
 	"retrieve" : function() {
 		var waiting;
-		tpht.easyXHR("get", config.baseURL + "node/tags.json?"+Math.floor(Math.random()*10000), "", function(response) {
-			var ans = JSON.parse(response).data;
-			if (ans.hasOwnProperty("locations")) {
-				tags.locations = ans.locations;
-			}
-			//console.log(ans.locations);
-			//			//////////////console.log((tags);
-			if (ans.hasOwnProperty("optionaltags")) {
-				tags.optionaltags = ans.optionaltags;
-				//tpht.ping();
-			}
-			if (ans.hasOwnProperty("campaign")) {
-				tags.campaign = ans.campaign;
-			}
-			if (maps.boundingBox.length != 4) {
-				waiting = window.setInterval(function() {
-					if (maps.boundingBox.length == 4) {
-						tags.filterBasedOnBound(true);
-						clearInterval(waiting);
+		tpht.easyXHR("get", config.baseURL + "node/tags.json", "", function(response) {
+		tpht.easyXHR("get", "node/jsons/TAGSSIZES.json?"+Math.floor(Math.random()*10000), "", function(response2) {
+			var conf = JSON.parse(response2);
+			//console.log(response2);			
+				var ans = JSON.parse(response).data;
+				//console.log(ans);
+				if (ans.hasOwnProperty("locations")) {
+					tags.locations = {};
+					//console.log(conf);
+					for(z in conf){
+						if(conf.hasOwnProperty(z)){
+							//console.log(z);
+							if(conf[z] > 0 && ans.locations.hasOwnProperty(z)){
+								tags.locations[z]=ans.locations[z];
+							}
+
+						}
 					}
-				}, 500);
-			}
+				}
+				
+				if (ans.hasOwnProperty("optionaltags")) {
+					tags.optionaltags = ans.optionaltags;
+					//tpht.ping();
+				}
+				if (ans.hasOwnProperty("campaign")) {
+					tags.campaign = ans.campaign;
+				}
+				if (maps.boundingBox.length != 4) {
+					waiting = window.setInterval(function() {
+						if (maps.boundingBox.length == 4) {
+							tags.filterBasedOnBound(true);
+							clearInterval(waiting);
+						}
+					}, 500);
+				}
+			
 			general.updateSinglePoint();
 			//////////////console.log(("filterBased");
 
 			//tags.markerPos();
-
-		});
+			})
+		})
 	},
 	"filterBasedOnBound" : function(carryOn) {
 		tags.inBound = new Array();
@@ -718,16 +715,9 @@ var tags = {
 	},
 	"loadTagFiles" : function(arr, updater) {
 		//tags.locations
-
+		//console.log(arr);
 		tpht.asyncLoop(arr.length, function(loop, i) {
-			//		//////////////console.log(("node/jsons/"+tags.inBound[t]+".json");
-			//////////////console.log((tags.inBound);
-			//	//console.log(arr[i]);
-
 			tpht.easyXHR("get", config.baseURL + "node/jsons/" + arr[i] + ".json?"+Math.floor(Math.random()*10000), "", function(response) {
-				//console.log(JSON.parse(response));
-				//////////////console.log((response.length);
-				////console.log(response);
 				try
 				{
 					var jsonP = JSON.parse(response);
@@ -847,9 +837,9 @@ var tags = {
 		tags.renderToMap(mmanager.hashContentArr);
 		for (var zed in tags.DOMrender) {
 			if (zed < config.ulLimit) {
-				tags.renderToList(tags.DOMrender[zed], false);
-				tags.DOMrenderOnPage.push(tags.DOMrender[zed].id);
-				tags.DOMrender.splice(zed, 1);
+				tags.renderToList(tags.DOMrender[0], false);
+				tags.DOMrenderOnPage.push(tags.DOMrender[0].id);
+				tags.DOMrender.splice(0, 1);
 			}
 			if (zed == config.ulLimit) {
 				twttr.widgets.load();
@@ -1102,10 +1092,7 @@ var tags = {
 }
 var elements = {
 	"updateMarkerVisibility" : function() {
-
-		//console.log(tags.tagMarkerNoGeo);
-		//console.log(tags.markerTagsNoGeo);
-
+		//console.log("getsCalled");
 		for (var i in tags.tagMarkerNoGeo) {
 			if (tags.tagMarkerNoGeo.hasOwnProperty(i)) {
 				//console.log("OLOLOLOLOLOLOLOL");
@@ -1115,10 +1102,8 @@ var elements = {
 			//		//console.log(zeds);
 	//		console.log(tags.markerTagsNoGeo[i][zeds].text+","+ tags.filtration);
 					if (tags.inString(tags.markerTagsNoGeo[i][zeds].text, tags.filtration) == true) {
+						//console.log(tags.markerTagsNoGeo[i][zeds]);
 						tags.arrEls[i].push(tags.markerTagsNoGeo[i][zeds]);
-						if(tags.markerTagsNoGeo[i][zeds].hashtag == "code"){
-						console.log(tags.markerTagsNoGeo[i][zeds].hashtag+","+tags.markerTagsNoGeo[i][zeds].text+","+ tags.filtration);	
-					}
 					}
 				}
 				//content : elements.info(arr[i]),
@@ -1140,6 +1125,7 @@ var elements = {
 					if (tags.tagMarkerNoGeo[i].getMap() == null) {
 						tags.tagMarkerNoGeo[i].setMap(maps.map);
 					}
+					//console.log(tags.arrEls);
 					tags.tagMarkerNoGeo[i].icon = "images/multiLocation.png";
 				} else if (tags.arrEls[i].length == 0) {
 					tags.tagMarkerNoGeo[i].setMap(null);
@@ -1160,28 +1146,29 @@ var elements = {
 				appDiv.setAttribute("id", i + "UL");
 				appDiv.setAttribute("class", "listNoGeoTag");
 				divCont.appendChild(appDiv);
-				console.log(i);
+				//console.log(i);
 				tags.tagMarkerNoGeo[i].info.setObjLength(tags.arrEls[i].length);
-				console.log(tags.arrEls[i].length);
-				if (tags.arrEls[i].length > 10) {
-					console.log("highLength");
-					console.log(tags.arrEls[i]);
+				//console.log(tags.arrEls[i].length);
+				if (tags.arrEls[i].length > 9) {
+					//console.log("highLength");
+					//console.log(tags.arrEls[i]);
 					for (var k = 0; k < 9; k++) {
 						appDiv.appendChild(elements.domListing(tags.arrEls[i][0], false, false, "", "" + "LI"));
 						tags.arrEls[i].splice(0, 1);
 					}
 					
 				} 
-				else if(tags.arrEls[i].length <= 10){
-						console.log("lowLength");
-						console.log(tags.arrEls[i]);
-					for (var k = 0; k < tags.arrEls[i].length; k++) {
+				else{
+						//console.log("lowLength");
+						//console.log(tags.arrEls[i]);
+						var longs = tags.arrEls[i].length;
+					for (var k = 0; k < longs; k++) {
 						appDiv.appendChild(elements.domListing(tags.arrEls[i][0], false, false, "", "" + "LI"));
 						tags.arrEls[i].splice(0, 1);
 					}
-					
 				}
 				twttr.widgets.load();
+				//console.log(divCont);
 				tags.tagMarkerNoGeo[i].info.setContent(divCont);
 				tags.tagMarkerNoGeo[i].info.redraw_();
 				//				$( 'li' ).off( 'scroll' );
@@ -1191,24 +1178,20 @@ var elements = {
 					if (this.scrollTop >= (document.getElementById(zedder + "UL").offsetHeight - 278)) {
 						if (tags.arrEls[zedder].length > 9) {
 							for (var k = 0; k < 9; k++) {
-								document.getElementById(zedder + "UL").appendChild(elements.domListing(tags.arrEls[zedder][k], false, false, zedder, zedder + "LI"));
+								document.getElementById(zedder + "UL").appendChild(elements.domListing(tags.arrEls[zedder][0], false, false, zedder, zedder + "LI"));
 								////console.log(elements.domListing(tags.markerTagsNoGeo[zedder][i],false,false,zed,zed+"LI"));
-								tags.arrEls[zedder].splice(k, 1);
+								tags.arrEls[zedder].splice(0, 1);
 							}
 						} else {
 							for (var k = 0; k < tags.arrEls[zedder].length; k++) {
-								document.getElementById(zedder + "UL").appendChild(elements.domListing(tags.arrEls[zedder][k], false, false, zedder, zedder + "LI"));
+								document.getElementById(zedder + "UL").appendChild(elements.domListing(tags.arrEls[zedder][0], false, false, zedder, zedder + "LI"));
 								////console.log(elements.domListing(tags.markerTagsNoGeo[zed][i],false,false,zed,zed+"LI"));
-								tags.arrEls[zedder].splice(k, 1);
+								tags.arrEls[zedder].splice(0, 1);
 							}
 						}
 					}
 					twttr.widgets.load();
 				});
-				if (tags.tagMarkerNoGeo[i].info.isOpen() == true) {
-					tags.tagMarkerNoGeo[i].info.close();
-					tags.tagMarkerNoGeo[i].info.open();
-				}
 //				//console.log(tags.tagMarkerNoGeo[i].label);
 				if(tags.tagMarkerNoGeo[i].label!=undefined){
 					tags.tagMarkerNoGeo[i].label.setStyles();
@@ -1411,7 +1394,6 @@ var elements = {
 		////////////console.log(JSON.stringify(obj));
 		if (obj.name != null) {
 			var str = obj.name.replace(/(^\s+|\s+$)/g, ' ');
-			;
 		} else {
 			var str = "";
 		}
@@ -1595,7 +1577,7 @@ var elements = {
 			var classes = ["firstName", "lastName"];
 			var domDiv = document.createElement("div");
 			domDiv.setAttribute("class", "nameContainer");
-			console.log(splitString);
+			//console.log(splitString);
 			for (var i = 0; i < splitString.length; i++) {
 				if(splitString[i].replace(/(^\s+|\s+$)/g, '').length == 0){
 					splitString.splice(i,1);
@@ -1603,7 +1585,7 @@ var elements = {
 			}
 			for (var i = 0; i < splitString.length; i++) {
 				var addDiv = document.createElement("p");
-				console.log(splitString.length);
+				//console.log(splitString.length);
 				addDiv.setAttribute("class", classes[i]);
 				var addDivText = document.createTextNode(splitString[i].toUpperCase());
 				addDiv.appendChild(addDivText);
