@@ -1,4 +1,12 @@
 <?php
+$prodCreds = array(
+  'host'     => 'localhost',
+  'user'     => 'root',
+  'pass' => 'alpine',
+  'db' => 'asosUniMap',
+  'port' => 3306,
+  'charset'=>'UTF8_GENERAL_CI'
+);
 
 $devCreds = array(
   'host'     => 'dev.welikepie.com',
