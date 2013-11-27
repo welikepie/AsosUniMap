@@ -81,16 +81,18 @@ var maps = {//waves structure is object first, mobile image second, and desktop 
 	oldInfoBox : null,
 	oldBounds : null,
 	map : "",
-	mblLatLng : [54.76772102, -2.66318],
-	stLatLng : [54.549593, 1.05556640625],
+//	mblLatLng : [54.76772102, -2.66318],
+	mblLatLng : [54.3, -2.66318], //this is actually being used for the medium screen.
+//	stLatLng : [54.549593, 1.05556640625],
+	stLatLng : [53.5, -2.66318], //this is actually being used for mobile and big screens.
 	setDefault : function() {
 	},
 	boundingBox : new Array(),
 	"initialize" : function() {
 		var styles;
-		//#zoominone added window.innerWidth check to see if mobile, and if mobile add map stylings.
-		if (window.innerHeight > 700 || window.innerWidth <= 480) {
-			if(window.innerHeight > 700){
+		//#zoominone added $(window).width() check to see if mobile, and if mobile add map stylings.
+		if ($(window).height() > 700 || $(window).width() <= 480) {
+			if($(window).height() > 700){
 				config.startZoom ++;
 				config.previousZoom ++;
 				config.minZoom++;
@@ -123,13 +125,13 @@ var maps = {//waves structure is object first, mobile image second, and desktop 
 			mapTypeId : google.maps.MapTypeId.SATELITE,
 			minZoom : config.minZoom
 		};
-		if (window.innerHeight < 490) {
+		if ($(window).height() < 490) {
 			mapOptions.zoomControlOptions.style = google.maps.ZoomControlStyle.SMALL;
 		}
 		//#zoominone changed to move the country a bit to the right on high screens. Now consistent across everything. Uncomment to get the zoomed out effect.
-//		if (document.documentElement.clientWidth < 480 || window.innerHeight < 700) {
+		if (document.documentElement.clientWidth < 480 || $(window).height() < 700) {
 			mapOptions.center = new google.maps.LatLng(maps.mblLatLng[0], maps.mblLatLng[1]);
-//		}
+		}
 		maps.map = new google.maps.Map(tpht.getById("map-canvas"), mapOptions);
 		if (document.documentElement.clientWidth > 480) {
 			google.maps.event.addListener(maps.map, 'tilesloaded', function() {
@@ -146,7 +148,7 @@ var maps = {//waves structure is object first, mobile image second, and desktop 
 			
 		});
 		//#zoominone Excluding the medium size screen here. > 480 excludes mobile, < 700 excludes big screen.
-		if(window.innerWidth > 480 && window.innerHeight < 700){
+		if($(window).width() > 480 && $(window).height() < 700){
 			beachMarker.setMap(maps.map);
 		}
 		
@@ -260,32 +262,39 @@ var maps = {//waves structure is object first, mobile image second, and desktop 
 				if (mmanager.tagManager != null) {
 						mmanager.tagManager.show();
 				}
-			if (document.documentElement.clientWidth < 480) {
-				maps.map.setCenter(new google.maps.LatLng(maps.mblLatLng[0], maps.mblLatLng[1]));
-			} else {
-				if (window.innerHeight > 700) {
-					maps.map.setCenter(new google.maps.LatLng(maps.mblLatLng[0], maps.mblLatLng[1]));
-				} else {
+			if (document.documentElement.clientWidth < 480 || $(window).height() < 700) {
+		maps.map.setCenter(new google.maps.LatLng(maps.mblLatLng[0], maps.mblLatLng[1]));
+			}
+			else {
 					maps.map.setCenter(new google.maps.LatLng(maps.stLatLng[0], maps.stLatLng[1]));
 				}
-			}
+			
 
 			//			tags.filtration = "";
 			
 			var bounds = maps.map.getBounds();
 			var bArr = bounds.toString().replace(/[()]/g, "").split(",");
 			maps.boundingBox = [parseFloat(bArr[1]), parseFloat(bArr[0]), parseFloat(bArr[3]), parseFloat(bArr[2])];
-
 			tags.filterBasedOnBound("doNothing");
-			maps.map.setOptions({
-				"styles" : [{
-					featureType : "all",
-					stylers : [{
-						visibility : "off"
-					}]
+
+if ($(window).height() > 700 || $(window).width() <= 480) {
+			maps.map.setOptions({"styles" : [{
+				"featureType" : "water",
+				"stylers" : [{
+					"color" : "#54bec6"
 				}]
-			});
-			if(window.innerWidth > 480){
+			}]});
+		}
+		else{
+		maps.map.setOptions({ "styles" : [{
+			featureType : "all",
+			stylers : [{
+				visibility : "off"
+			}]
+		}]});
+	}
+
+			if($(window).width() > 480 && $(window).height() < 700){
 				beachMarker.setVisible(true);
 			}
 				for(var i = 0; i < maps.waves.length; i++){
