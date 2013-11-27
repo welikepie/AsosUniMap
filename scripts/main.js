@@ -17,15 +17,16 @@ var config = {
 			}
 		}
 		return false;
-	},
-	"previousZoom" : 5,
+	},//#zoominone previousZoom, minZoom, startZoom and markerMinZoom upped by one.
+	"previousZoom" : 6,
 	"minTime" : 0, //usually looks like 1376501470
-	"minZoom" : 5, //minimum zoom to have.
-	"startZoom" : 5, //starting zoom to have. Is 5 in on bigger screens and changed to 6 otherwise.
-	"markerMinZoom" : 6,
+	"minZoom" : 6, //minimum zoom to have.
+	"startZoom" : 6, //starting zoom to have. Is 5 in on bigger screens and changed to 6 otherwise.
+	"markerMinZoom" : 7,
 	"baseURL" : "",
 	"ulLimit" : 10,
-	"labelArr" : ["ukMapMobile.png", "uk.png"],
+	//"labelArr" : ["ukMapMobile.png", "uk.png"],
+	"labelArr" : ["uk.png"],
 	"bandSizes" : {
 		1 : "hidden",
 		3 : "xs",
@@ -86,17 +87,29 @@ var maps = {//waves structure is object first, mobile image second, and desktop 
 	},
 	boundingBox : new Array(),
 	"initialize" : function() {
-		if (window.innerHeight > 700) {
-			config.startZoom = 6;
-			config.previousZoom = 6;
+		var styles;
+		//#zoominone added window.innerWidth check to see if mobile, and if mobile add map stylings.
+		if (window.innerHeight > 700 || window.innerWidth <= 480) {
+			if(window.innerHeight > 700){
+				config.startZoom ++;
+				config.previousZoom ++;
+				config.minZoom++;
+			}
+			styles = [{
+				"featureType" : "water",
+				"stylers" : [{
+					"color" : "#54bec6"
+				}]
+			}];
 		}
-
-		var styles = [{
+		else{
+		styles = [{
 			featureType : "all",
 			stylers : [{
 				visibility : "off"
 			}]
 		}];
+	}
 		var mapOptions = {
 			streetViewControl : false,
 			mapTypeControl : false,
@@ -113,11 +126,11 @@ var maps = {//waves structure is object first, mobile image second, and desktop 
 		if (window.innerHeight < 490) {
 			mapOptions.zoomControlOptions.style = google.maps.ZoomControlStyle.SMALL;
 		}
-		if (document.documentElement.clientWidth < 480 || window.innerHeight < 700) {
+		//#zoominone changed to move the country a bit to the right on high screens. Now consistent across everything. Uncomment to get the zoomed out effect.
+//		if (document.documentElement.clientWidth < 480 || window.innerHeight < 700) {
 			mapOptions.center = new google.maps.LatLng(maps.mblLatLng[0], maps.mblLatLng[1]);
-		}
+//		}
 		maps.map = new google.maps.Map(tpht.getById("map-canvas"), mapOptions);
-
 		if (document.documentElement.clientWidth > 480) {
 			google.maps.event.addListener(maps.map, 'tilesloaded', function() {
 				// Visible tiles loaded!
@@ -130,8 +143,12 @@ var maps = {//waves structure is object first, mobile image second, and desktop 
 			//			icon : 'images/uk.png',
 			icon : "images/" + config.labelArr[maps.map.getZoom() - config.minZoom],
 			zIndex : 500,
-			map : maps.map
+			
 		});
+		//#zoominone Excluding the medium size screen here. > 480 excludes mobile, < 700 excludes big screen.
+		if(window.innerWidth > 480 && window.innerHeight < 700){
+			beachMarker.setMap(maps.map);
+		}
 		
 		for(var i = 0; i < maps.waves.length; i++){
 			maps.waves[i][0] = new google.maps.Marker({
@@ -211,6 +228,7 @@ var maps = {//waves structure is object first, mobile image second, and desktop 
 				});
 				beachMarker.setIcon("images/" + config.labelArr[maps.map.getZoom() - config.minZoom]);
 				beachMarker.setVisible(true);
+
 				for(var i = 0; i < maps.waves.length; i++){
 					//console.log(maps.waves[i][maps.map.getZoom() - config.minZoom+1]);
 					maps.waves[i][0].setIcon(maps.waves[i][maps.map.getZoom() - config.minZoom+1]);
@@ -267,7 +285,9 @@ var maps = {//waves structure is object first, mobile image second, and desktop 
 					}]
 				}]
 			});
-			beachMarker.setVisible(true);
+			if(window.innerWidth > 480){
+				beachMarker.setVisible(true);
+			}
 				for(var i = 0; i < maps.waves.length; i++){
 					maps.waves[i][0].icon = maps.waves[i][maps.map.getZoom() - config.minZoom+1]
 					//maps.waves[i][0].setVisible(true);
