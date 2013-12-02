@@ -97,21 +97,22 @@ var maps = {//waves structure is object first, mobile image second, and desktop 
 				config.previousZoom ++;
 				config.minZoom++;
 			}
+		}
 			styles = [{
 				"featureType" : "water",
 				"stylers" : [{
 					"color" : "#54bec6"
 				}]
 			}];
-		}
-		else{
+
+/*		else{
 		styles = [{
 			featureType : "all",
 			stylers : [{
 				visibility : "off"
 			}]
 		}];
-	}
+	}*/
 		var mapOptions = {
 			streetViewControl : false,
 			mapTypeControl : false,
@@ -149,7 +150,7 @@ var maps = {//waves structure is object first, mobile image second, and desktop 
 		});
 		//#zoominone Excluding the medium size screen here. > 480 excludes mobile, < 700 excludes big screen.
 		if($(window).width() > 480 && $(window).height() < 700){
-			beachMarker.setMap(maps.map);
+		//	beachMarker.setMap(maps.map);
 		}
 		
 		for(var i = 0; i < maps.waves.length; i++){
@@ -220,14 +221,14 @@ var maps = {//waves structure is object first, mobile image second, and desktop 
 					//maps.waves[i][0].setVisible(false);
 				}
 			} else {
-				maps.map.setOptions({
+		/*		maps.map.setOptions({
 					"styles" : [{
 						featureType : "all",
 						stylers : [{
 							visibility : "off"
 						}]
 					}]
-				});
+				});*/
 				beachMarker.setIcon("images/" + config.labelArr[maps.map.getZoom() - config.minZoom]);
 				beachMarker.setVisible(true);
 
